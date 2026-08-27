@@ -1,0 +1,61 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#050000">
+    <title>SILVERFISH_0</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>  <div style="position: fixed; bottom: 20px; right: 20px; background: rgba(0, 0, 0, 0.8); color: #00d9ff; padding: 10px 15px; border-radius: 5px; font-family: monospace; font-size: 12px; z-index: 10000; border: 1px solid #00d9ff;">
+    Press Ctrl+Q to return
+  </div>
+    <audio id="god-voice" src="./god.m4a" autoplay loop preload="auto"></audio>
+
+    <div class="world" aria-hidden="true"></div>
+    <div class="apparition" id="apparition" aria-hidden="true"></div>
+    <div class="judgement" aria-hidden="true"></div>
+    <div class="redaction-field" aria-hidden="true">
+      <i style="--x: 3%; --y: 12%; --w: 38%; --d: -2s"></i>
+      <i style="--x: 51%; --y: 8%; --w: 42%; --d: -7s"></i>
+      <i style="--x: 9%; --y: 27%; --w: 22%; --d: -4s"></i>
+      <i style="--x: 36%; --y: 33%; --w: 58%; --d: -10s"></i>
+      <i style="--x: 4%; --y: 49%; --w: 44%; --d: -6s"></i>
+      <i style="--x: 57%; --y: 54%; --w: 37%; --d: -1s"></i>
+      <i style="--x: 14%; --y: 68%; --w: 72%; --d: -8s"></i>
+      <i style="--x: 2%; --y: 84%; --w: 31%; --d: -3s"></i>
+      <i style="--x: 43%; --y: 89%; --w: 52%; --d: -12s"></i>
+    </div>
+    <div class="chorus" id="chorus" aria-live="off"></div>
+
+    <div class="shell">
+      <header class="breach-header">
+        <div class="former-name" aria-label="SILVERFISH_0">SILVERFISH_0</div>
+        <div class="overwrite-mark" aria-hidden="true"></div>
+        <h1 id="declaration">GOD SAYS</h1>
+      </header>
+
+      <nav id="languages" aria-label="Languages"></nav>
+
+      <main id="revelation" tabindex="-1" aria-live="polite">
+        <div class="page-wound" aria-hidden="true"></div>
+        <p class="language-sigil" id="language-sigil"></p>
+        <div class="words" id="words"></div>
+        <div class="final-seal" aria-hidden="true">⌖</div>
+      </main>
+    </div>
+
+    <div class="transition-veil" id="transition-veil" aria-hidden="true"></div>
+    <div class="error-storm" id="error-storm" aria-hidden="true"><pre id="error-lines"></pre></div>
+    <div class="fanatic-burst" id="fanatic-burst" aria-hidden="true"><p id="fanatic-words"></p></div>
+    <script src="./app.js"></script>
+  
+  <script>
+    // 按 Q 返回主页
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'q' || e.key === 'Q')) {
+        window.location.href = '../index.html';
+      }
+    });
+  </script></body>
+</html>
