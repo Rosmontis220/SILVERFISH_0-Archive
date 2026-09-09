@@ -54,6 +54,11 @@
       transition: background 0.3s ease, color 0.3s ease;
     }
 
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
     .nav-system {
       position: fixed;
       top: 0;
@@ -78,6 +83,9 @@
       border: 1px solid var(--line);
       color: var(--ef-yellow);
       font-size: 24px;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
       transition: border-color 0.2s;
     }
 
@@ -120,13 +128,261 @@
     .icon-btn svg { width: 19px; height: 19px; }
     .icon-btn:hover { color: var(--ef-yellow); transform: translateY(-2px); }
 
-    .viewport {
+    .page {
       margin-left: 84px;
+      height: 100vh;
+      overflow: hidden;
+      overscroll-behavior: none;
+      scrollbar-width: none;
+    }
+
+    .page::-webkit-scrollbar { display: none; }
+
+    .module {
       min-height: 100vh;
-      padding: clamp(40px, 6vw, 76px) clamp(28px, 7vw, 96px) 48px;
       display: flex;
       flex-direction: column;
-      gap: clamp(34px, 5vw, 60px);
+      justify-content: center;
+      padding: clamp(28px, 5vw, 64px) clamp(28px, 7vw, 96px);
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+
+    .module-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+      min-height: 0;
+    }
+
+    .module-nav {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 300;
+    }
+
+    .module-nav button,
+    .module-count {
+      position: absolute;
+      pointer-events: auto;
+    }
+
+    #module-up {
+      top: 22px;
+      left: calc(50% + 42px);
+      transform: translateX(-50%);
+    }
+
+    .module-count {
+      bottom: 64px;
+      left: calc(50% + 42px);
+      transform: translateX(-50%);
+      width: max-content;
+    }
+
+    #module-down {
+      bottom: 20px;
+      left: calc(50% + 42px);
+      transform: translateX(-50%);
+    }
+
+    .module-nav button {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      background: var(--surface);
+      color: var(--muted);
+      border: 1px solid var(--line);
+      cursor: pointer;
+      font-size: 17px;
+      line-height: 1;
+      transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .module-nav button:hover:not(:disabled) {
+      color: var(--ef-yellow);
+      border-color: var(--ef-yellow);
+      background: var(--ef-light);
+    }
+
+    .module-nav button:disabled {
+      opacity: 0.25;
+      cursor: default;
+    }
+
+    .module-count {
+      font: 700 10px/1.4 var(--mono);
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .module-last { padding-bottom: clamp(76px, 11vh, 116px); }
+
+    .archive-entry-btn {
+      margin-top: 34px;
+      align-self: flex-start;
+      border: 0;
+      background: var(--ef-yellow);
+      color: var(--btn-text);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      padding: 16px 26px;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .archive-entry-btn:hover { transform: translateY(-2px); }
+    .archive-entry-btn:disabled { opacity: 0.55; cursor: default; transform: none; }
+
+    .enter-hint {
+      margin-top: 14px;
+      font: 700 10px/1.5 var(--mono);
+      letter-spacing: 0.18em;
+      color: var(--ef-yellow);
+      text-transform: uppercase;
+    }
+
+    .boot {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: var(--bg-page);
+      color: var(--text);
+      opacity: 1;
+      transition: opacity 0.65s ease;
+      overflow: hidden;
+    }
+
+    .boot.done { opacity: 0; pointer-events: none; }
+
+    .boot-bgword {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      user-select: none;
+      font-size: clamp(140px, 24vw, 320px);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.05em;
+      color: rgba(128, 128, 128, 0.1);
+      filter: blur(14px);
+    }
+
+    .boot-side {
+      position: absolute;
+      top: 50%;
+      left: 62%;
+      width: min(430px, 34vw);
+      transform: translateY(-64%);
+    }
+
+    .boot-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: clamp(24px, 2vw, 36px);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.02em;
+    }
+
+    .boot-mark {
+      width: 26px;
+      height: 26px;
+      border: 1px solid var(--ef-yellow);
+      color: var(--ef-yellow);
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .boot-slogan {
+      margin-top: 18px;
+      font: 700 10px/2 var(--mono);
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .boot-track-v {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 8px;
+      background: var(--line);
+    }
+
+    .boot-track-v span {
+      position: absolute;
+      inset: 0;
+      transform-origin: top;
+      background: var(--ef-yellow);
+      box-shadow: 0 0 14px var(--ef-yellow);
+      transform: scaleY(0);
+    }
+
+    .boot-track-h { display: none; }
+
+    .boot-status {
+      position: absolute;
+      left: 20px;
+      bottom: 26px;
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      font: 700 12px/1.6 var(--mono);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .boot-status b {
+      color: var(--ef-yellow);
+      font: 900 clamp(26px, 3vw, 40px)/1 var(--mono);
+      letter-spacing: 0.02em;
+    }
+
+    .boot-status #boot-state {
+      font: 700 12px/1.6 var(--mono);
+      letter-spacing: 0.18em;
+      color: var(--muted);
+    }
+
+    .boot-track-h {
+      display: none;
+      background: var(--line);
+      overflow: hidden;
+    }
+
+    .boot-track-h span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--ef-yellow);
+      transition: width 0.12s linear;
+    }
+
+    .module > .hero,
+    .module .module-main { will-change: opacity, transform; }
+
+    .module.is-active > .hero,
+    .module.is-active .module-main {
+      animation: module-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+
+    @keyframes module-in {
+      from { opacity: 0; transform: translateY(22px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .hero .kicker {
@@ -334,26 +590,69 @@
         color: var(--btn-text);
       }
 
-      .nav-mark, .system-title-v { display: none; }
+      .system-title-v { display: none; }
+      .nav-mark { width: 36px; height: 36px; font-size: 18px; }
       .system-title-h {
         display: block;
         font-size: 15px;
         font-weight: 900;
         letter-spacing: 0.12em;
       }
-      .nav-actions { flex-direction: row; gap: 12px; }
+      .nav-actions { flex-direction: row; gap: 10px; }
       .icon-btn:hover { color: inherit; transform: none; }
 
-      .viewport {
+      .page {
         margin-left: 0;
-        padding: 96px 20px 32px;
-        gap: 38px;
+        padding-top: 64px;
+        overflow-y: auto;
+      }
+      .module {
+        min-height: 0;
+        padding: 26px 20px 40px;
+      }
+      .module:first-child {
+        min-height: calc(100vh - 64px);
+        justify-content: center;
+      }
+      .module-nav { display: none !important; }
+
+      .boot-bgword { font-size: clamp(90px, 30vw, 170px); }
+      .boot-side {
+        top: 24%;
+        left: 0;
+        width: 100%;
+        padding: 0 24px;
+        text-align: center;
+        transform: none;
+      }
+      .boot-logo { justify-content: center; font-size: 24px; gap: 12px; }
+      .boot-mark { width: 24px; height: 24px; font-size: 12px; }
+      .boot-slogan { margin-top: 14px; }
+      .boot-track-v { display: none; }
+      .boot-track-h {
+        display: block;
+        position: absolute;
+        left: 50%;
+        bottom: 56px;
+        transform: translateX(-50%);
+        width: min(340px, 78vw);
+        height: 4px;
+      }
+      .boot-status {
+        left: 50%;
+        bottom: 78px;
+        transform: translateX(-50%);
+        text-align: center;
+        gap: 10px;
       }
 
       .hero h1 { font-size: clamp(40px, 13vw, 68px); }
     }
 
     @media (max-width: 520px) {
+      .module { padding: 20px 16px 36px; }
+      .system-title-h { font-size: 12px; letter-spacing: 0.04em; }
+      .nav-actions { gap: 8px; }
       .series-head { flex-direction: column; align-items: flex-start; gap: 6px; }
       .card-grid { grid-template-columns: 1fr; }
       .archive-footer { flex-direction: column; align-items: flex-start; }
@@ -362,15 +661,45 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
     }
+
+    @media print {
+      html, body { height: auto; overflow: visible; }
+      .nav-system, .module-nav, .archive-entry-btn, .enter-hint, .boot { display: none !important; }
+      .page {
+        margin-left: 0;
+        height: auto;
+        overflow: visible;
+        scroll-snap-type: none;
+        scroll-behavior: auto;
+      }
+      .module {
+        min-height: 0;
+        padding: 18px 0;
+        scroll-snap-align: none;
+      }
+    }
   </style>
 </head>
 <body>
+
+<div class="boot" id="boot" role="status" aria-label="档案载入中">
+  <div class="boot-bgword" id="boot-bgword" aria-hidden="true">SILVERFISH_0</div>
+  <div class="boot-side">
+    <p class="boot-logo"><span class="boot-mark" aria-hidden="true">◈</span>SILVERFISH_0</p>
+    <p class="boot-slogan">Complete Archive // 断联前后的完整记录</p>
+  </div>
+  <div class="boot-track-v" aria-hidden="true"><span id="boot-fill-v"></span></div>
+  <div class="boot-track-h" aria-hidden="true"><span id="boot-fill"></span></div>
+  <p class="boot-status" aria-live="polite"><b id="boot-pct">0%</b><span id="boot-state">Updating...</span></p>
+</div>
 
 <audio id="archive-music" src="call-of-iberia.mp3" autoplay loop preload="auto" style="position: fixed; width: 1px; height: 1px; opacity: 0; pointer-events: none;" aria-hidden="true"></audio>
 
 <nav class="nav-system" aria-label="站点导航">
   <div class="nav-left">
-    <span class="nav-mark" aria-hidden="true">⌖</span>
+    <button id="sound-toggle" class="nav-mark" type="button" aria-label="开启背景音乐" title="背景音乐">
+      <span id="sound-icon" aria-hidden="true">🔇</span>
+    </button>
   </div>
   <div class="nav-center">
     <div class="system-title-v">SILVERFISH_0 ARCHIVE</div>
@@ -388,8 +717,9 @@
   </div>
 </nav>
 
-<main class="viewport">
-  <header class="hero">
+<main class="page locked" id="page">
+  <section class="module" aria-label="档案简介">
+    <header class="hero">
     <div class="kicker">Complete Archive // 完整存档</div>
     <h1>SILVERFISH_0</h1>
     <p class="hero-sub">
@@ -399,9 +729,15 @@
       <span class="status-dot" aria-hidden="true"></span>
       <span>ARCHIVE_CHANNEL: ACTIVE</span>
     </div>
-  </header>
+    <button id="enter-archive" class="archive-entry-btn" type="button">
+      进入档案库 <span aria-hidden="true">→</span>
+    </button>
+    <p class="enter-hint" id="enter-hint" hidden>↓ 已解锁 · 滚动查看各模块 / Scroll to Explore</p>
+    </header>
+  </section>
 
-  <section class="series" aria-label="调查维基">
+  <section class="module" aria-label="调查维基">
+    <div class="module-main">
     <div class="series-head">
       <h2 class="series-name"><span class="no">01</span>调查维基 / WIKI</h2>
       <span class="series-count">3 RECORDS</span>
@@ -437,9 +773,11 @@
         <div class="card-enter">Open Record <span>→</span></div>
       </a>
     </div>
+    </div>
   </section>
 
-  <section class="series" aria-label="大黄昏预测">
+  <section class="module module-last" aria-label="大黄昏预测">
+    <div class="module-main">
     <div class="series-head">
       <h2 class="series-name"><span class="no">02</span>大黄昏预测 / FORECAST</h2>
       <span class="series-count">2 RECORDS</span>
@@ -467,24 +805,128 @@
         <div class="card-enter">Open Record <span>→</span></div>
       </a>
     </div>
-  </section>
-
-  <footer class="archive-footer">
-    <span>SILVERFISH_0 · COMPLETE ARCHIVE</span>
-    <div class="footer-links">
-      <a href="https://github.com/Silverfish-0" target="_blank" rel="noopener">
-        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-        </svg> GITHUB / SILVERFISH_0
-      </a>
-      <a href="https://github.com/Rosmontis220" target="_blank" rel="noopener">
-        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-        </svg> GITHUB / ROSMONTIS220
-      </a>
     </div>
-  </footer>
+
+    <footer class="archive-footer">
+      <span>SILVERFISH_0 · COMPLETE ARCHIVE</span>
+      <div class="footer-links">
+        <a href="https://github.com/Silverfish-0" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+          </svg> GITHUB / SILVERFISH_0
+        </a>
+        <a href="https://github.com/Rosmontis220" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+          </svg> GITHUB / ROSMONTIS220
+        </a>
+      </div>
+    </footer>
+  </section>
 </main>
+
+<div class="module-nav" aria-label="模块定位">
+  <button id="module-up" type="button" aria-label="上一个模块">↑</button>
+  <span class="module-count" id="module-count" aria-hidden="true">01 / 03</span>
+  <button id="module-down" type="button" aria-label="下一个模块">↓</button>
+</div>
+
+<script>
+  (function () {
+    const boot = document.getElementById('boot');
+    const fill = document.getElementById('boot-fill');
+    const fillV = document.getElementById('boot-fill-v');
+    const pctEl = document.getElementById('boot-pct');
+    const stateEl = document.getElementById('boot-state');
+    const bgword = document.getElementById('boot-bgword');
+    if (!boot || !fill || !fillV || !pctEl || !stateEl || !bgword) return;
+    let entered = false;
+    let fromHistory = false;
+    let returning = false;
+    try { entered = sessionStorage.getItem('sf-entry') === '1'; } catch (e) { /* storage unavailable */ }
+    try {
+      returning = sessionStorage.getItem('sf-return') === '1';
+      if (returning) sessionStorage.removeItem('sf-return');
+    } catch (e) { /* storage unavailable */ }
+    try {
+      const nav = performance.getEntriesByType && performance.getEntriesByType('navigation');
+      fromHistory = !!(nav && nav.length && nav[0].type === 'back_forward');
+    } catch (e) { /* navigation timing unavailable */ }
+    if (entered && (fromHistory || returning)) {
+      boot.remove();
+      document.documentElement.classList.add('auto-unlock');
+      window.dispatchEvent(new Event('archive:ready'));
+      return;
+    }
+    const PRELOAD_FILES = [
+      'wiki/v1/index.html', 'wiki/v1/style.css', 'wiki/v1/app.js', 'wiki/v1/content.js',
+      'wiki/v2/index.html', 'wiki/v2/style.css', 'wiki/v2/app.js', 'wiki/v2/content.js',
+      'wiki/v3/index.html', 'wiki/v3/style.css', 'wiki/v3/app.js',
+      'wiki/v3/background.png', 'wiki/v3/god.m4a',
+      'forecast/v1/index.html',
+      'forecast/v2/index.html', 'forecast/v2/GDF-ALERT-LEVEL-III.mp3'
+    ];
+    const totalFiles = PRELOAD_FILES.length;
+    let doneFiles = 0;
+    let allDone = false;
+    PRELOAD_FILES.forEach((url) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'blob';
+      xhr.onloadend = () => { doneFiles += 1; };
+      xhr.onerror = () => { doneFiles += 1; };
+      xhr.send();
+    });
+    const finishPreload = () => { allDone = true; };
+    const waitFiles = window.setInterval(() => {
+      if (doneFiles >= totalFiles) {
+        window.clearInterval(waitFiles);
+        finishPreload();
+      }
+    }, 120);
+    window.setTimeout(finishPreload, 9000); // 网络异常时兜底，不让进度条卡死
+
+    const DURATION = 2200;
+    const started = performance.now();
+    const stages = [
+      [30, 'CONNECTING // 连接中'],
+      [65, 'DECRYPTING // 解密中'],
+      [92, 'RECONSTRUCTING // 重组中'],
+      [100, 'ARCHIVE READY // 档案就绪']
+    ];
+    const tick = (now) => {
+      const t = Math.min(1, (now - started) / DURATION);
+      const easedTime = 1 - Math.pow(1 - t, 3);
+      const fileRatio = totalFiles ? doneFiles / totalFiles : 0;
+      let pct = 0;
+      if (allDone && t >= 1) {
+        pct = 100;
+      } else {
+        pct = Math.min(99, Math.round(100 * (0.45 * fileRatio + 0.55 * easedTime)));
+      }
+      const progress = pct / 100;
+      pctEl.textContent = pct + '%';
+      fill.style.width = pct + '%';
+      fillV.style.transform = 'scaleY(' + progress + ')';
+      bgword.style.filter = 'blur(' + Math.round((1 - progress) * 16) + 'px)';
+      const stage = stages.find((s) => pct <= s[0]) || stages[stages.length - 1];
+      stateEl.textContent = stage[1];
+      if (pct < 100) {
+        window.requestAnimationFrame(tick);
+      } else {
+        stateEl.textContent = 'ARCHIVE READY // 档案就绪';
+        window.setTimeout(() => {
+          boot.classList.add('done');
+          window.setTimeout(() => {
+            boot.remove();
+            window.dispatchEvent(new Event('archive:ready'));
+          }, 680);
+        }, 420);
+      }
+    };
+    window.requestAnimationFrame(tick);
+  })();
+</script>
 
 <script>
   (function () {
@@ -501,6 +943,161 @@
       try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) { /* storage unavailable */ }
       applyIcon();
     });
+  })();
+</script>
+<script>
+  (function () {
+    const page = document.getElementById('page');
+    const mods = Array.from(page.querySelectorAll(':scope > .module'));
+    const up = document.getElementById('module-up');
+    const down = document.getElementById('module-down');
+    const countEl = document.getElementById('module-count');
+    const enter = document.getElementById('enter-archive');
+    const hint = document.getElementById('enter-hint');
+    const locked = () => page.classList.contains('locked');
+    const currentIndex = () => {
+      const idx = Math.round(page.scrollTop / page.clientHeight);
+      return Math.max(0, Math.min(mods.length - 1, idx));
+    };
+    let busy = false;
+    let touchY = null;
+    const mobileQuery = window.matchMedia('(max-width: 860px)');
+    const isMobile = () => mobileQuery.matches;
+    const setState = () => {
+      if (isMobile()) return;
+      const i = currentIndex();
+      const l = locked();
+      countEl.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(mods.length).padStart(2, '0');
+      up.disabled = l || i === 0;
+      down.disabled = l || i === mods.length - 1;
+      mods.forEach((m, idx) => m.classList.toggle('is-active', idx === i));
+    };
+    const go = (i) => {
+      if (locked()) return;
+      if (isMobile()) {
+        const target = mods[Math.max(0, Math.min(mods.length - 1, i))];
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      if (busy) return;
+      const target = Math.max(0, Math.min(mods.length - 1, i));
+      if (target === currentIndex()) return;
+      busy = true;
+      page.scrollTo({ top: target * page.clientHeight, behavior: 'smooth' });
+      window.setTimeout(() => { busy = false; }, 1050);
+    };
+    const shift = (dir) => go(currentIndex() + dir);
+    const unlock = (showHint = true) => {
+      if (!locked()) return;
+      page.classList.remove('locked');
+      enter.disabled = true;
+      enter.innerHTML = '已进入档案库 <span aria-hidden="true">✓</span>';
+      hint.hidden = !showHint;
+      try { sessionStorage.setItem('sf-entry', '1'); } catch (e) { /* storage unavailable */ }
+      setState();
+    };
+    page.addEventListener('wheel', (e) => {
+      if (e.ctrlKey || isMobile()) return; // 保留浏览器缩放 / 移动端自然滚动
+      e.preventDefault();
+      if (!locked() && !busy) shift(e.deltaY > 0 ? 1 : -1);
+    }, { passive: false });
+    page.addEventListener('touchstart', (e) => {
+      if (isMobile()) return;
+      touchY = e.touches[0].clientY;
+    }, { passive: true });
+    page.addEventListener('touchmove', (e) => {
+      if (!isMobile() && !locked()) e.preventDefault();
+    }, { passive: false });
+    page.addEventListener('touchend', (e) => {
+      if (isMobile()) return;
+      if (locked() || touchY === null) return;
+      const dy = e.changedTouches[0].clientY - touchY;
+      touchY = null;
+      if (Math.abs(dy) > 42) shift(dy < 0 ? 1 : -1);
+    }, { passive: true });
+    up.addEventListener('click', () => shift(-1));
+    down.addEventListener('click', () => shift(1));
+    document.addEventListener('click', (e) => {
+      const card = e.target && e.target.closest ? e.target.closest('.entry-card') : null;
+      if (!card) return;
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      try { sessionStorage.setItem('sf-return', '1'); } catch (err) { /* storage unavailable */ }
+    }, true);
+    enter.addEventListener('click', () => {
+      unlock(true);
+      window.setTimeout(() => go(1), 550);
+    });
+    page.addEventListener('scroll', () => {
+      window.requestAnimationFrame(setState);
+    }, { passive: true });
+    if ('onscrollend' in window) {
+      page.addEventListener('scrollend', () => { busy = false; });
+    }
+    window.addEventListener('keydown', (e) => {
+      if (isMobile() || locked() || busy) return;
+      const tag = (e.target && e.target.tagName) || '';
+      if (/^(INPUT|TEXTAREA|SELECT)$/.test(tag)) return;
+      if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); shift(1); }
+      else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); shift(-1); }
+      else if (e.key === 'Home') { e.preventDefault(); go(0); }
+      else if (e.key === 'End') { e.preventDefault(); go(mods.length - 1); }
+    });
+    window.addEventListener('archive:ready', () => {
+      if (isMobile()) return;
+      mods.forEach((m) => m.classList.remove('is-active'));
+      window.requestAnimationFrame(() => {
+        mods[0].classList.add('is-active');
+      });
+    });
+    setState();
+    if (document.documentElement.classList.contains('auto-unlock')) {
+      unlock(false);
+      window.setTimeout(() => go(1), 450);
+    }
+  })();
+</script>
+<script>
+  (function () {
+    const btn = document.getElementById('sound-toggle');
+    const icon = document.getElementById('sound-icon');
+    const music = document.getElementById('archive-music');
+    if (!btn || !music) return;
+    let userMuted = false;
+    let tempMuted = false;
+    const update = () => {
+      const silent = music.paused || music.muted;
+      icon.textContent = silent ? '🔇' : '🔊';
+      btn.setAttribute('aria-label', silent ? '开启背景音乐' : '静音');
+      btn.title = silent ? '开启背景音乐' : '静音';
+    };
+    btn.addEventListener('click', () => {
+      if (music.paused || music.muted) {
+        userMuted = false;
+        music.muted = false;
+        const attempt = music.play();
+        if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
+      } else {
+        userMuted = true;
+        music.pause();
+      }
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (!music.paused && !music.muted && !userMuted) {
+          tempMuted = true;
+          music.muted = true;
+        }
+      } else if (tempMuted) {
+        tempMuted = false;
+        music.muted = false;
+        if (!userMuted && music.paused) {
+          const attempt = music.play();
+          if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
+        }
+      }
+    });
+    ['play', 'pause', 'volumechange'].forEach((ev) => music.addEventListener(ev, update));
+    update();
   })();
 </script>
 <script>
