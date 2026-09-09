@@ -1,222 +1,505 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SILVERFISH_0 Archive</title>
+  <meta name="description" content="SILVERFISH_0 完整存档：调查维基 v1-v3 与大黄昏预测两版。">
+  <title>SILVERFISH_0 // Archive</title>
+  <script>
+    (function () {
+      var stored = null;
+      try { stored = localStorage.getItem('theme'); } catch (e) { /* storage unavailable */ }
+      var dark = stored ? stored === 'dark' : true; // 默认暗色
+      if (!dark) document.documentElement.classList.add('light');
+    })();
+  </script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-dark: #0a0a0a;
+      --bg-light: #eaebed;
+      --gray-lines: rgba(128, 128, 128, 0.3);
+      --mono: 'Consolas', 'SFMono-Regular', Menlo, monospace;
     }
-    
+
+    html {
+      --ef-yellow: #FACC15;
+      --ef-dim: rgba(250, 204, 21, 0.08);
+      --ef-light: rgba(250, 204, 21, 0.04);
+      --btn-text: #000;
+      --surface: rgba(255, 255, 255, 0.04);
+      --bg-page: var(--bg-dark);
+      --text: #f4f4f4;
+      --muted: #949494;
+      --line: rgba(128, 128, 128, 0.3);
+    }
+
+    html.light {
+      --ef-yellow: #007aff;
+      --ef-dim: rgba(0, 122, 255, 0.08);
+      --ef-light: rgba(0, 122, 255, 0.04);
+      --btn-text: #fff;
+      --surface: rgba(0, 0, 0, 0.035);
+      --bg-page: var(--bg-light);
+      --text: #111;
+      --muted: #5a5a5a;
+      --line: rgba(128, 128, 128, 0.25);
+    }
+
     body {
-      font-family: 'Consolas', 'Monaco', monospace;
-      background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 100%);
-      color: #e0e0e0;
+      font-family: 'Noto Sans Hans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+      background: var(--bg-page);
+      color: var(--text);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .nav-system {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 84px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 0;
+      border-right: 1px solid var(--line);
+      background: rgba(128, 128, 128, 0.05);
+      z-index: 100;
+    }
+
+    .nav-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      color: var(--ef-yellow);
+      font-size: 24px;
+      transition: border-color 0.2s;
+    }
+
+    .nav-mark:hover { border-color: var(--ef-yellow); }
+
+    .system-title-v {
+      writing-mode: vertical-rl;
+      font-weight: 900;
+      letter-spacing: 8px;
+      font-size: 19px;
+      opacity: 0.92;
+      white-space: nowrap;
+    }
+
+    .system-title-h { display: none; }
+
+    .nav-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .icon-btn {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      background: none;
+      border: 0;
+      padding: 0;
+      color: inherit;
+      text-decoration: none;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .icon-btn svg { width: 19px; height: 19px; }
+    .icon-btn:hover { color: var(--ef-yellow); transform: translateY(-2px); }
+
+    .viewport {
+      margin-left: 84px;
       min-height: 100vh;
+      padding: clamp(40px, 6vw, 76px) clamp(28px, 7vw, 96px) 48px;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(34px, 5vw, 60px);
+    }
+
+    .hero .kicker {
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 20px;
+      gap: 12px;
+      font: 700 11px/1.4 var(--mono);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--ef-yellow);
+      margin-bottom: 18px;
     }
-    
-    .container {
-      max-width: 900px;
-      width: 100%;
+
+    .hero .kicker::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--ef-yellow);
     }
-    
-    .header {
-      text-align: center;
-      margin-bottom: 60px;
+
+    .hero h1 {
+      font-size: clamp(46px, 8vw, 104px);
+      font-weight: 900;
+      line-height: 0.94;
+      letter-spacing: -0.045em;
     }
-    
-    .title {
-      font-size: 48px;
-      color: #00d9ff;
-      text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
-      margin-bottom: 15px;
-      letter-spacing: 4px;
+
+    .hero-sub {
+      margin-top: 22px;
+      max-width: 680px;
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--muted);
     }
-    
-    .subtitle {
+
+    .status-line {
+      margin-top: 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font: 700 11px/1.4 var(--mono);
+      letter-spacing: 0.18em;
+      color: var(--muted);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ef-yellow);
+      box-shadow: 0 0 12px var(--ef-yellow);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    .series {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .series-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .series-name {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       font-size: 16px;
-      color: #888;
-      letter-spacing: 2px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
     }
-    
-    .versions {
+
+    .series-name .no {
+      font: 700 12px var(--mono);
+      color: var(--ef-yellow);
+      letter-spacing: 0.1em;
+    }
+
+    .series-count {
+      font: 700 10px var(--mono);
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-      margin-bottom: 60px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
     }
-    
-    .version-card {
-      background: rgba(0, 217, 255, 0.05);
-      border: 2px solid #00d9ff;
-      padding: 30px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      text-decoration: none;
-      display: block;
+
+    .entry-card {
       position: relative;
-      overflow: hidden;
-    }
-    
-    .version-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.2), transparent);
-      transition: left 0.5s ease;
-    }
-    
-    .version-card:hover::before {
-      left: 100%;
-    }
-    
-    .version-card:hover {
-      background: rgba(0, 217, 255, 0.1);
-      box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
-      transform: translateY(-5px);
-    }
-    
-    .version-number {
-      font-size: 14px;
-      color: #00d9ff;
-      margin-bottom: 10px;
-      letter-spacing: 1px;
-    }
-    
-    .version-title {
-      font-size: 24px;
-      color: #fff;
-      margin-bottom: 15px;
-      font-weight: bold;
-    }
-    
-    .version-desc {
-      font-size: 14px;
-      color: #aaa;
-      line-height: 1.8;
-      margin-bottom: 15px;
-    }
-    
-    .version-meta {
-      font-size: 12px;
-      color: #666;
-      border-top: 1px solid rgba(0, 217, 255, 0.2);
-      padding-top: 15px;
-    }
-    
-    .god-card {
-      border-color: #ff0064;
-      background: rgba(255, 0, 100, 0.05);
-    }
-    
-    .god-card::before {
-      background: linear-gradient(90deg, transparent, rgba(255, 0, 100, 0.2), transparent);
-    }
-    
-    .god-card:hover {
-      background: rgba(255, 0, 100, 0.1);
-      box-shadow: 0 0 30px rgba(255, 0, 100, 0.3);
-    }
-    
-    .god-card .version-number {
-      color: #ff0064;
-    }
-    
-    .footer {
-      text-align: center;
-      color: #666;
-      font-size: 13px;
-      line-height: 1.8;
-    }
-    
-    .footer a {
-      color: #00d9ff;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 24px 24px 18px;
       text-decoration: none;
+      color: inherit;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+      transition: border-color 0.22s ease, background 0.22s ease, transform 0.22s ease;
     }
-    
-    .footer a:hover {
-      text-decoration: underline;
+
+    .entry-card:hover {
+      border-color: var(--ef-yellow);
+      background: var(--ef-light);
+      transform: translateY(-3px);
     }
-    
-    @media (max-width: 768px) {
-      .title {
-        font-size: 32px;
+
+    .card-kicker {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font: 700 10px/1.4 var(--mono);
+      letter-spacing: 0.22em;
+      color: var(--ef-yellow);
+      text-transform: uppercase;
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .card-desc {
+      flex: 1;
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    .card-enter {
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font: 700 10px/1 var(--mono);
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .card-enter span { transition: transform 0.22s ease; }
+    .entry-card:hover .card-enter { color: var(--ef-yellow); }
+    .entry-card:hover .card-enter span { transform: translateX(4px); }
+
+    .archive-footer {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      font: 700 10px/1.5 var(--mono);
+      letter-spacing: 0.14em;
+      color: var(--muted);
+    }
+
+    .archive-footer a {
+      color: inherit;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+
+    .archive-footer a svg { width: 13px; height: 13px; }
+    .archive-footer a:hover { color: var(--ef-yellow); }
+    .footer-links {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    @media (max-width: 860px) {
+      .nav-system {
+        width: 100%;
+        height: 64px;
+        flex-direction: row;
+        padding: 0 18px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        background: var(--ef-yellow);
+        color: var(--btn-text);
       }
-      
-      .versions {
-        grid-template-columns: 1fr;
+
+      .nav-mark, .system-title-v { display: none; }
+      .system-title-h {
+        display: block;
+        font-size: 15px;
+        font-weight: 900;
+        letter-spacing: 0.12em;
       }
+      .nav-actions { flex-direction: row; gap: 12px; }
+      .icon-btn:hover { color: inherit; transform: none; }
+
+      .viewport {
+        margin-left: 0;
+        padding: 96px 20px 32px;
+        gap: 38px;
+      }
+
+      .hero h1 { font-size: clamp(40px, 13vw, 68px); }
+    }
+
+    @media (max-width: 520px) {
+      .series-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+      .card-grid { grid-template-columns: 1fr; }
+      .archive-footer { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1 class="title">SILVERFISH_0</h1>
-      <p class="subtitle">完整存档 / Complete Archive</p>
+
+<nav class="nav-system" aria-label="站点导航">
+  <div class="nav-left">
+    <span class="nav-mark" aria-hidden="true">⌖</span>
+  </div>
+  <div class="nav-center">
+    <div class="system-title-v">SILVERFISH_0 ARCHIVE</div>
+    <div class="system-title-h">SILVERFISH_0 ARCHIVE</div>
+  </div>
+  <div class="nav-actions">
+    <a class="icon-btn" href="https://github.com/Rosmontis220/SILVERFISH_0-Archive" target="_blank" rel="noopener" aria-label="存档仓库：SILVERFISH_0-Archive" title="SILVERFISH_0-Archive">
+      <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/>
+      </svg>
+    </a>
+    <button id="theme-toggle" class="icon-btn" type="button" aria-label="切换日间模式">
+      <span id="theme-icon" aria-hidden="true">🌙</span>
+    </button>
+  </div>
+</nav>
+
+<main class="viewport">
+  <header class="hero">
+    <div class="kicker">Complete Archive // 完整存档</div>
+    <h1>SILVERFISH_0</h1>
+    <p class="hero-sub">
+      断联前后的完整记录：调查维基的三个版本，以及大黄昏预测网页在事件前后的两份状态。
+    </p>
+    <div class="status-line">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span>ARCHIVE_CHANNEL: ACTIVE</span>
     </div>
-    
-    <div class="versions">
-      <a href="v1/index.html" class="version-card">
-        <div class="version-number">VERSION 1</div>
-        <h2 class="version-title">断联前 v1</h2>
-        <p class="version-desc">
-          原始版本的调查维基<br>
-          20篇文章<br>
+  </header>
+
+  <section class="series" aria-label="调查维基">
+    <div class="series-head">
+      <h2 class="series-name"><span class="no">01</span>调查维基 / WIKI</h2>
+      <span class="series-count">3 RECORDS</span>
+    </div>
+    <div class="card-grid">
+      <a href="wiki/v1/index.html" class="entry-card">
+        <div class="card-kicker">WIKI // V1</div>
+        <h3 class="card-title">调查维基 v1</h3>
+        <p class="card-desc">
+          断联前 · 20篇原始版本<br>
           证据规则系统、锚点假说
         </p>
-        <div class="version-meta">
-          20 articles · 41.83 KB
-        </div>
+        <div class="card-enter">Open Record <span>→</span></div>
       </a>
-      
-      <a href="v2/index.html" class="version-card">
-        <div class="version-number">VERSION 2</div>
-        <h2 class="version-title">断联前 v2</h2>
-        <p class="version-desc">
-          新增《断联协议》<br>
-          21篇文章<br>
-          扩充理论、重构预言系统
+
+      <a href="wiki/v2/index.html" class="entry-card">
+        <div class="card-kicker">WIKI // V2</div>
+        <h3 class="card-title">调查维基 v2</h3>
+        <p class="card-desc">
+          断联前 · 21篇更新版本<br>
+          新增《断联协议》、扩充理论
         </p>
-        <div class="version-meta">
-          21 articles · 46.47 KB · +4.64 KB
-        </div>
+        <div class="card-enter">Open Record <span>→</span></div>
       </a>
-      
-      <a href="god/index.html" class="version-card god-card">
-        <div class="version-number">BLACKOUT</div>
-        <h2 class="version-title">断联后</h2>
-        <p class="version-desc">
-          GOD SAYS<br>
-          16种语言启示<br>
-          50哀歌 + 20错误 + 16狂热
+
+      <a href="wiki/v3/index.html" class="entry-card">
+        <div class="card-kicker">WIKI // V3</div>
+        <h3 class="card-title">调查维基 v3</h3>
+        <p class="card-desc">
+          断联后 · GOD SAYS<br>
+          16种语言启示
         </p>
-        <div class="version-meta">
-          content.js deleted · Somniomancer [null set]
-        </div>
+        <div class="card-enter">Open Record <span>→</span></div>
       </a>
     </div>
-    
-        <div class="footer">
-      <p>
-        "If the sky remembers you, do not answer."<br>
-        <br>
-        <span style="color: #00d9ff; font-size: 14px;">💡 提示：进入页面后按 Ctrl+Q 快速返回</span><br>
-        <br>
-        <a href="https://github.com/Silverfish-0" target="_blank">GitHub: Silverfish-0</a>
-      </p>
+  </section>
+
+  <section class="series" aria-label="大黄昏预测">
+    <div class="series-head">
+      <h2 class="series-name"><span class="no">02</span>大黄昏预测 / FORECAST</h2>
+      <span class="series-count">2 RECORDS</span>
     </div>
-  </div>
+    <div class="card-grid">
+      <a href="forecast/v1/index.html" class="entry-card">
+        <div class="card-kicker">FORECAST // V1</div>
+        <h3 class="card-title">大黄昏预测 v1</h3>
+        <p class="card-desc">
+          GREAT DUSK FORECAST<br>
+          预警信道仍在预报<br>
+          预估持续时间 ≈ 1 个人类月份
+        </p>
+        <div class="card-enter">Open Record <span>→</span></div>
+      </a>
+
+      <a href="forecast/v2/index.html" class="entry-card">
+        <div class="card-kicker">FORECAST // V2</div>
+        <h3 class="card-title">大黄昏预测 v2</h3>
+        <p class="card-desc">
+          GDF // SIGNAL LOSS<br>
+          预报状态终止，事件状态开始<br>
+          Level III 警报信道已附加
+        </p>
+        <div class="card-enter">Open Record <span>→</span></div>
+      </a>
+    </div>
+  </section>
+
+  <footer class="archive-footer">
+    <span>SILVERFISH_0 · COMPLETE ARCHIVE</span>
+    <div class="footer-links">
+      <a href="https://github.com/Silverfish-0" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+        </svg> GITHUB / SILVERFISH_0
+      </a>
+      <a href="https://github.com/Rosmontis220" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+        </svg> GITHUB / ROSMONTIS220
+      </a>
+    </div>
+  </footer>
+</main>
+
+<script>
+  (function () {
+    const toggle = document.getElementById('theme-toggle');
+    const icon = document.getElementById('theme-icon');
+    const applyIcon = () => {
+      const dark = !document.documentElement.classList.contains('light');
+      icon.textContent = dark ? '☀️' : '🌙';
+      toggle.setAttribute('aria-label', dark ? '切换日间模式' : '切换夜间模式');
+    };
+    applyIcon();
+    toggle.addEventListener('click', () => {
+      const dark = !document.documentElement.classList.toggle('light');
+      try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) { /* storage unavailable */ }
+      applyIcon();
+    });
+  })();
+</script>
 </body>
 </html>

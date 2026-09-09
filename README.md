@@ -10,30 +10,36 @@ SILVERFISH_0-Archive/
 ├── index.html          # 主页面（版本选择）
 ├── README.md           # 说明文档
 │
-├── v1/                 # 断联前 v1（20篇原始版本）
-│   ├── index.html
-│   ├── app.js
-│   ├── style.css
-│   ├── content.js
-│   ├── 密码.txt
-│   ├── readme.zip
-│   └── 404.html
+├── wiki/               # 调查维基（断联前后）
+│   ├── v1/             # 断联前 v1（20篇原始版本）
+│   │   ├── index.html
+│   │   ├── app.js
+│   │   ├── style.css
+│   │   ├── content.js
+│   │   ├── 密码.txt
+│   │   ├── readme.zip
+│   │   └── 404.html
+│   ├── v2/             # 断联前 v2（21篇更新版本）
+│   │   ├── index.html
+│   │   ├── app.js
+│   │   ├── style.css
+│   │   ├── content.js
+│   │   ├── 密码.txt
+│   │   ├── readme.zip
+│   │   └── 404.html
+│   └── v3/             # 断联后（GOD SAYS）
+│       ├── index.html
+│       ├── app.js
+│       ├── style.css
+│       ├── god.m4a
+│       └── background.png
 │
-├── v2/                 # 断联前 v2（21篇更新版本）
-│   ├── index.html
-│   ├── app.js
-│   ├── style.css
-│   ├── content.js
-│   ├── 密码.txt
-│   ├── readme.zip
-│   └── 404.html
-│
-└── god/                # 断联后（GOD SAYS）
-    ├── index.html
-    ├── app.js
-    ├── style.css
-    ├── god.m4a
-    └── background.png
+└── forecast/           # 大黄昏预测网页（补档）
+    ├── v1/             # commit 3344017 时的第一版
+    │   └── index.html
+    └── v2/             # 当前仓库 HEAD 的第二版
+        ├── index.html
+        └── GDF-ALERT-LEVEL-III.mp3
 ```
 
 ## 版本说明
@@ -53,7 +59,22 @@ SILVERFISH_0-Archive/
 - 50哀歌 + 20系统错误 + 16狂热宣言
 - Somniomancer [null set] 音频 (Crywolf)
 
-## 留档文件（在 v1/ 和 v2/ 中）
+### 大黄昏预测 (补档自 great-dusk-forecast)
+
+该网页原部署于 `https://github.com/Silverfish-0/great-dusk-forecast`，此前未纳入本存档。
+
+#### forecast/v1（commit `3344017`）
+- 单页预报：GREAT DUSK FORECAST
+- 预报仍在进行：持续时间 ≈ 1 个人类月份，预警等级 ELEVATED
+
+#### forecast/v2（当前仓库 HEAD）
+- 预报状态终止，页面转为本地位记录
+- `index.html` 为加密外壳，浏览器会自动解密并显示事件页
+- 附带 `GDF-ALERT-LEVEL-III.mp3`（Level III 警报音频，与事件页同目录）
+
+两版页面均未沿用 Ctrl+Q 快捷键，改用右下角可见的「返回存档索引」按钮返回本目录。
+
+## 留档文件（在 wiki/v1/ 和 wiki/v2/ 中）
 
 ### 密码.txt
 解密密码：`INSIGHTFUTURETHROUGHTHEFOG`
@@ -67,9 +88,11 @@ SILVERFISH_0-Archive/
 直接打开 `index.html`，点击对应版本。
 
 ### 独立访问
-- `v1/index.html` - 20篇原始版本
-- `v2/index.html` - 21篇更新版本
-- `god/index.html` - GOD SAYS
+- `wiki/v1/index.html` - 20篇原始版本
+- `wiki/v2/index.html` - 21篇更新版本
+- `wiki/v3/index.html` - GOD SAYS
+- `forecast/v1/index.html` - 大黄昏预测第一版
+- `forecast/v2/index.html` - 大黄昏预测第二版（加密页，需 WebCrypto 自动解密）
 
 ### GitHub Pages 部署
 
