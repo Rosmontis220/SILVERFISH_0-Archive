@@ -262,19 +262,16 @@
 
     .boot.done { opacity: 0; pointer-events: none; }
 
-    .boot-bgword {
+    .boot-bgimg {
       position: absolute;
       inset: 0;
-      display: grid;
-      place-items: center;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       pointer-events: none;
       user-select: none;
-      font-size: clamp(140px, 24vw, 320px);
-      font-weight: 900;
-      line-height: 0.9;
-      letter-spacing: -0.05em;
-      color: rgba(128, 128, 128, 0.1);
-      filter: blur(14px);
+      opacity: 0.28;
+      filter: blur(20px);
     }
 
     .boot-side {
@@ -616,7 +613,6 @@
       }
       .module-nav { display: none !important; }
 
-      .boot-bgword { font-size: clamp(90px, 30vw, 170px); }
       .boot-side {
         top: 24%;
         left: 0;
@@ -683,7 +679,7 @@
 <body>
 
 <div class="boot" id="boot" role="status" aria-label="档案载入中">
-  <div class="boot-bgword" id="boot-bgword" aria-hidden="true">SILVERFISH_0</div>
+  <img class="boot-bgimg" id="boot-bgimg" src="avatar_silverfish.jpg" alt="" aria-hidden="true">
   <div class="boot-side">
     <p class="boot-logo"><span class="boot-mark" aria-hidden="true">◈</span>SILVERFISH_0</p>
     <p class="boot-slogan">Complete Archive // 断联前后的完整记录</p>
@@ -838,8 +834,8 @@
     const fillV = document.getElementById('boot-fill-v');
     const pctEl = document.getElementById('boot-pct');
     const stateEl = document.getElementById('boot-state');
-    const bgword = document.getElementById('boot-bgword');
-    if (!boot || !fill || !fillV || !pctEl || !stateEl || !bgword) return;
+    const bgimg = document.getElementById('boot-bgimg');
+    if (!boot || !fill || !fillV || !pctEl || !stateEl || !bgimg) return;
     let entered = false;
     let fromHistory = false;
     let returning = false;
@@ -908,7 +904,8 @@
       pctEl.textContent = pct + '%';
       fill.style.width = pct + '%';
       fillV.style.transform = 'scaleY(' + progress + ')';
-      bgword.style.filter = 'blur(' + Math.round((1 - progress) * 16) + 'px)';
+      bgimg.style.filter = 'blur(' + Math.round((1 - progress) * 20) + 'px)';
+      bgimg.style.opacity = (0.28 + progress * 0.22).toFixed(3);
       const stage = stages.find((s) => pct <= s[0]) || stages[stages.length - 1];
       stateEl.textContent = stage[1];
       if (pct < 100) {
