@@ -366,6 +366,8 @@
 </head>
 <body>
 
+<audio id="archive-music" src="call-of-iberia.mp3" autoplay loop preload="auto" style="position: fixed; width: 1px; height: 1px; opacity: 0; pointer-events: none;" aria-hidden="true"></audio>
+
 <nav class="nav-system" aria-label="站点导航">
   <div class="nav-left">
     <span class="nav-mark" aria-hidden="true">⌖</span>
@@ -499,6 +501,24 @@
       try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) { /* storage unavailable */ }
       applyIcon();
     });
+  })();
+</script>
+<script>
+  (function () {
+    const music = document.getElementById('archive-music');
+    if (!music) return;
+    const play = () => {
+      const attempt = music.play();
+      if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
+    };
+    window.addEventListener('pageshow', play);
+    window.addEventListener('pointerdown', play, { once: true });
+    window.addEventListener('keydown', play, { once: true });
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) play();
+    });
+    music.addEventListener('canplay', play, { once: true });
+    window.setTimeout(play, 80);
   })();
 </script>
 </body>
