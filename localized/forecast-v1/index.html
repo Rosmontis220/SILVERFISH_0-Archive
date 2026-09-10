@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>大黄昏预测 // SILVERFISH_0</title>
+<style>
+:root{--bg:#050505;--panel:#0b0b0b;--fg:#f1f1f1;--muted:#8e8e8e;--line:#262626;--danger:#ff3a3a}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--fg);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}body{min-height:100vh;overflow-x:hidden}body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.08;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.09) 0,rgba(255,255,255,.09) 1px,transparent 1px,transparent 4px);mix-blend-mode:screen;z-index:999}.wrap{width:min(980px,calc(100% - 32px));margin:auto;padding:32px 0 80px}.topline{display:flex;justify-content:space-between;gap:24px;padding-bottom:16px;border-bottom:1px solid var(--line);color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--danger);margin-right:8px;box-shadow:0 0 14px rgba(255,58,58,.65);animation:pulse 1.35s infinite;vertical-align:middle}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.22}}.hero{padding:72px 0 48px;border-bottom:1px solid var(--line)}.kicker{color:var(--danger);font-size:13px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:18px}h1{margin:0;font-size:clamp(44px,9vw,110px);line-height:.88;letter-spacing:-.055em;font-weight:800;text-transform:uppercase}.sub{margin-top:30px;max-width:760px;color:#c9c9c9;font-size:clamp(16px,2vw,20px);line-height:1.65}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:34px}.metric{background:var(--panel);padding:22px;min-height:128px}.metric .label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px}.metric .value{font-size:24px;line-height:1.2}.metric .small{margin-top:8px;color:#777;font-size:11px;line-height:1.5}section{padding:38px 0;border-bottom:1px solid var(--line)}h2{font-size:15px;margin:0 0 20px;text-transform:uppercase;letter-spacing:.14em}p{margin:0 0 16px;color:#bdbdbd;line-height:1.75;font-size:15px}.warning{margin:34px 0;border:1px solid var(--danger);background:rgba(255,58,58,.04);padding:26px;position:relative;overflow:hidden}.warning:before{content:"ALERT";position:absolute;right:18px;top:10px;font-size:72px;font-weight:900;color:rgba(255,58,58,.06);letter-spacing:-.07em;pointer-events:none}.warning strong{color:var(--danger);display:block;margin-bottom:12px;font-size:17px;letter-spacing:.1em}.warning p{color:#dfdfdf;max-width:780px}.rules{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}.rule{border:1px solid var(--line);background:var(--panel);padding:18px;color:#cfcfcf;line-height:1.6;min-height:88px}.rule b{color:#fff;display:block;margin-bottom:6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}.terminal{background:#000;border:1px solid var(--line);padding:22px;margin-top:20px;font-size:13px;line-height:1.85;color:#a8a8a8;white-space:pre-wrap}.terminal .red{color:var(--danger)}.terminal .white{color:#f4f4f4}.signature{padding-top:48px;display:flex;justify-content:space-between;align-items:flex-end;gap:24px}.sig{font-size:28px;letter-spacing:-.03em}.sig small{display:block;margin-top:8px;font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}.footnote{max-width:440px;text-align:right;color:#666;font-size:11px;line-height:1.6}.glitch{position:relative;display:inline-block}.glitch:after{content:attr(data-text);position:absolute;inset:0;color:var(--danger);clip-path:inset(48% 0 42% 0);opacity:0;animation:glitch 7s infinite;pointer-events:none}@keyframes glitch{0%,92%,100%{opacity:0;transform:translateX(0)}93%{opacity:.7;transform:translateX(3px)}94%{opacity:.5;transform:translateX(-2px)}95%{opacity:0;transform:translateX(0)}}@media(max-width:720px){.wrap{width:min(100% - 22px,980px);padding-top:20px}.topline{font-size:10px}.hero{padding-top:50px}.grid{grid-template-columns:1fr}.rules{grid-template-columns:1fr}.signature{align-items:flex-start;flex-direction:column}.footnote{text-align:left}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<div class="topline"><div><span class="status-dot"></span>预测信道在线</div><div>公开 / 外部观察者</div></div>
+<header class="hero">
+<div class="kicker">延伸事件预测</div>
+<h1 class="glitch" data-text="大黄昏">大黄昏</h1>
+<p class="sub">当前预测显示，下一次大黄昏不会短暂。如果预测维持稳定，其持续时间可能相当于人类民用时间的一个月左右。</p>
+<div class="grid">
+<div class="metric"><div class="label">事件</div><div class="value">大黄昏</div><div class="small">大规模、非周期性的自然宇宙灾害</div></div>
+<div class="metric"><div class="label">预估持续时间</div><div class="value">≈ 1 个人类月份</div><div class="small">仅为估计，各地实际体验可能不同。</div></div>
+<div class="metric"><div class="label">预测信心</div><div class="value">上升中</div><div class="small">预测窗口正在收窄。</div></div>
+</div>
+</header>
+<section><h2>这意味着什么</h2>
+<p>大黄昏不是被制造的袭击、政治行为或敌意宣告。它是一种自然发生的宇宙灾害，其起始无法被排期、谈判或用常规手段阻止。</p>
+<p>已知的大多数大黄昏持续时间有限，而本次预测不同。当前模型反复收敛到一段足够长的区间——长到足以影响连续性、观测、通讯与普通记录的稳定。</p>
+<p>人类观察者应把这份通告视为预警，而不是倒计时。确切的开始时间仍不确定。</p>
+</section>
+<div class="warning"><strong>警报 // 建议准备</strong><p>如果这份预测正确，通讯可能在很长一段时间内变得不可靠。不要假设沉默等于缺席；不要假设记录缺失等于什么都没发生；不要假设两份幸存的副本必然一致。</p></div>
+<section><h2>建议行为</h2><div class="rules">
+<div class="rule"><b>保留独立副本</b>把重要信息保存在不止一个地方。</div>
+<div class="rule"><b>记录日期与观察者</b>上下文可能比文件本身更重要。</div>
+<div class="rule"><b>不要强行对账</b>矛盾的记录应先被保留，再考虑修正。</div>
+<div class="rule"><b>预期通讯中断</b>长时间的沉默可能是环境导致，而非人为。</div>
+</div></section>
+<section><h2>预测备注</h2>
+<p>我发布这份预测，是因为预计的持续时间足够异常——等到确信再发，警告本身就没有意义了。</p>
+<p>你可以怀疑这份预测。如果我们的处境互换，我大概也会怀疑。只要把这一页保存在一个不依赖这台服务器的地方就好。</p>
+<div class="terminal"><span class="white">预测状态:</span> 有效
+<span class="white">事件类型:</span> 大黄昏
+<span class="white">预计持续:</span> ~ 1 个人类月份
+<span class="white">起始时间:</span> 未确定
+<span class="white">严重程度:</span> <span class="red">升高</span>
+<span class="white">更新策略:</span> 视情况而定
+
+如果天空在这一页改变之前先改变，
+相信天空。</div>
+</section>
+<footer class="signature"><div class="sig">— Silverfish_0<small>外务连续性通告</small></div><div class="footnote">本页是一份预测通告，不代表任何更大机构、权威或档案馆的官方声明。</div></footer>
+</main>
+<script>const title=document.querySelector('.glitch');setInterval(()=>{if(Math.random()<.10){const v=['大黄昏','大黄昏','长黄昏','长 黄_昏','大黄昏'];title.textContent=v[Math.floor(Math.random()*v.length)];setTimeout(()=>title.textContent='大黄昏',90+Math.random()*140)}},1200);</script>
+<style>
+.archive-return{position:fixed;bottom:14px;right:14px;z-index:10000;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:11px;line-height:1;letter-spacing:.08em;color:#FACC15;background:rgba(10,10,10,.85);border:1px solid rgba(250,204,21,.55);padding:10px 12px;border-radius:4px;text-decoration:none}
+.archive-return:hover{color:#000;background:#FACC15;border-color:#FACC15}
+</style>
+<a class="archive-return" href="../../index.html">← BACK TO ARCHIVE // 返回存档索引</a>
+</body>
+</html>

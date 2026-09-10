@@ -34,12 +34,18 @@ SILVERFISH_0-Archive/
 │       ├── god.m4a
 │       └── background.png
 │
-└── forecast/           # 大黄昏预测网页（补档）
+├── forecast/           # 大黄昏预测网页（补档）
     ├── v1/             # commit 3344017 时的第一版
     │   └── index.html
     └── v2/             # 当前仓库 HEAD 的第二版
         ├── index.html
         └── GDF-ALERT-LEVEL-III.mp3
+│
+└── localized/          # 汉化模块（英文页面中文版）
+    ├── forecast-v1/    # 大黄昏预测 v1 汉化
+    │   └── index.html
+    └── forecast-v2/    # 大黄昏预测 v2 汉化（加密页，音频引用原版）
+        └── index.html
 ```
 
 ## 版本说明
@@ -74,6 +80,13 @@ SILVERFISH_0-Archive/
 
 两版页面均未沿用 Ctrl+Q 快捷键，改用右下角可见的「返回存档索引」按钮返回本目录。
 
+### 汉化 (localized)
+
+把原本全英文的两份大黄昏预测页面翻译成中文，原版页面保持不动：
+
+- `localized/forecast-v1/`：预测页中文版（版式、配色与交互与原版一致）
+- `localized/forecast-v2/`：事件页中文版，仍为加密壳，解密后为中文内容；保留手动警报门禁，音频引用原版 `forecast/v2/GDF-ALERT-LEVEL-III.mp3`
+
 ## 留档文件（在 wiki/v1/ 和 wiki/v2/ 中）
 
 ### 密码.txt
@@ -93,6 +106,8 @@ SILVERFISH_0-Archive/
 - `wiki/v3/index.html` - GOD SAYS
 - `forecast/v1/index.html` - 大黄昏预测第一版
 - `forecast/v2/index.html` - 大黄昏预测第二版（加密页，需 WebCrypto 自动解密）
+- `localized/forecast-v1/index.html` - 大黄昏预测第一版汉化
+- `localized/forecast-v2/index.html` - 大黄昏预测第二版汉化
 
 ### GitHub Pages 部署
 
