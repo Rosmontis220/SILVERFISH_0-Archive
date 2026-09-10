@@ -121,6 +121,20 @@ SILVERFISH_0-Archive/
 
 发布方在说明里要求：不要上传到所谓在线解密站，也不要把这件事扩展成对任何现实人物的调查；模组不联网、不上传数据。
 
+### 文件下载 (downloads)
+
+首页第五个模块，把散落在各目录里的随档文件集中成下载入口。`wiki/v1/` 与 `wiki/v2/` 的
+`密码.txt`、`readme.zip` 哈希完全一致，所以只放一份。
+
+| 文件 | 实际位置 | 说明 |
+| --- | --- | --- |
+| `密码.txt` | `wiki/v1/` | 64 B，解密密码 |
+| `readme.zip` | `wiki/v1/` | 508 B，原始加密文件 |
+| `local-continuity-probe-0.1.0.jar` | `number-of-motion/files/` | 9.8 KB，本地连续性探针 |
+| `CHECKSUMS.txt` | `number-of-motion/files/` | 658 B，探针三个文件的 SHA-256 与使用须知 |
+| `god.m4a` | `wiki/v3/` | 3.4 MB，调查维基 v3（GOD SAYS）音频 |
+| `GDF-ALERT-LEVEL-III.mp3` | `forecast/v2/` | 9.2 MB，大黄昏预测 v2 警报音频 |
+
 ### 杂项 (MISC)
 
 外部入口，汇总在首页第四个模块：
