@@ -1217,21 +1217,28 @@
       }
     });
     if (userMuted) music.muted = true;
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        if (!music.paused && !music.muted && !userMuted) {
-          tempMuted = true;
-          music.muted = true;
-        }
-      } else if (tempMuted) {
-        tempMuted = false;
-        music.muted = false;
-        if (!userMuted && music.paused) {
-          const attempt = music.play();
-          if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
-        }
+    const suspendForBackground = () => {
+      if (!music.paused && !music.muted && !userMuted) {
+        tempMuted = true;
+        music.muted = true;
       }
+    };
+    const resumeFromBackground = () => {
+      if (!tempMuted) return;
+      tempMuted = false;
+      music.muted = false;
+      if (!userMuted && music.paused) {
+        const attempt = music.play();
+        if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
+      }
+    };
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) suspendForBackground();
+      else resumeFromBackground();
     });
+    window.addEventListener('blur', suspendForBackground);
+    window.addEventListener('focus', resumeFromBackground);
+    window.addEventListener('pagehide', suspendForBackground);
     ['play', 'pause', 'volumechange'].forEach((ev) => music.addEventListener(ev, update));
     update();
   })();
