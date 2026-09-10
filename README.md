@@ -87,6 +87,17 @@ SILVERFISH_0-Archive/
 - `localized/forecast-v1/`：预测页中文版（版式、配色与交互与原版一致）
 - `localized/forecast-v2/`：事件页中文版，仍为加密壳，解密后为中文内容；保留手动警报门禁，音频引用原版 `forecast/v2/GDF-ALERT-LEVEL-III.mp3`
 
+### 杂项 (MISC)
+
+外部入口，汇总在首页第四个模块：
+
+- B站 · XIKM HLQA ONYIEN：`https://space.bilibili.com/3493126603803061`
+- 抖音 · VHQ-4K/19：分享主页链接
+- 腾讯文档 · XIKM HLQA ONYIEN 解谜：`https://docs.qq.com/doc/DZURVVXJkS1NZWFNq`
+- B站 · Silverfish_0：`https://space.bilibili.com/1239867708`
+- 迷雾论坛：`https://www.mistarg.cn/`
+- QQ 群链接：`https://qm.qq.com/q/EICZzM2KTC`
+
 ## 留档文件（在 wiki/v1/ 和 wiki/v2/ 中）
 
 ### 密码.txt
