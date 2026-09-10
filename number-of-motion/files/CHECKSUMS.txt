@@ -1,0 +1,16 @@
+LOCAL CONTINUITY PROBE／本地连续性探针
+VERSION／版本: 0.1.0
+MINECRAFT: Java 1.20.1
+FORGE: 47.4.10
+
+SHA-256:
+local-continuity-probe-0.1.0.jar  2677eb597e433913103e23dc9b1a36bcb325704f9dcf6d7c454c6353f1f8fa04
+last-local-record.html            d525670114f1f084c36bcf60daad13b29293c099f3a06ad6f757d8ebe501c09f
+local-copy.html                   866d44866e9d30836bc75869b423fa7fa95c72af084b844521e1d7db938d7c3f
+
+NETWORK／联网: NONE／无
+TELEMETRY／遥测: NONE／无
+WORLD CHANGES／世界改动: PLAYER PROGRESS ONLY／只记录玩家实验进度
+
+USE A DISPOSABLE TEST WORLD AND KEEP A BACKUP.
+请使用一次性测试存档，并保留备份。

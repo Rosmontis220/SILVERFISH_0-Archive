@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="SILVERFISH_0 完整存档：调查维基 v1-v3 与大黄昏预测两版。">
+  <meta name="description" content="SILVERFISH_0 完整存档：调查维基 v1-v3、大黄昏预测两版，以及失联后发布的本地连续性探针。">
   <title>SILVERFISH_0 // Archive</title>
   <script>
     (function () {
@@ -760,7 +760,7 @@
     <div class="kicker">Complete Archive // 完整存档</div>
     <h1>SILVERFISH_0</h1>
     <p class="hero-sub">
-      断联前后的完整记录：调查维基的三个版本、大黄昏预测网页的两份状态、汉化页面，以及相关外部入口。
+      断联前后的完整记录：调查维基的三个版本、大黄昏预测网页的两份状态、失联后发布的本地连续性探针、汉化页面，以及相关外部入口。
     </p>
     <div class="status-line">
       <span class="status-dot" aria-hidden="true"></span>
@@ -845,10 +845,42 @@
     </div>
   </section>
 
+  <section class="module" aria-label="运动之数">
+    <div class="module-main">
+      <div class="series-head">
+        <h2 class="series-name"><span class="no">03</span>运动之数 / NUMBER OF MOTION</h2>
+        <span class="series-count">2 RECORDS</span>
+      </div>
+      <div class="card-grid">
+        <a href="number-of-motion/files/last-local-record.html" class="entry-card">
+          <div class="card-kicker">NOM // RECORD</div>
+          <h3 class="card-title">本地记录</h3>
+          <p class="card-desc">
+            LOCAL RECORD<br>
+            加密原文，需在浏览器内输入密钥<br>
+            解封过程只在本地完成
+          </p>
+          <div class="card-enter">Open Record <span>→</span></div>
+        </a>
+
+        <a href="number-of-motion/files/local-copy.html" class="entry-card">
+          <div class="card-kicker">NOM // COPY</div>
+          <h3 class="card-title">本地副本</h3>
+          <p class="card-desc">
+            LOCAL COPY<br>
+            同批发布的另一份记录<br>
+            归档记录称其完整，结论请自行核对
+          </p>
+          <div class="card-enter">Open Record <span>→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <section class="module" aria-label="汉化">
     <div class="module-main">
       <div class="series-head">
-        <h2 class="series-name"><span class="no">03</span>汉化 / LOCALIZED</h2>
+        <h2 class="series-name"><span class="no">04</span>汉化 / LOCALIZED</h2>
         <span class="series-count">2 RECORDS</span>
       </div>
       <div class="card-grid">
@@ -878,7 +910,7 @@
   <section class="module module-last" aria-label="杂项">
     <div class="module-main">
       <div class="series-head">
-        <h2 class="series-name"><span class="no">04</span>杂项 / MISC</h2>
+        <h2 class="series-name"><span class="no">05</span>杂项 / MISC</h2>
         <span class="series-count">6 LINKS</span>
       </div>
       <div class="card-grid card-grid-3">
@@ -946,7 +978,7 @@
 
 <div class="module-nav" aria-label="模块定位">
   <button id="module-up" type="button" aria-label="上一个模块">↑</button>
-  <span class="module-count" id="module-count" aria-hidden="true">01 / 03</span>
+  <span class="module-count" id="module-count" aria-hidden="true">01 / 06</span>
   <button id="module-down" type="button" aria-label="下一个模块">↓</button>
 </div>
 
@@ -985,6 +1017,8 @@
       'wiki/v3/background.png', 'wiki/v3/god.m4a',
       'forecast/v1/index.html',
       'forecast/v2/index.html', 'forecast/v2/GDF-ALERT-LEVEL-III.mp3',
+      'number-of-motion/files/last-local-record.html',
+      'number-of-motion/files/local-copy.html',
       'localized/forecast-v1/index.html', 'localized/forecast-v2/index.html'
     ];
     const totalFiles = PRELOAD_FILES.length;
@@ -1147,6 +1181,7 @@
       if (!card) return;
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       try { sessionStorage.setItem('sf-return', '1'); } catch (err) { /* storage unavailable */ }
+      try { sessionStorage.setItem('sf-module', String(currentIndex())); } catch (err) { /* storage unavailable */ }
     }, true);
     enter.addEventListener('click', () => {
       unlock(true);
@@ -1177,7 +1212,13 @@
     setState();
     if (document.documentElement.classList.contains('auto-unlock')) {
       unlock(false);
-      window.setTimeout(() => go(1), 450);
+      let origin = 1;
+      try {
+        const raw = sessionStorage.getItem('sf-module');
+        const parsed = raw === null ? NaN : parseInt(raw, 10);
+        if (!Number.isNaN(parsed)) origin = Math.max(0, Math.min(mods.length - 1, parsed));
+      } catch (e) { /* storage unavailable */ }
+      window.setTimeout(() => go(origin), 450);
     }
   })();
 </script>

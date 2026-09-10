@@ -1,4 +1,4 @@
-﻿# SILVERFISH_0 Archive
+# SILVERFISH_0 Archive
 
 断联前后的完整记录。
 
@@ -40,6 +40,14 @@ SILVERFISH_0-Archive/
     └── v2/             # 当前仓库 HEAD 的第二版
         ├── index.html
         └── GDF-ALERT-LEVEL-III.mp3
+│
+├── number-of-motion/   # 运动之数（失联后发布）
+│   ├── README.md       # 发布方随附说明
+│   └── files/          # 解压后的发布文件
+│       ├── CHECKSUMS.txt
+│       ├── last-local-record.html
+│       ├── local-copy.html
+│       └── local-continuity-probe-0.1.0.jar
 │
 └── localized/          # 汉化模块（英文页面中文版）
     ├── forecast-v1/    # 大黄昏预测 v1 汉化
@@ -87,6 +95,32 @@ SILVERFISH_0-Archive/
 - `localized/forecast-v1/`：预测页中文版（版式、配色与交互与原版一致）
 - `localized/forecast-v2/`：事件页中文版，仍为加密壳，解密后为中文内容；保留手动警报门禁，音频引用原版 `forecast/v2/GDF-ALERT-LEVEL-III.mp3`
 
+### 运动之数 (number-of-motion)
+
+来自仓库 `https://github.com/Silverfish-0/number-of-motion`，以及 2026-09-10 的 B 站动态《失联以后，这边还在走》。
+这是一个 Minecraft 侧的小模组谜题，不是网页存档，因此单独成一个模块：
+
+- `files/local-continuity-probe-0.1.0.jar`：Local Continuity Probe／本地连续性探针 v0.1.0，环境 Minecraft Java 1.20.1 + Forge 47.4.10
+- `files/last-local-record.html`：本地记录，加密外壳，需在浏览器内输入密钥解封
+- `files/local-copy.html`：本地副本，同为加密外壳
+- `files/CHECKSUMS.txt`：发布方自述的注意事项与三个文件的 SHA-256
+
+三个文件按发布时的原始字节保存，未做任何改动，SHA-256 与 `CHECKSUMS.txt` 完全一致。
+首页只收录两份记录网页，模组与说明按原样留在目录里，不进入首页模块。
+
+两份记录网页在文件末尾追加了一段返回入口（单行标记 `SF0-ARCHIVE-RETURN-BEGIN` … `SF0-ARCHIVE-RETURN-END`），
+这是全文唯一的改动：原有内容一个字节没动，追加块只负责往页面上注入右下角的返回按钮。
+追加块 1133 字节，紧接在原件之后，截断回 8584 字节（`last-local-record.html`）或 4656 字节（`local-copy.html`）
+即可还原原件、重新对上 `CHECKSUMS.txt`。追加块不含换行符，所以仓库里的字节与 GitHub Pages 提供的一致。
+`local-copy.html` 的追加块以一个 `</script>` 开头——它末尾原有内容没有闭合脚本标签，不补这一下，追加的代码不会被解析执行。
+
+| 文件 | 原件 SHA-256 | 追加后 SHA-256 |
+| --- | --- | --- |
+| `last-local-record.html` | `d525670114f1f084c36bcf60daad13b29293c099f3a06ad6f757d8ebe501c09f` | `8aa4e8722380571ed97187aebf24738ae7de2e710860090b99f2b868bda4e45f` |
+| `local-copy.html` | `866d44866e9d30836bc75869b423fa7fa95c72af084b844521e1d7db938d7c3f` | `91fa0bbefd539696d4550898a438ea49fb19018263c6a3bd62b897a673bd9570` |
+
+发布方在说明里要求：不要上传到所谓在线解密站，也不要把这件事扩展成对任何现实人物的调查；模组不联网、不上传数据。
+
 ### 杂项 (MISC)
 
 外部入口，汇总在首页第四个模块：
@@ -117,6 +151,9 @@ SILVERFISH_0-Archive/
 - `wiki/v3/index.html` - GOD SAYS
 - `forecast/v1/index.html` - 大黄昏预测第一版
 - `forecast/v2/index.html` - 大黄昏预测第二版（加密页，需 WebCrypto 自动解密）
+- `number-of-motion/files/last-local-record.html` - 本地记录（加密）
+- `number-of-motion/files/local-copy.html` - 本地副本
+- `number-of-motion/files/local-continuity-probe-0.1.0.jar` - 本地连续性探针模组
 - `localized/forecast-v1/index.html` - 大黄昏预测第一版汉化
 - `localized/forecast-v2/index.html` - 大黄昏预测第二版汉化
 
