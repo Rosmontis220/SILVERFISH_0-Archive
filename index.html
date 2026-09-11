@@ -128,6 +128,168 @@
     .icon-btn svg { width: 19px; height: 19px; }
     .icon-btn:hover { color: var(--ef-yellow); transform: translateY(-2px); }
 
+    /* 侧边栏：快速跳转目录（桌面悬停扩展 / 移动端汉堡菜单） */
+    .nav-system { align-items: flex-start; }
+
+    .nav-left,
+    .nav-center,
+    .nav-actions {
+      width: 84px;
+      display: flex;
+    }
+
+    .nav-left,
+    .nav-center { justify-content: center; }
+
+    .nav-burger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      width: 40px;
+      height: 40px;
+      padding: 0 8px;
+      border: 0;
+      background: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .nav-burger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: currentColor;
+      transition: transform 0.22s ease, opacity 0.18s ease;
+    }
+
+    .nav-system.menu-open .nav-burger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-system.menu-open .nav-burger span:nth-child(2) { opacity: 0; }
+    .nav-system.menu-open .nav-burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    .nav-panel {
+      position: absolute;
+      top: 96px;
+      left: 0;
+      right: 0;
+      bottom: 96px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 20px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateX(-10px);
+      transition: opacity 0.2s ease, transform 0.26s ease, visibility 0.26s;
+    }
+
+    .nav-panel-title {
+      font: 700 10px/1.4 var(--mono);
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .nav-toc {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-toc-item {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      width: 100%;
+      padding: 9px 10px;
+      border: 0;
+      border-left: 2px solid transparent;
+      background: none;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: left;
+      cursor: pointer;
+      transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .nav-toc-item .toc-no {
+      font: 700 10px var(--mono);
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .nav-toc-item:hover {
+      color: var(--ef-yellow);
+      background: var(--ef-light);
+      border-left-color: var(--ef-yellow);
+    }
+
+    .nav-toc-item.is-current {
+      color: var(--ef-yellow);
+      border-left-color: var(--ef-yellow);
+    }
+
+    .nav-toc-item.is-current .toc-no { color: var(--ef-yellow); }
+
+    .nav-panel-slot {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-panel-slot:empty { display: none; }
+
+    @media (min-width: 861px) {
+      .nav-system {
+        transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1), background 0.28s ease, box-shadow 0.28s ease;
+      }
+
+      .system-title-v { transition: opacity 0.16s ease; }
+
+      .nav-system:hover {
+        width: 252px;
+        background: var(--bg-page);
+        box-shadow: 0 0 0 1px var(--line), 18px 0 44px rgba(0, 0, 0, 0.22);
+      }
+
+      .nav-system:hover .nav-panel {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: none;
+      }
+
+      .nav-system:hover .system-title-v { opacity: 0; }
+
+      /* 仅键盘聚焦（:focus-visible）时保持展开；鼠标点击不会锁住展开状态，移开即收回 */
+      @supports selector(:has(*)) {
+        .nav-system:has(:focus-visible) {
+          width: 252px;
+          background: var(--bg-page);
+          box-shadow: 0 0 0 1px var(--line), 18px 0 44px rgba(0, 0, 0, 0.22);
+        }
+
+        .nav-system:has(:focus-visible) .nav-panel {
+          opacity: 1;
+          visibility: visible;
+          pointer-events: auto;
+          transform: none;
+        }
+
+        .nav-system:has(:focus-visible) .system-title-v { opacity: 0; }
+      }
+    }
+
     .page {
       margin-left: 84px;
       height: 100vh;
@@ -633,6 +795,41 @@
       .nav-actions { flex-direction: row; gap: 10px; }
       .icon-btn:hover { color: inherit; transform: none; }
 
+      .nav-system { align-items: center; }
+      .nav-left,
+      .nav-actions { display: none; }
+      .nav-center {
+        width: auto;
+        flex: 1;
+        justify-content: flex-start;
+      }
+      .nav-burger { display: flex; }
+
+      .nav-panel {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        bottom: auto;
+        max-height: calc(100vh - 64px);
+        padding: 18px 18px 20px;
+        color: var(--text);
+        background: var(--bg-page);
+        border-bottom: 1px solid var(--line);
+        box-shadow: 0 20px 44px rgba(0, 0, 0, 0.26);
+        transform: translateY(-12px);
+      }
+
+      .nav-system.menu-open .nav-panel {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: none;
+      }
+
+      .nav-toc-item { padding: 12px 10px; font-size: 14px; }
+      .nav-panel-slot { gap: 18px; }
+
       .page {
         margin-left: 0;
         padding-top: 64px;
@@ -641,6 +838,7 @@
       .module {
         min-height: 0;
         padding: 26px 20px 40px;
+        scroll-margin-top: 64px;
       }
       .module:first-child {
         min-height: calc(100vh - 64px);
@@ -751,6 +949,18 @@
     <button id="theme-toggle" class="icon-btn" type="button" aria-label="切换日间模式">
       <span id="theme-icon" aria-hidden="true">🌙</span>
     </button>
+  </div>
+
+  <button class="nav-burger" id="nav-burger" type="button" aria-label="打开目录" aria-expanded="false" aria-controls="nav-panel">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </button>
+
+  <div class="nav-panel" id="nav-panel">
+    <p class="nav-panel-title">目录 / Directory</p>
+    <ul class="nav-toc" id="nav-toc"></ul>
+    <div class="nav-panel-slot" id="nav-panel-slot"></div>
   </div>
 </nav>
 
@@ -1186,6 +1396,14 @@
     const hint = document.getElementById('enter-hint');
     const locked = () => page.classList.contains('locked');
     const currentIndex = () => {
+      if (isMobile()) {
+        const pageTop = page.getBoundingClientRect().top;
+        let best = 0;
+        mods.forEach((m, idx) => {
+          if (m.getBoundingClientRect().top - pageTop <= 80) best = idx;
+        });
+        return best;
+      }
       const idx = Math.round(page.scrollTop / page.clientHeight);
       return Math.max(0, Math.min(mods.length - 1, idx));
     };
@@ -1193,9 +1411,85 @@
     let touchY = null;
     const mobileQuery = window.matchMedia('(max-width: 860px)');
     const isMobile = () => mobileQuery.matches;
+
+    /* 侧边栏目录：桌面悬停扩展 / 移动端汉堡菜单 */
+    const nav = document.querySelector('.nav-system');
+    const burger = document.getElementById('nav-burger');
+    const tocList = document.getElementById('nav-toc');
+    const panelSlot = document.getElementById('nav-panel-slot');
+    const navLeft = nav ? nav.querySelector('.nav-left') : null;
+    const navActions = nav ? nav.querySelector('.nav-actions') : null;
+    const soundBtn = document.getElementById('sound-toggle');
+    const themeBtn = document.getElementById('theme-toggle');
+    const repoLink = navActions ? navActions.querySelector('a.icon-btn') : null;
+    const tocItems = [];
+    if (tocList) {
+      mods.forEach((m, idx) => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'nav-toc-item';
+        const no = m.querySelector('.series-name .no');
+        if (no) {
+          const noEl = document.createElement('span');
+          noEl.className = 'toc-no';
+          noEl.textContent = no.textContent.trim();
+          btn.appendChild(noEl);
+        }
+        const label = document.createElement('span');
+        label.textContent = m.getAttribute('aria-label') || ('模块 ' + (idx + 1));
+        btn.appendChild(label);
+        btn.addEventListener('click', () => jumpTo(idx));
+        li.appendChild(btn);
+        tocList.appendChild(li);
+        tocItems.push(btn);
+      });
+    }
+    const closeMenu = () => {
+      if (!nav || !nav.classList.contains('menu-open')) return;
+      nav.classList.remove('menu-open');
+      if (burger) burger.setAttribute('aria-expanded', 'false');
+    };
+    const jumpTo = (i) => {
+      if (i < 0 || i >= mods.length) return;
+      if (locked()) unlock(true);
+      go(i);
+      closeMenu();
+    };
+    const syncNavLayout = () => {
+      if (!nav || !panelSlot) return;
+      if (isMobile()) {
+        [soundBtn, repoLink, themeBtn].forEach((el) => { if (el) panelSlot.appendChild(el); });
+      } else {
+        if (soundBtn && navLeft) navLeft.appendChild(soundBtn);
+        if (repoLink && navActions) navActions.appendChild(repoLink);
+        if (themeBtn && navActions) navActions.appendChild(themeBtn);
+        closeMenu();
+      }
+    };
+    if (burger) {
+      burger.addEventListener('click', () => {
+        const open = nav.classList.toggle('menu-open');
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    }
+    document.addEventListener('click', (e) => {
+      if (!nav || !nav.classList.contains('menu-open')) return;
+      const t = e.target;
+      if (t && t.closest && t.closest('.nav-system')) return;
+      closeMenu();
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+    if (mobileQuery.addEventListener) mobileQuery.addEventListener('change', syncNavLayout);
+    else if (mobileQuery.addListener) mobileQuery.addListener(syncNavLayout);
+    syncNavLayout();
+
     const setState = () => {
-      if (isMobile()) return;
       const i = currentIndex();
+      tocItems.forEach((el, idx) => el.classList.toggle('is-current', idx === i));
+      if (isMobile()) return;
       const l = locked();
       countEl.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(mods.length).padStart(2, '0');
       up.disabled = l || i === 0;
