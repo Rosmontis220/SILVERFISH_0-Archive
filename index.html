@@ -77,37 +77,48 @@
     }
 
     .nav-mark {
-      width: 42px;
-      height: 42px;
+      width: 40px;
+      height: 40px;
       display: grid;
       place-items: center;
-      border: 1px solid var(--line);
-      color: var(--ef-yellow);
-      font-size: 24px;
-      background: transparent;
+      border: 0;
+      color: inherit;
+      font-size: 22px;
+      line-height: 1;
+      background: none;
       padding: 0;
       cursor: pointer;
-      transition: border-color 0.2s;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
-    .nav-mark:hover { border-color: var(--ef-yellow); }
+    .nav-mark:hover { opacity: 0.72; }
 
-    .system-title-v {
-      writing-mode: vertical-rl;
-      font-weight: 900;
-      letter-spacing: 8px;
-      font-size: 19px;
-      opacity: 0.92;
-      white-space: nowrap;
+    .nav-logo {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border: 0;
+      border-radius: 6px;
+      overflow: hidden;
+      background: none;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
-    .system-title-h { display: none; }
+    .nav-logo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .nav-logo:hover { opacity: 0.85; transform: translateY(-2px); }
 
     .nav-actions {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 10px;
     }
 
     .icon-btn {
@@ -140,7 +151,8 @@
       justify-content: center;
     }
 
-    .nav-actions {
+    .nav-actions-frame {
+      display: flex;
       flex-direction: column;
       align-items: center;
       gap: 6px;
@@ -149,7 +161,13 @@
       transition: border-color 0.22s ease;
     }
 
-    .nav-actions:hover { border-color: var(--ef-yellow); }
+    .nav-actions-frame:hover { border-color: var(--ef-yellow); }
+    .nav-actions-frame:empty { display: none; }
+
+    .nav-center {
+      width: auto;
+      justify-content: center;
+    }
 
     .nav-burger {
       display: none;
@@ -288,8 +306,6 @@
         transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1), background 0.28s ease, box-shadow 0.28s ease;
       }
 
-      .system-title-v { transition: opacity 0.16s ease; }
-
       .nav-system:hover {
         width: 252px;
         background: var(--bg-page);
@@ -312,8 +328,6 @@
         max-width: 220px;
         opacity: 1;
       }
-
-      .nav-system:hover .system-title-v { opacity: 0; }
 
       /* 仅键盘聚焦（:focus-visible）时保持展开；鼠标点击不会锁住展开状态，移开即收回 */
       @supports selector(:has(*)) {
@@ -340,17 +354,11 @@
           opacity: 1;
         }
 
-        .nav-system:has(:focus-visible) .system-title-v { opacity: 0; }
       }
     }
 
-    /* 屏幕不高时收紧竖排标题与图标行距，保证整列放得下 */
-    @media (min-width: 861px) and (max-height: 900px) {
-      .system-title-v {
-        font-size: 15px;
-        letter-spacing: 4px;
-      }
-
+    /* 屏幕不高时收紧图标行距，保证整列放得下 */
+    @media (min-width: 861px) and (max-height: 680px) {
       .nav-toc-item { height: 30px; }
     }
 
@@ -841,6 +849,7 @@
         width: 100%;
         height: 64px;
         flex-direction: row;
+        align-items: center;
         padding: 0 18px;
         border-right: 0;
         border-bottom: 1px solid var(--line);
@@ -848,55 +857,72 @@
         color: var(--btn-text);
       }
 
-      .system-title-v { display: none; }
-      .nav-mark { width: 36px; height: 36px; font-size: 18px; }
-      .system-title-h {
-        display: block;
-        font-size: 15px;
-        font-weight: 900;
-        letter-spacing: 0.12em;
-      }
-      .nav-actions { flex-direction: row; gap: 10px; }
-      .icon-btn:hover { color: inherit; transform: none; }
-
-      .nav-system { align-items: center; }
-      .nav-left,
-      .nav-actions { display: none; }
-      .nav-center {
+      .nav-left {
         width: auto;
-        flex: 1;
+        margin-right: auto;
         justify-content: flex-start;
       }
+      .nav-center,
+      .nav-actions { display: none; }
+      .nav-mark { width: 38px; height: 38px; font-size: 19px; }
+      .nav-logo { width: 34px; height: 34px; border-radius: 5px; }
+      .icon-btn:hover { color: inherit; transform: none; }
+
       .nav-burger { display: flex; }
+      .nav-system.menu-open .nav-burger {
+        position: relative;
+        z-index: 30;
+        color: var(--text);
+      }
 
       .nav-panel {
         position: fixed;
-        top: 64px;
+        top: 0;
         left: 0;
         right: 0;
-        bottom: auto;
+        bottom: 0;
         display: flex;
         flex-direction: column;
-        max-height: calc(100vh - 64px);
-        padding: 18px 18px 20px;
+        padding: 14px 18px calc(20px + env(safe-area-inset-bottom, 0px));
         overflow-y: auto;
         overscroll-behavior: contain;
         color: var(--text);
         background: var(--bg-page);
         border-bottom: 1px solid var(--line);
         box-shadow: 0 20px 44px rgba(0, 0, 0, 0.26);
-        opacity: 0;
         visibility: hidden;
         pointer-events: none;
-        transform: translateY(-12px);
-        transition: opacity 0.2s ease, transform 0.24s ease, visibility 0.24s;
+        transform: translateX(-100%);
+        transition: transform 0.34s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.34s;
+        z-index: 20;
       }
 
       .nav-system.menu-open .nav-panel {
-        opacity: 1;
         visibility: visible;
         pointer-events: auto;
-        transform: none;
+        transform: translateX(0);
+      }
+
+      .nav-panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      .nav-panel-logo {
+        display: block;
+        width: 34px;
+        height: 34px;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      .nav-panel-logo img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
 
       .nav-modules {
@@ -983,7 +1009,6 @@
 
     @media (max-width: 520px) {
       .module { padding: 20px 16px 36px; }
-      .system-title-h { font-size: 12px; letter-spacing: 0.04em; }
       .nav-actions { gap: 8px; }
       .series-head { flex-direction: column; align-items: flex-start; gap: 6px; }
       .card-grid { grid-template-columns: 1fr; }
@@ -1031,27 +1056,30 @@
 
 <nav class="nav-system" aria-label="站点导航">
   <div class="nav-left">
-    <button id="sound-toggle" class="nav-mark" type="button" aria-label="开启背景音乐" title="背景音乐">
-      <span id="sound-icon" aria-hidden="true">🔇</span>
+    <button class="nav-logo" id="nav-logo" type="button" aria-label="回到档案首屏" title="SILVERFISH_0">
+      <img src="avatar_silverfish.jpg" alt="SILVERFISH_0">
     </button>
   </div>
   <div class="nav-center">
-    <div class="system-title-v">SILVERFISH_0 ARCHIVE</div>
-    <div class="system-title-h">SILVERFISH_0 ARCHIVE</div>
-  </div>
-  <div class="nav-modules" id="nav-modules">
-    <p class="nav-modules-title">[ 目录 ] / Directory</p>
-    <ul class="nav-toc" id="nav-toc"></ul>
+    <div class="nav-modules" id="nav-modules">
+      <p class="nav-modules-title">[ 目录 ] / Directory</p>
+      <ul class="nav-toc" id="nav-toc"></ul>
+    </div>
   </div>
   <div class="nav-actions">
-    <a class="icon-btn" href="https://github.com/Rosmontis220/SILVERFISH_0-Archive" target="_blank" rel="noopener" aria-label="存档仓库：SILVERFISH_0-Archive" title="SILVERFISH_0-Archive">
-      <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-        <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/>
-      </svg>
-    </a>
-    <button id="theme-toggle" class="icon-btn" type="button" aria-label="切换日间模式">
-      <span id="theme-icon" aria-hidden="true">🌙</span>
+    <button id="sound-toggle" class="nav-mark" type="button" aria-label="开启背景音乐" title="背景音乐">
+      <span id="sound-icon" aria-hidden="true">🔇</span>
     </button>
+    <div class="nav-actions-frame" id="nav-actions-frame">
+      <a class="icon-btn" href="https://github.com/Rosmontis220/SILVERFISH_0-Archive" target="_blank" rel="noopener" aria-label="存档仓库：SILVERFISH_0-Archive" title="SILVERFISH_0-Archive">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/>
+        </svg>
+      </a>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="切换日间模式">
+        <span id="theme-icon" aria-hidden="true">🌙</span>
+      </button>
+    </div>
   </div>
 
   <button class="nav-burger" id="nav-burger" type="button" aria-label="打开目录" aria-expanded="false" aria-controls="nav-panel">
@@ -1061,6 +1089,9 @@
   </button>
 
   <div class="nav-panel" id="nav-panel">
+    <div class="nav-panel-head">
+      <span class="nav-panel-logo" aria-hidden="true"><img src="avatar_silverfish.jpg" alt=""></span>
+    </div>
     <div class="nav-panel-slot" id="nav-panel-slot"></div>
   </div>
 </nav>
@@ -1518,13 +1549,14 @@
     const burger = document.getElementById('nav-burger');
     const tocList = document.getElementById('nav-toc');
     const panelSlot = document.getElementById('nav-panel-slot');
-    const navLeft = nav ? nav.querySelector('.nav-left') : null;
     const navActions = nav ? nav.querySelector('.nav-actions') : null;
     const soundBtn = document.getElementById('sound-toggle');
     const themeBtn = document.getElementById('theme-toggle');
     const repoLink = navActions ? navActions.querySelector('a.icon-btn') : null;
     const navModules = document.getElementById('nav-modules');
     const navCenter = nav ? nav.querySelector('.nav-center') : null;
+    const navActionsFrame = document.getElementById('nav-actions-frame');
+    const navLogo = document.getElementById('nav-logo');
     const TOC_ICONS = [
       '<rect x="5.6" y="5.6" width="12.8" height="12.8" transform="rotate(45 12 12)"/><circle cx="12" cy="12" r="2"/>',
       '<path d="M7 3.5h6.5L18 8v12.5H7z"/><path d="M13.5 3.5V8H18"/><path d="M9.8 12h5.4M9.8 15.5h5.4"/>',
@@ -1592,12 +1624,13 @@
       if (!nav || !panelSlot) return;
       if (isMobile()) {
         if (navModules) panelSlot.parentNode.insertBefore(navModules, panelSlot);
-        [soundBtn, repoLink, themeBtn].forEach((el) => { if (el) panelSlot.appendChild(el); });
+        [repoLink, themeBtn].forEach((el) => { if (el) panelSlot.appendChild(el); });
+        if (soundBtn && burger) nav.insertBefore(soundBtn, burger);
       } else {
-        if (navModules && navCenter) navCenter.insertAdjacentElement('afterend', navModules);
-        if (soundBtn && navLeft) navLeft.appendChild(soundBtn);
-        if (repoLink && navActions) navActions.appendChild(repoLink);
-        if (themeBtn && navActions) navActions.appendChild(themeBtn);
+        if (navModules && navCenter) navCenter.appendChild(navModules);
+        if (soundBtn && navActions) navActions.insertBefore(soundBtn, navActionsFrame);
+        if (repoLink && navActionsFrame) navActionsFrame.appendChild(repoLink);
+        if (themeBtn && navActionsFrame) navActionsFrame.appendChild(themeBtn);
         closeMenu();
       }
     };
@@ -1605,6 +1638,16 @@
       burger.addEventListener('click', () => {
         const open = nav.classList.toggle('menu-open');
         burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    }
+    if (navLogo) {
+      navLogo.addEventListener('click', () => {
+        closeMenu();
+        if (isMobile()) {
+          mods[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else if (!locked()) {
+          go(0);
+        }
       });
     }
     document.addEventListener('click', (e) => {
