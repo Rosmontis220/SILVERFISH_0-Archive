@@ -129,7 +129,7 @@
     .icon-btn svg { width: 19px; height: 19px; }
     .icon-btn:hover { color: var(--ef-yellow); transform: translateY(-2px); }
 
-    /* 侧边栏：快速跳转目录（桌面悬停扩展 / 移动端汉堡菜单） */
+    /* 侧边栏（参考终末地官网）：折叠为图标窄栏，悬停展开文字目录 */
     .nav-system { align-items: flex-start; }
 
     .nav-left,
@@ -137,10 +137,19 @@
     .nav-actions {
       width: 84px;
       display: flex;
+      justify-content: center;
     }
 
-    .nav-left,
-    .nav-center { justify-content: center; }
+    .nav-actions {
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 0;
+      border: 1px solid var(--line);
+      transition: border-color 0.22s ease;
+    }
+
+    .nav-actions:hover { border-color: var(--ef-yellow); }
 
     .nav-burger {
       display: none;
@@ -168,31 +177,27 @@
     .nav-system.menu-open .nav-burger span:nth-child(2) { opacity: 0; }
     .nav-system.menu-open .nav-burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
-    .nav-panel {
-      position: absolute;
-      top: 96px;
-      left: 0;
-      right: 0;
-      bottom: 96px;
+    /* 模块列：折叠只显示图标，展开显示图标 + 编号 + 名称 */
+    .nav-modules {
+      width: 84px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      padding: 0 20px;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      scrollbar-width: thin;
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transform: translateX(-10px);
-      transition: opacity 0.2s ease, transform 0.26s ease, visibility 0.26s;
+      align-items: stretch;
+      gap: 2px;
+      flex-shrink: 0;
     }
 
-    .nav-panel-title {
+    .nav-modules-title {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      padding: 0 20px;
       font: 700 10px/1.4 var(--mono);
       letter-spacing: 0.2em;
       color: var(--muted);
       text-transform: uppercase;
+      white-space: nowrap;
+      transition: opacity 0.18s ease, max-height 0.26s ease;
     }
 
     .nav-toc {
@@ -200,24 +205,50 @@
       display: flex;
       flex-direction: column;
       gap: 2px;
+      width: 100%;
     }
 
     .nav-toc-item {
+      position: relative;
       display: flex;
-      align-items: baseline;
-      gap: 8px;
+      align-items: center;
+      justify-content: center;
       width: 100%;
-      padding: 9px 10px;
+      height: 34px;
+      padding: 0;
       border: 0;
       border-left: 2px solid transparent;
       background: none;
-      color: var(--text);
+      color: var(--muted);
       font-family: inherit;
       font-size: 13px;
       font-weight: 700;
+      line-height: 1;
       text-align: left;
       cursor: pointer;
       transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .nav-toc-item .toc-icon {
+      width: 22px;
+      height: 22px;
+      flex: 0 0 22px;
+    }
+
+    .nav-toc-item .toc-label {
+      position: absolute;
+      top: 50%;
+      left: 65px;
+      right: 16px;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      max-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      opacity: 0;
+      transition: max-width 0.28s ease, opacity 0.16s ease;
     }
 
     .nav-toc-item .toc-no {
@@ -238,6 +269,8 @@
     }
 
     .nav-toc-item.is-current .toc-no { color: var(--ef-yellow); }
+
+    .nav-panel { display: none; }
 
     .nav-panel-slot {
       display: flex;
@@ -263,11 +296,21 @@
         box-shadow: 0 0 0 1px var(--line), 18px 0 44px rgba(0, 0, 0, 0.22);
       }
 
-      .nav-system:hover .nav-panel {
+      .nav-system:hover .nav-modules { width: 252px; }
+
+      .nav-system:hover .nav-modules-title {
+        max-height: 20px;
         opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-        transform: none;
+      }
+
+      .nav-system:hover .nav-toc-item {
+        justify-content: flex-start;
+        padding-left: 31px;
+      }
+
+      .nav-system:hover .nav-toc-item .toc-label {
+        max-width: 220px;
+        opacity: 1;
       }
 
       .nav-system:hover .system-title-v { opacity: 0; }
@@ -280,15 +323,35 @@
           box-shadow: 0 0 0 1px var(--line), 18px 0 44px rgba(0, 0, 0, 0.22);
         }
 
-        .nav-system:has(:focus-visible) .nav-panel {
+        .nav-system:has(:focus-visible) .nav-modules { width: 252px; }
+
+        .nav-system:has(:focus-visible) .nav-modules-title {
+          max-height: 20px;
           opacity: 1;
-          visibility: visible;
-          pointer-events: auto;
-          transform: none;
+        }
+
+        .nav-system:has(:focus-visible) .nav-toc-item {
+          justify-content: flex-start;
+          padding-left: 31px;
+        }
+
+        .nav-system:has(:focus-visible) .nav-toc-item .toc-label {
+          max-width: 220px;
+          opacity: 1;
         }
 
         .nav-system:has(:focus-visible) .system-title-v { opacity: 0; }
       }
+    }
+
+    /* 屏幕不高时收紧竖排标题与图标行距，保证整列放得下 */
+    @media (min-width: 861px) and (max-height: 900px) {
+      .system-title-v {
+        font-size: 15px;
+        letter-spacing: 4px;
+      }
+
+      .nav-toc-item { height: 30px; }
     }
 
     .page {
@@ -812,13 +875,21 @@
         left: 0;
         right: 0;
         bottom: auto;
+        display: flex;
+        flex-direction: column;
         max-height: calc(100vh - 64px);
         padding: 18px 18px 20px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
         color: var(--text);
         background: var(--bg-page);
         border-bottom: 1px solid var(--line);
         box-shadow: 0 20px 44px rgba(0, 0, 0, 0.26);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
         transform: translateY(-12px);
+        transition: opacity 0.2s ease, transform 0.24s ease, visibility 0.24s;
       }
 
       .nav-system.menu-open .nav-panel {
@@ -828,7 +899,34 @@
         transform: none;
       }
 
-      .nav-toc-item { padding: 12px 10px; font-size: 14px; }
+      .nav-modules {
+        width: 100%;
+        align-items: stretch;
+        gap: 0;
+      }
+
+      .nav-modules-title {
+        max-height: 20px;
+        opacity: 1;
+        padding: 0 10px 8px;
+      }
+
+      .nav-toc-item {
+        height: 44px;
+        justify-content: flex-start;
+        padding: 0 10px;
+        font-size: 14px;
+      }
+
+      .nav-toc-item .toc-label {
+        position: static;
+        transform: none;
+        max-width: none;
+        overflow: visible;
+        opacity: 1;
+        margin-left: 12px;
+      }
+
       .nav-panel-slot { gap: 18px; }
 
       .page {
@@ -941,6 +1039,10 @@
     <div class="system-title-v">SILVERFISH_0 ARCHIVE</div>
     <div class="system-title-h">SILVERFISH_0 ARCHIVE</div>
   </div>
+  <div class="nav-modules" id="nav-modules">
+    <p class="nav-modules-title">[ 目录 ] / Directory</p>
+    <ul class="nav-toc" id="nav-toc"></ul>
+  </div>
   <div class="nav-actions">
     <a class="icon-btn" href="https://github.com/Rosmontis220/SILVERFISH_0-Archive" target="_blank" rel="noopener" aria-label="存档仓库：SILVERFISH_0-Archive" title="SILVERFISH_0-Archive">
       <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -959,8 +1061,6 @@
   </button>
 
   <div class="nav-panel" id="nav-panel">
-    <p class="nav-panel-title">目录 / Directory</p>
-    <ul class="nav-toc" id="nav-toc"></ul>
     <div class="nav-panel-slot" id="nav-panel-slot"></div>
   </div>
 </nav>
@@ -1423,23 +1523,54 @@
     const soundBtn = document.getElementById('sound-toggle');
     const themeBtn = document.getElementById('theme-toggle');
     const repoLink = navActions ? navActions.querySelector('a.icon-btn') : null;
+    const navModules = document.getElementById('nav-modules');
+    const navCenter = nav ? nav.querySelector('.nav-center') : null;
+    const TOC_ICONS = [
+      '<rect x="5.6" y="5.6" width="12.8" height="12.8" transform="rotate(45 12 12)"/><circle cx="12" cy="12" r="2"/>',
+      '<path d="M7 3.5h6.5L18 8v12.5H7z"/><path d="M13.5 3.5V8H18"/><path d="M9.8 12h5.4M9.8 15.5h5.4"/>',
+      '<path d="M3.5 17.5h17"/><circle cx="12" cy="11" r="4"/><path d="M12 3v2.2M5.6 5.9l1.6 1.6M18.4 5.9l-1.6 1.6"/>',
+      '<circle cx="12" cy="12" r="8"/><path d="M12 4v2.4M12 17.6V20M4 12h2.4M17.6 12H20"/><circle cx="12" cy="12" r="2.4"/>',
+      '<circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><path d="M12 4c2.6 2.4 2.6 13.6 0 16M12 4c-2.6 2.4-2.6 13.6 0 16"/>',
+      '<path d="M12 3.8v9.4"/><path d="M8.2 9.4l3.8 3.8 3.8-3.8"/><path d="M4.8 19.2h14.4"/>',
+      '<path d="M10.2 13.8a3.6 3.6 0 0 1 0-5.1l2-2a3.6 3.6 0 0 1 5.1 5.1l-.9.9"/><path d="M13.8 10.2a3.6 3.6 0 0 1 0 5.1l-2 2a3.6 3.6 0 0 1-5.1-5.1l.9-.9"/>'
+    ];
+    const makeTocIcon = (idx) => {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('class', 'toc-icon');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('fill', 'none');
+      svg.setAttribute('stroke', 'currentColor');
+      svg.setAttribute('stroke-width', '1.6');
+      svg.setAttribute('stroke-linecap', 'round');
+      svg.setAttribute('stroke-linejoin', 'round');
+      svg.setAttribute('aria-hidden', 'true');
+      svg.innerHTML = TOC_ICONS[idx] || '';
+      return svg;
+    };
     const tocItems = [];
     if (tocList) {
       mods.forEach((m, idx) => {
+        const name = m.getAttribute('aria-label') || ('模块 ' + (idx + 1));
         const li = document.createElement('li');
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'nav-toc-item';
+        btn.title = name;
+        btn.setAttribute('aria-label', name);
+        btn.appendChild(makeTocIcon(idx));
+        const wrap = document.createElement('span');
+        wrap.className = 'toc-label';
         const no = m.querySelector('.series-name .no');
         if (no) {
           const noEl = document.createElement('span');
           noEl.className = 'toc-no';
           noEl.textContent = no.textContent.trim();
-          btn.appendChild(noEl);
+          wrap.appendChild(noEl);
         }
-        const label = document.createElement('span');
-        label.textContent = m.getAttribute('aria-label') || ('模块 ' + (idx + 1));
-        btn.appendChild(label);
+        const nameEl = document.createElement('span');
+        nameEl.textContent = name;
+        wrap.appendChild(nameEl);
+        btn.appendChild(wrap);
         btn.addEventListener('click', () => jumpTo(idx));
         li.appendChild(btn);
         tocList.appendChild(li);
@@ -1460,8 +1591,10 @@
     const syncNavLayout = () => {
       if (!nav || !panelSlot) return;
       if (isMobile()) {
+        if (navModules) panelSlot.parentNode.insertBefore(navModules, panelSlot);
         [soundBtn, repoLink, themeBtn].forEach((el) => { if (el) panelSlot.appendChild(el); });
       } else {
+        if (navModules && navCenter) navCenter.insertAdjacentElement('afterend', navModules);
         if (soundBtn && navLeft) navLeft.appendChild(soundBtn);
         if (repoLink && navActions) navActions.appendChild(repoLink);
         if (themeBtn && navActions) navActions.appendChild(themeBtn);
