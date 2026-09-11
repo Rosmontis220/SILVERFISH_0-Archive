@@ -80,6 +80,7 @@
       display: block;
       width: 40px;
       height: 40px;
+      flex: 0 0 40px;
       border-radius: 6px;
       overflow: hidden;
     }
@@ -124,6 +125,24 @@
     .nav-center {
       width: auto;
       justify-content: center;
+    }
+
+    .nav-left {
+      justify-content: flex-start;
+      align-items: center;
+      gap: 12px;
+      padding-left: 22px;
+      overflow: hidden;
+    }
+
+    .nav-wordmark {
+      flex: 0 0 auto;
+      font: 700 11px/1.2 var(--mono);
+      letter-spacing: 0.16em;
+      white-space: nowrap;
+      color: var(--text);
+      opacity: 0;
+      transition: opacity 0.18s ease;
     }
 
     .nav-burger {
@@ -266,7 +285,9 @@
 
       .nav-system:hover .nav-modules { width: 252px; }
       .nav-system:hover .nav-actions { width: 252px; }
+      .nav-system:hover .nav-left { width: 252px; }
       .nav-system:hover .nav-modules-title { opacity: 1; }
+      .nav-system:hover .nav-wordmark { opacity: 1; }
       .nav-system:hover .toc-label { opacity: 1; }
 
       /* 仅键盘聚焦（:focus-visible）时保持展开；鼠标点击不会锁住展开状态，移开即收回 */
@@ -279,7 +300,9 @@
 
         .nav-system:has(:focus-visible) .nav-modules { width: 252px; }
         .nav-system:has(:focus-visible) .nav-actions { width: 252px; }
+        .nav-system:has(:focus-visible) .nav-left { width: 252px; }
         .nav-system:has(:focus-visible) .nav-modules-title { opacity: 1; }
+        .nav-system:has(:focus-visible) .nav-wordmark { opacity: 1; }
         .nav-system:has(:focus-visible) .toc-label { opacity: 1; }
       }
     }
@@ -796,9 +819,11 @@
 
       .nav-left {
         width: auto;
+        padding-left: 0;
         margin-right: auto;
         justify-content: flex-start;
       }
+      .nav-wordmark { display: none; }
       .nav-center,
       .nav-actions { display: none; }
       .nav-system > .nav-action-item {
@@ -811,7 +836,7 @@
       }
       .nav-system > .nav-action-item .toc-label { display: none; }
       .nav-system > .nav-action-item .nav-action-icon { font-size: 19px; }
-      .nav-logo { width: 34px; height: 34px; border-radius: 5px; }
+      .nav-logo { width: 34px; height: 34px; flex: 0 0 34px; border-radius: 5px; }
 
       .nav-burger { display: flex; }
       .nav-system.menu-open .nav-burger,
@@ -1002,6 +1027,7 @@
     <span class="nav-logo" title="SILVERFISH_0">
       <img src="avatar_silverfish.jpg" alt="SILVERFISH_0">
     </span>
+    <span class="nav-wordmark">SILVERFISH_0 ARCHIVE</span>
   </div>
   <div class="nav-center">
     <div class="nav-modules" id="nav-modules">
