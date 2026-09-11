@@ -77,15 +77,11 @@
     }
 
     .nav-logo {
+      display: block;
       width: 40px;
       height: 40px;
-      padding: 0;
-      border: 0;
       border-radius: 6px;
       overflow: hidden;
-      background: none;
-      cursor: pointer;
-      transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
     .nav-logo img {
@@ -94,8 +90,6 @@
       height: 100%;
       object-fit: cover;
     }
-
-    .nav-logo:hover { opacity: 0.85; transform: translateY(-2px); }
 
     .nav-actions {
       display: flex;
@@ -996,9 +990,9 @@
 
 <nav class="nav-system" aria-label="站点导航">
   <div class="nav-left">
-    <button class="nav-logo" id="nav-logo" type="button" aria-label="回到档案首屏" title="SILVERFISH_0">
+    <span class="nav-logo" title="SILVERFISH_0">
       <img src="avatar_silverfish.jpg" alt="SILVERFISH_0">
-    </button>
+    </span>
   </div>
   <div class="nav-center">
     <div class="nav-modules" id="nav-modules">
@@ -1498,7 +1492,6 @@
     const repoLink = navActions ? navActions.querySelector('a.nav-action-item') : null;
     const navModules = document.getElementById('nav-modules');
     const navCenter = nav ? nav.querySelector('.nav-center') : null;
-    const navLogo = document.getElementById('nav-logo');
     const TOC_ICONS = [
       '<rect x="5.6" y="5.6" width="12.8" height="12.8" transform="rotate(45 12 12)"/><circle cx="12" cy="12" r="2"/>',
       '<path d="M7 3.5h6.5L18 8v12.5H7z"/><path d="M13.5 3.5V8H18"/><path d="M9.8 12h5.4M9.8 15.5h5.4"/>',
@@ -1580,16 +1573,6 @@
       burger.addEventListener('click', () => {
         const open = nav.classList.toggle('menu-open');
         burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-      });
-    }
-    if (navLogo) {
-      navLogo.addEventListener('click', () => {
-        closeMenu();
-        if (isMobile()) {
-          mods[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else if (!locked()) {
-          go(0);
-        }
       });
     }
     document.addEventListener('click', (e) => {
