@@ -65,6 +65,21 @@
     /* 黑红主题效果 */
     .crimson-fx { display: none; }
 
+    /* 黑红主题背景：cover 铺满不留黑边，切主题时淡入淡出 */
+    .crimson-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(5, 0, 0, 0.58), rgba(5, 0, 0, 0.72)),
+        url("crimson-background.webp") center / cover no-repeat;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    html.crimson .crimson-bg { opacity: 1; }
+
     html.crimson .crimson-fx {
       display: block;
       position: fixed;
@@ -377,6 +392,8 @@
     }
 
     .page {
+      position: relative;
+      z-index: 1;
       margin-left: 84px;
       height: 100vh;
       overflow: hidden;
@@ -1075,6 +1092,8 @@
 </head>
 <body>
 
+<div class="crimson-bg" aria-hidden="true"></div>
+
 <div class="boot" id="boot" role="status" aria-label="档案载入中">
   <div class="boot-side">
     <p class="boot-logo"><span class="boot-mark" aria-hidden="true">◈</span>SILVERFISH_0</p>
@@ -1479,6 +1498,7 @@
       return;
     }
     const PRELOAD_FILES = [
+      'crimson-background.webp',
       'wiki/v1/index.html', 'wiki/v1/style.css', 'wiki/v1/app.js', 'wiki/v1/content.js',
       'wiki/v2/index.html', 'wiki/v2/style.css', 'wiki/v2/app.js', 'wiki/v2/content.js',
       'wiki/v3/index.html', 'wiki/v3/style.css', 'wiki/v3/app.js',
