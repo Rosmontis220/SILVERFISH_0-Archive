@@ -1109,48 +1109,13 @@
     };
     const VOLUME = 1;
     const MUSIC_VOLUME = 1;
-    const DUCK_VOLUME = 0.3;
-    const DUCK_FADE = 80;
     const MAX_VOICES = 4;
-    const HOLD = { click: 240, menu: 240, page: 260, close: 240, enter: 1200 };
     const pools = {};
 
     const allowed = () => window.__archiveSoundAllowed !== false;
 
     const music = document.getElementById('archive-music');
     if (music) music.volume = MUSIC_VOLUME;
-
-    let duckTimer = null;
-    let glideToken = 0;
-    let glideFrame = null;
-
-    const glideMusic = (target, ms) => {
-      if (!music) return;
-      glideToken += 1;
-      const mine = glideToken;
-      const from = music.volume;
-      const steps = Math.max(1, Math.round(ms / 16));
-      let step = 0;
-      if (glideFrame) { window.cancelAnimationFrame(glideFrame); glideFrame = null; }
-      const tick = () => {
-        if (mine !== glideToken) return;
-        step += 1;
-        const value = from + (target - from) * (step / steps);
-        music.volume = Math.min(1, Math.max(0, value));
-        glideFrame = step < steps ? window.requestAnimationFrame(tick) : null;
-      };
-      glideFrame = window.requestAnimationFrame(tick);
-    };
-
-    const duck = (hold) => {
-      if (!music) return;
-      glideMusic(DUCK_VOLUME, DUCK_FADE);
-      if (duckTimer) window.clearTimeout(duckTimer);
-      duckTimer = window.setTimeout(() => {
-        duckTimer = null;
-        glideMusic(MUSIC_VOLUME, DUCK_FADE * 2);
-      }, hold);
-    };
 
     const slotFor = (key) => {
       const src = SOURCES[key];
@@ -1168,7 +1133,6 @@
       if (!allowed()) return;
       const slot = slotFor(key);
       if (!slot) return;
-      duck(HOLD[key] || 240);
       let voice = slot.voices.find((v) => v.paused || v.ended);
       if (!voice) {
         if (slot.voices.length >= MAX_VOICES) {
