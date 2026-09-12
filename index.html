@@ -1927,7 +1927,7 @@
     enter.addEventListener('click', () => {
       if (window.__archiveSfx) window.__archiveSfx.enter();
       unlock(true);
-      window.setTimeout(() => go(1), 550);
+      window.setTimeout(() => go(1, true), 550);
     });
     page.addEventListener('scroll', () => {
       window.requestAnimationFrame(setState);
@@ -1960,7 +1960,7 @@
         const parsed = raw === null ? NaN : parseInt(raw, 10);
         if (!Number.isNaN(parsed)) origin = Math.max(0, Math.min(mods.length - 1, parsed));
       } catch (e) { /* storage unavailable */ }
-      window.setTimeout(() => go(origin), 450);
+      window.setTimeout(() => go(origin, true), 450);
     }
   })();
 </script>
