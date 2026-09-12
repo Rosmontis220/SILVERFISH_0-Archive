@@ -62,6 +62,56 @@
       --line: rgba(255, 27, 19, 0.28);
     }
 
+    /* 黑红主题的故障效果：遮挡条 + 扫描线 */
+    .crimson-fx { display: none; }
+
+    html.crimson .crimson-fx {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .crimson-fx i {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--w);
+      height: clamp(9px, 1.5vw, 21px);
+      background: rgba(0, 0, 0, 0.78);
+      animation: fx-drift 16s ease-in-out infinite alternate;
+      animation-delay: var(--d, 0s);
+    }
+
+    html.crimson .crimson-fx::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(180deg, rgba(255, 27, 19, 0.05) 0 1px, transparent 1px 3px);
+      mix-blend-mode: screen;
+    }
+
+    html.crimson .hero h1 {
+      text-shadow: 3px 0 0 rgba(0, 120, 255, 0.42), -3px 0 0 rgba(255, 27, 19, 0.6);
+      animation: fx-glitch 6.5s steps(1, end) infinite;
+    }
+
+    html.crimson .hero .kicker { text-shadow: 0 0 14px rgba(255, 27, 19, 0.55); }
+
+    @keyframes fx-drift {
+      from { transform: translate3d(-0.6%, 0, 0); }
+      to { transform: translate3d(0.6%, 0, 0); }
+    }
+
+    @keyframes fx-glitch {
+      0%, 92%, 100% { transform: none; }
+      93% { transform: translate(-2px, 1px); }
+      95% { transform: translate(2px, -1px); }
+      97% { transform: translate(-1px, 0); }
+    }
+
     body {
       font-family: 'Noto Sans Hans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Segoe UI', sans-serif;
       background: var(--bg-page);
@@ -1038,6 +1088,18 @@
 
 <div class="curtain" id="curtain" aria-hidden="true"></div>
 
+<div class="crimson-fx" aria-hidden="true">
+  <i style="--x: 3%; --y: 9%; --w: 34%; --d: -2s"></i>
+  <i style="--x: 52%; --y: 6%; --w: 42%; --d: -7s"></i>
+  <i style="--x: 8%; --y: 24%; --w: 22%; --d: -4s"></i>
+  <i style="--x: 37%; --y: 31%; --w: 56%; --d: -10s"></i>
+  <i style="--x: 5%; --y: 47%; --w: 44%; --d: -6s"></i>
+  <i style="--x: 58%; --y: 52%; --w: 35%; --d: -1s"></i>
+  <i style="--x: 12%; --y: 66%; --w: 66%; --d: -8s"></i>
+  <i style="--x: 3%; --y: 82%; --w: 30%; --d: -3s"></i>
+  <i style="--x: 44%; --y: 88%; --w: 50%; --d: -12s"></i>
+</div>
+
 <audio id="archive-music" src="call-of-iberia.mp3" loop preload="auto" style="position: fixed; width: 1px; height: 1px; opacity: 0; pointer-events: none;" aria-hidden="true"></audio>
 
 <nav class="nav-system" aria-label="站点导航">
@@ -1539,26 +1601,25 @@
     apply(current(), false);
 
     if (toggle) {
-      toggle.addEventListener('click', () => {
-        const list = available();
-        const i = list.indexOf(current());
-        apply(list[(i + 1) % list.length], true);
-      });
-    }
-
-    const logo = document.querySelector('.nav-logo');
-    if (logo) {
       let count = 0;
       let last = 0;
-      logo.addEventListener('click', () => {
+      toggle.addEventListener('click', () => {
         const now = Date.now();
         count = now - last > 1200 ? 1 : count + 1;
         last = now;
-        if (count < 5) return;
-        count = 0;
-        unlocked = true;
-        try { localStorage.setItem('sf-unlocked', '1'); } catch (e) { /* storage unavailable */ }
-        apply('crimson', true);
+
+        /* 连点五次解锁黑红主题，第五次直接落在这里 */
+        if (count >= 5) {
+          count = 0;
+          unlocked = true;
+          try { localStorage.setItem('sf-unlocked', '1'); } catch (e) { /* storage unavailable */ }
+          apply('crimson', true);
+          return;
+        }
+
+        const list = available();
+        const i = list.indexOf(current());
+        apply(list[(i + 1) % list.length], true);
       });
     }
   })();
