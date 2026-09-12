@@ -10,8 +10,9 @@
     (function () {
       var stored = null;
       try { stored = localStorage.getItem('theme'); } catch (e) { /* storage unavailable */ }
-      var dark = stored ? stored === 'dark' : true; // 默认暗色
-      if (!dark) document.documentElement.classList.add('light');
+      var theme = stored || 'dark'; // 默认暗色
+      if (theme === 'light') document.documentElement.classList.add('light');
+      else if (theme === 'crimson') document.documentElement.classList.add('crimson');
     })();
   </script>
   <style>
@@ -46,6 +47,19 @@
       --text: #111;
       --muted: #5a5a5a;
       --line: rgba(128, 128, 128, 0.25);
+    }
+
+    /* 第三主题（解锁后出现）：SF 本体站点的黑红配色 */
+    html.crimson {
+      --ef-yellow: #ff1b13;
+      --ef-dim: rgba(255, 27, 19, 0.1);
+      --ef-light: rgba(255, 27, 19, 0.05);
+      --btn-text: #0a0000;
+      --surface: rgba(255, 27, 19, 0.04);
+      --bg-page: #050000;
+      --text: #f1e7dd;
+      --muted: #a8918a;
+      --line: rgba(255, 27, 19, 0.28);
     }
 
     body {
@@ -1481,19 +1495,71 @@
 
 <script>
   (function () {
+    const THEMES = ['dark', 'light', 'crimson'];
+    const NAMES = { dark: '暗色', light: '亮色', crimson: '黑红' };
+    const ICONS = { dark: '☀️', light: '🩸', crimson: '🌙' };
+    const TRACKS = {
+      dark: 'call-of-iberia.mp3',
+      light: 'call-of-iberia.mp3',
+      crimson: 'Mayors-the-Yearning-Flotsam.mp3'
+    };
+    const root = document.documentElement;
     const toggle = document.getElementById('theme-toggle');
     const icon = document.getElementById('theme-icon');
-    const applyIcon = () => {
-      const dark = !document.documentElement.classList.contains('light');
-      icon.textContent = dark ? '☀️' : '🌙';
-      toggle.setAttribute('aria-label', dark ? '切换日间模式' : '切换夜间模式');
+    const music = document.getElementById('archive-music');
+    let unlocked = false;
+    try { unlocked = localStorage.getItem('sf-unlocked') === '1'; } catch (e) { /* storage unavailable */ }
+
+    const available = () => (unlocked ? THEMES : THEMES.slice(0, 2));
+    const current = () => THEMES.find((t) => root.classList.contains(t)) || 'dark';
+
+    const applyTrack = (theme) => {
+      const file = TRACKS[theme] || TRACKS.dark;
+      if (!music || (music.getAttribute('src') || '').indexOf(file) !== -1) return;
+      const wasPlaying = !music.paused && !music.muted && window.__archiveSoundAllowed !== false;
+      music.setAttribute('src', file);
+      try { music.load(); } catch (e) { /* load unavailable */ }
+      if (wasPlaying) {
+        const attempt = music.play();
+        if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
+      }
     };
-    applyIcon();
-    toggle.addEventListener('click', () => {
-      const dark = !document.documentElement.classList.toggle('light');
-      try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) { /* storage unavailable */ }
-      applyIcon();
-    });
+
+    const apply = (theme, persist) => {
+      THEMES.forEach((t) => root.classList.toggle(t, t === theme));
+      if (icon) icon.textContent = ICONS[theme] || ICONS.dark;
+      if (toggle) toggle.setAttribute('aria-label', '切换主题（当前：' + (NAMES[theme] || theme) + '）');
+      if (persist) {
+        try { localStorage.setItem('theme', theme); } catch (e) { /* storage unavailable */ }
+      }
+      applyTrack(theme);
+    };
+
+    apply(current(), false);
+
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        const list = available();
+        const i = list.indexOf(current());
+        apply(list[(i + 1) % list.length], true);
+      });
+    }
+
+    const logo = document.querySelector('.nav-logo');
+    if (logo) {
+      let count = 0;
+      let last = 0;
+      logo.addEventListener('click', () => {
+        const now = Date.now();
+        count = now - last > 1200 ? 1 : count + 1;
+        last = now;
+        if (count < 5) return;
+        count = 0;
+        unlocked = true;
+        try { localStorage.setItem('sf-unlocked', '1'); } catch (e) { /* storage unavailable */ }
+        apply('crimson', true);
+      });
+    }
   })();
 </script>
 <script>
@@ -1810,35 +1876,6 @@
     });
     music.addEventListener('canplay', play, { once: true });
     window.setTimeout(play, 80);
-  })();
-</script>
-<script>
-  (function () {
-    const logo = document.querySelector('.nav-logo');
-    const music = document.getElementById('archive-music');
-    if (!logo || !music) return;
-    const TRACKS = ['call-of-iberia.mp3', 'Mayors-the-Yearning-Flotsam.mp3'];
-    let count = 0;
-    let last = 0;
-    const currentTrack = () => {
-      const src = music.getAttribute('src') || '';
-      const i = TRACKS.findIndex((t) => src.indexOf(t) !== -1);
-      return i < 0 ? 0 : i;
-    };
-    logo.addEventListener('click', () => {
-      const now = Date.now();
-      count = now - last > 1200 ? 1 : count + 1;
-      last = now;
-      if (count < 5) return;
-      count = 0;
-      const wasPlaying = !music.paused && !music.muted && window.__archiveSoundAllowed !== false;
-      music.setAttribute('src', TRACKS[(currentTrack() + 1) % TRACKS.length]);
-      try { music.load(); } catch (e) { /* load unavailable */ }
-      if (wasPlaying) {
-        const attempt = music.play();
-        if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
-      }
-    });
   })();
 </script>
 </body>
