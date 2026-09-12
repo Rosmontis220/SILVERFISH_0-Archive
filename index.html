@@ -89,17 +89,6 @@
       opacity: 0.6;
     }
 
-    .crimson-fx i {
-      position: absolute;
-      left: var(--x);
-      top: var(--y);
-      width: var(--w);
-      height: clamp(9px, 1.5vw, 21px);
-      background: rgba(0, 0, 0, 0.78);
-      animation: fx-drift 16s ease-in-out infinite alternate;
-      animation-delay: var(--d, 0s);
-    }
-
     html.crimson .crimson-fx::before {
       content: "";
       position: absolute;
@@ -114,11 +103,6 @@
     }
 
     html.crimson .hero .kicker { text-shadow: 0 0 14px rgba(255, 27, 19, 0.55); }
-
-    @keyframes fx-drift {
-      from { transform: translate3d(-0.6%, 0, 0); }
-      to { transform: translate3d(0.6%, 0, 0); }
-    }
 
     @keyframes fx-glitch {
       0%, 92%, 100% { transform: none; }
@@ -1107,17 +1091,7 @@
 
 <div class="curtain" id="curtain" aria-hidden="true"></div>
 
-<div class="crimson-fx" aria-hidden="true">
-  <i style="--x: 3%; --y: 9%; --w: 34%; --d: -2s"></i>
-  <i style="--x: 52%; --y: 6%; --w: 42%; --d: -7s"></i>
-  <i style="--x: 8%; --y: 24%; --w: 22%; --d: -4s"></i>
-  <i style="--x: 37%; --y: 31%; --w: 56%; --d: -10s"></i>
-  <i style="--x: 5%; --y: 47%; --w: 44%; --d: -6s"></i>
-  <i style="--x: 58%; --y: 52%; --w: 35%; --d: -1s"></i>
-  <i style="--x: 12%; --y: 66%; --w: 66%; --d: -8s"></i>
-  <i style="--x: 3%; --y: 82%; --w: 30%; --d: -3s"></i>
-  <i style="--x: 44%; --y: 88%; --w: 50%; --d: -12s"></i>
-</div>
+<div class="crimson-fx" aria-hidden="true"></div>
 
 <audio id="archive-music" src="call-of-iberia.mp3" loop preload="auto" style="position: fixed; width: 1px; height: 1px; opacity: 0; pointer-events: none;" aria-hidden="true"></audio>
 
