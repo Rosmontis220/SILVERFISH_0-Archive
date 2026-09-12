@@ -1097,6 +1097,83 @@
 
 <audio id="archive-music" src="call-of-iberia.mp3" loop preload="auto" style="position: fixed; width: 1px; height: 1px; opacity: 0; pointer-events: none;" aria-hidden="true"></audio>
 
+<script>
+  /* 点击与滑动音效：Web Audio 实时合成，不用音频文件 */
+  (function () {
+    const AudioCtor = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtor) return;
+    let ctx = null;
+
+    const allowed = () => window.__archiveSoundAllowed !== false;
+    const ensure = () => {
+      if (!allowed()) return null;
+      if (!ctx) {
+        try { ctx = new AudioCtor(); } catch (e) { return null; }
+      }
+      if (ctx.state === 'suspended') {
+        const resumed = ctx.resume();
+        if (resumed && typeof resumed.catch === 'function') resumed.catch(() => {});
+      }
+      return ctx;
+    };
+
+    const click = () => {
+      const ac = ensure();
+      if (!ac) return;
+      const t = ac.currentTime;
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(920, t);
+      osc.frequency.exponentialRampToValueAtTime(300, t + 0.06);
+      gain.gain.setValueAtTime(0.0001, t);
+      gain.gain.exponentialRampToValueAtTime(0.07, t + 0.006);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+      osc.connect(gain).connect(ac.destination);
+      osc.start(t);
+      osc.stop(t + 0.11);
+    };
+
+    const slide = () => {
+      const ac = ensure();
+      if (!ac) return;
+      const t = ac.currentTime;
+      const length = 0.34;
+      const frames = Math.floor(ac.sampleRate * length);
+      const buffer = ac.createBuffer(1, frames, ac.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < frames; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / frames);
+      const source = ac.createBufferSource();
+      source.buffer = buffer;
+      const filter = ac.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.Q.value = 1.2;
+      filter.frequency.setValueAtTime(300, t);
+      filter.frequency.exponentialRampToValueAtTime(2600, t + length);
+      const gain = ac.createGain();
+      gain.gain.setValueAtTime(0.0001, t);
+      gain.gain.exponentialRampToValueAtTime(0.05, t + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + length);
+      source.connect(filter).connect(gain).connect(ac.destination);
+      source.start(t);
+      source.stop(t + length);
+    };
+
+    window.__archiveSfx = { click, slide, state: () => (ctx ? ctx.state : 'none') };
+
+    window.addEventListener('pointerdown', ensure, { once: true });
+    window.addEventListener('keydown', ensure, { once: true });
+
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!target || !target.closest) return;
+      if (!target.closest('a, button, .entry-card, .nav-toc-item')) return;
+      if (target.closest('#sound-toggle')) return;
+      click();
+    }, true);
+  })();
+</script>
+
 <nav class="nav-system" aria-label="站点导航">
   <div class="nav-left">
     <span class="nav-logo" title="SILVERFISH_0">
@@ -1771,6 +1848,7 @@
       burger.addEventListener('click', () => {
         const open = nav.classList.toggle('menu-open');
         burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (window.__archiveSfx) window.__archiveSfx.slide();
       });
     }
     document.addEventListener('click', (e) => {
@@ -1800,12 +1878,14 @@
       if (locked()) return;
       if (isMobile()) {
         const target = mods[Math.max(0, Math.min(mods.length - 1, i))];
+        if (window.__archiveSfx) window.__archiveSfx.slide();
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         return;
       }
       if (busy) return;
       const target = Math.max(0, Math.min(mods.length - 1, i));
       if (target === currentIndex()) return;
+      if (window.__archiveSfx) window.__archiveSfx.slide();
       busy = true;
       page.scrollTo({ top: target * page.clientHeight, behavior: 'smooth' });
       window.setTimeout(() => { busy = false; }, 1050);
