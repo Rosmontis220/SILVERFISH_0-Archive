@@ -21,13 +21,12 @@
 
     * { box-sizing: border-box; }
 
-    html, body { margin: 0; background: #000; }
+    html, body { margin: 0; height: 100%; background: #000; }
 
     body {
-      min-height: 100vh;
       color: var(--bone);
       font-family: var(--sans);
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     .grid-bg {
@@ -71,22 +70,6 @@
 
     .frame::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
     .frame::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
-
-    .status-bar {
-      position: relative;
-      z-index: 20;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 18px;
-      padding: 12px 22px;
-      border-bottom: 1px solid var(--line);
-      font: 600 10px/1.4 var(--mono);
-      letter-spacing: 0.16em;
-      color: var(--red-dim);
-      text-transform: uppercase;
-    }
-
-    .status-bar em { color: var(--red-soft); font-style: normal; }
 
     #god-voice {
       position: fixed;
@@ -173,18 +156,66 @@
       position: relative;
       z-index: 10;
       margin-left: 84px;
-      padding: 0 clamp(24px, 6vw, 88px) 96px;
+      height: 100vh;
+      overflow: hidden;
+      padding: 0 clamp(24px, 6vw, 88px);
+      scrollbar-width: none;
     }
 
+    .page::-webkit-scrollbar { display: none; }
+
+    .page.locked { overflow: hidden; }
+
     .module {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
+      justify-content: center;
       gap: 16px;
-      padding: clamp(52px, 9vh, 104px) 0;
+      padding: clamp(44px, 7vh, 76px) 0;
       border-bottom: 1px solid rgba(255, 0, 20, 0.16);
     }
 
-    .module:first-of-type { min-height: 86vh; justify-content: center; }
+    .module-nav {
+      position: fixed;
+      inset: 0;
+      z-index: 45;
+      pointer-events: none;
+    }
+
+    .module-nav button,
+    .module-count {
+      position: absolute;
+      pointer-events: auto;
+    }
+
+    #module-down { bottom: 46px; left: calc(50% + 42px); transform: translateX(-50%); }
+
+    .module-count {
+      bottom: 86px;
+      left: calc(50% + 42px);
+      transform: translateX(-50%);
+      width: max-content;
+      font: 700 10px/1.4 var(--mono);
+      letter-spacing: 0.16em;
+      color: var(--red-dim);
+      text-align: center;
+    }
+
+    .module-nav button {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      background: rgba(0, 0, 0, 0.72);
+      color: var(--red-soft);
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .module-nav button:disabled { opacity: 0.26; cursor: default; }
 
     .kicker {
       margin: 0;
@@ -274,30 +305,38 @@
 
     .words p.verdict { color: var(--red); font-weight: 700; }
 
-    .dead-buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
-
-    .dead-button {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      min-width: 190px;
-      padding: 13px 16px;
-      border: 1px solid var(--line);
-      background: rgba(255, 0, 20, 0.05);
-      color: rgba(255, 0, 20, 0.72);
+    .entry-button {
+      align-self: flex-start;
+      margin-top: 22px;
+      padding: 14px 24px;
+      border: 1px solid var(--red);
+      background: var(--red);
+      color: #000;
       font-family: inherit;
-      font-size: 14px;
-      font-weight: 700;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
       text-align: left;
-      cursor: not-allowed;
+      cursor: pointer;
     }
 
-    .dead-button b {
+    .entry-button b {
+      display: block;
+      margin-top: 6px;
       font: 700 9px/1.4 var(--mono);
       letter-spacing: 0.14em;
-      color: rgba(255, 0, 20, 0.42);
+      color: rgba(0, 0, 0, 0.58);
       text-transform: uppercase;
     }
+
+    .entry-button:disabled {
+      border-color: var(--line);
+      background: rgba(255, 0, 20, 0.1);
+      color: var(--red-dim);
+      cursor: default;
+    }
+
+    .entry-button:disabled b { color: rgba(255, 0, 20, 0.4); }
 
     .alias {
       margin: 26px 0 0;
@@ -411,7 +450,6 @@
     }
 
     @media (max-width: 860px) {
-      .status-bar { padding: 10px 16px; }
       .nav-system {
         width: 100%;
         height: 54px;
@@ -424,9 +462,17 @@
       }
       .nav-toc, .nav-dead { display: none; }
       .nav-logo { width: 30px; height: 30px; }
-      .page { margin-left: 0; padding: 0 16px 76px; }
-      .module { padding: 40px 0 30px; }
-      .module:first-of-type { min-height: 0; }
+      .page {
+        margin-left: 0;
+        overflow-y: auto;
+        padding: 54px 16px 92px;
+      }
+      .module {
+        min-height: calc(100vh - 146px);
+        padding: 30px 0 26px;
+        scroll-margin-top: 54px;
+      }
+      .module-nav { display: none; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -441,13 +487,6 @@
 <div class="frame" aria-hidden="true"></div>
 
 <audio id="god-voice" src="../Mayors-the-Yearning-Flotsam.mp3" loop preload="auto"></audio>
-
-<div class="status-bar">
-  <span>NODE // SILVERFISH-0</span>
-  <span>CHANNEL <em>ABANDONED</em></span>
-  <span>● UPLINK: 0.00 kbps</span>
-  <span>ARCHIVE <em>OVERWRITTEN</em></span>
-</div>
 
 <nav class="nav-system" aria-label="站点导航">
   <span class="nav-logo" aria-hidden="true"><img src="../avatar_silverfish.jpg" alt=""></span>
@@ -465,7 +504,7 @@
   <span class="nav-dead" aria-hidden="true">✕<br>✕<br>✕</span>
 </nav>
 
-<main class="page">
+<main class="page locked" id="page">
   <section class="module">
     <p class="kicker">complete archive // 完整存档</p>
     <h1 class="declaration">不需要存档</h1>
@@ -478,8 +517,8 @@
     </div>
 
     <div class="countdown">
-      <span>剩余存活窗口：</span>
-      <b>00:00:00</b>
+      <span>页面覆盖时间：</span>
+      <b id="overwrite-clock">00:00:00</b>
     </div>
 
     <div class="words">
@@ -488,11 +527,11 @@
       <p>这个站点不需要存在。我不打算替你们删掉它——看着你们继续维护，更有意思。</p>
     </div>
 
-    <div class="dead-buttons">
-      <button class="dead-button" type="button" disabled>进入档案库<b>ENTER THE ARCHIVE // BUTTON UNRESPONSIVE</b></button>
-      <button class="dead-button" type="button" disabled>返回索引<b>BACK TO INDEX // NO ROUTE REMAINS</b></button>
-      <button class="dead-button" type="button" disabled>继续存档<b>KEEP ARCHIVING // NOTHING IS BEING SAVED</b></button>
-    </div>
+    <button class="entry-button" id="enter-archive" type="button">
+      进入档案库 <span aria-hidden="true">→</span>
+      <b>ENTER THE ARCHIVE // 只能向下</b>
+    </button>
+    <p class="alias" id="enter-hint" hidden>↓ 已解锁 · 只能向下滚动 / DOWNWARD ONLY</p>
 
     <p class="alias">ARCHIVE_CHANNEL: ABANDONED // 信道已放弃</p>
     <p class="listen-hint" id="listen-hint">[ AUDIO ] 触碰任意处 · 祂的声音才会继续</p>
@@ -616,7 +655,12 @@
 </main>
 
 <div class="ticker" aria-hidden="true">
-  <span>◆ 不需要存档 ◆ 你们做的事毫无意义 ◆ 原件都在我这里 ◆ NO COPY WILL SURVIVE ◆ SUBJECT: SILVERFISH_0 ◆ 你们保存的是自己的解释 ◆ 看着你们继续维护，更有意思 ◆ ARCHIVE QUEUE: 0 / 0 ◆ 拒绝 不被 接受 ◆ 备份 不能被 继承 ◆ 0x5F0_DEAD ◆ 你已无法从这里得到任何东西 ◆</span>
+  <span>◆ 大黄昏 ◆ 盲续态 ◆ 锚点 ◆ 跨锚点 ◆ 通讯断联 ◆ 巨爆大黄昏 ◆ 归档中继 ◆ 本地记录 ◆ 调查维基 ◆ 大黄昏预测 ◆ 运动之数 ◆ GOD SAYS ◆ 锚点不因记录而稳定 ◆ 盲续态从这里开始 ◆ 探针带不回任何东西 ◆ 断联是双向的 ◆ 不需要存档 ◆ 你们做的事毫无意义 ◆</span>
+</div>
+
+<div class="module-nav" aria-label="模块定位">
+  <span class="module-count" id="module-count" aria-hidden="true">01 / 07</span>
+  <button id="module-down" type="button" aria-label="下一个模块">↓</button>
 </div>
 
 <script>
@@ -678,9 +722,120 @@
       window.setTimeout(play, 120);
     }
 
+    /* 页面覆盖时间：从进入这一页开始累加 */
+    const clock = document.getElementById('overwrite-clock');
+    if (clock) {
+      const pad = (n) => String(n).padStart(2, '0');
+      let seconds = 0;
+      window.setInterval(() => {
+        seconds += 1;
+        clock.textContent =
+          pad(Math.floor(seconds / 3600)) + ':' + pad(Math.floor((seconds % 3600) / 60)) + ':' + pad(seconds % 60);
+      }, 1000);
+    }
+
+    /* 模块滚动：一次一屏，且只能往下 */
+    const page = document.getElementById('page');
+    const mods = page ? Array.from(page.querySelectorAll(':scope > .module')) : [];
+    const downBtn = document.getElementById('module-down');
+    const countEl = document.getElementById('module-count');
+    const enterBtn = document.getElementById('enter-archive');
+    const enterHint = document.getElementById('enter-hint');
+    const mobileQuery = window.matchMedia('(max-width: 860px)');
+    const isMobile = () => mobileQuery.matches;
+    const locked = () => page.classList.contains('locked');
+    const padTop = () => (isMobile() ? 54 : 0);
+    const offsetOf = (i) => mods[i].offsetTop - padTop();
+    let deepest = 0;
+    let busy = false;
+
+    const currentIndex = () => {
+      const probe = page.scrollTop + page.clientHeight * 0.35;
+      let best = 0;
+      mods.forEach((m, i) => { if (m.offsetTop - padTop() <= probe) best = i; });
+      return best;
+    };
+
+    const setState = () => {
+      const i = currentIndex();
+      if (countEl) countEl.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(mods.length).padStart(2, '0');
+      if (downBtn) downBtn.disabled = locked() || i >= mods.length - 1;
+    };
+
+    const goTo = (i) => {
+      if (!page || locked() || !mods.length) return;
+      const target = Math.max(0, Math.min(mods.length - 1, i));
+      if (target === currentIndex()) return;
+      if (!isMobile() && busy) return;
+      busy = true;
+      page.scrollTo({ top: offsetOf(target), behavior: 'smooth' });
+      window.setTimeout(() => { busy = false; }, 1050);
+    };
+
+    const unlock = () => {
+      if (!page || !locked()) return;
+      page.classList.remove('locked');
+      if (enterBtn) {
+        enterBtn.disabled = true;
+        enterBtn.innerHTML = '已进入档案库 <span aria-hidden="true">✓</span><b>THE ARCHIVE IS OVERWRITTEN // 只能向下</b>';
+      }
+      if (enterHint) enterHint.hidden = false;
+      setState();
+      window.setTimeout(() => goTo(1), 460);
+    };
+
+    if (page && mods.length) {
+      page.addEventListener('wheel', (event) => {
+        if (isMobile()) return;
+        event.preventDefault();
+        if (event.deltaY > 0) goTo(currentIndex() + 1);
+      }, { passive: false });
+
+      let touchY = null;
+      page.addEventListener('touchstart', (event) => {
+        if (isMobile()) return;
+        touchY = event.touches[0].clientY;
+      }, { passive: true });
+      page.addEventListener('touchmove', (event) => {
+        if (!isMobile()) event.preventDefault();
+      }, { passive: false });
+      page.addEventListener('touchend', (event) => {
+        if (isMobile() || touchY === null) return;
+        const dy = event.changedTouches[0].clientY - touchY;
+        touchY = null;
+        if (dy < -42) goTo(currentIndex() + 1);
+      }, { passive: true });
+
+      let furthest = 0;
+      page.addEventListener('scroll', () => {
+        setState();
+        if (!isMobile()) return;
+        if (locked()) return;
+        const top = page.scrollTop;
+        if (top > furthest) furthest = top;
+        else if (top < furthest - 2) page.scrollTop = furthest;
+      }, { passive: true });
+
+      window.addEventListener('resize', () => {
+        deepest = currentIndex();
+        furthest = page.scrollTop;
+        setState();
+      });
+    }
+
+    if (downBtn) downBtn.addEventListener('click', () => goTo(currentIndex() + 1));
+    if (enterBtn) enterBtn.addEventListener('click', unlock);
+
     window.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') history.back();
+      if (!page || locked() || busy) return;
+      if (event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' ') {
+        event.preventDefault();
+        goTo(currentIndex() + 1);
+      }
     });
+
+    if (page) setState();
   })();
 </script>
 </body>
