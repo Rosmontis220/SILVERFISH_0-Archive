@@ -1107,11 +1107,15 @@
       enter: 'sfx/home_enter.6aefd5.mp3',
       close: 'sfx/close_click.fe1dc4.mp3'
     };
-    const VOLUME = 0.5;
+    const VOLUME = 1;
+    const MUSIC_VOLUME = 0.45;
     const MAX_VOICES = 4;
     const pools = {};
 
     const allowed = () => window.__archiveSoundAllowed !== false;
+
+    const music = document.getElementById('archive-music');
+    if (music) music.volume = MUSIC_VOLUME;
 
     const slotFor = (key) => {
       const src = SOURCES[key];
