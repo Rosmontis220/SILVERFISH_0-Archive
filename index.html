@@ -111,7 +111,7 @@
 
     .nav-action-icon svg { width: 18px; height: 18px; }
 
-    /* 侧边栏（参考终末地官网）：折叠为图标窄栏，悬停展开文字目录 */
+    /* 侧边栏 */
     .nav-system { align-items: flex-start; }
 
     .nav-left,
@@ -171,7 +171,7 @@
     .nav-system.menu-open .nav-burger span:nth-child(2) { opacity: 0; }
     .nav-system.menu-open .nav-burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
-    /* 模块列：折叠只显示图标，展开显示图标 + 编号 + 名称 */
+    /* 模块列 */
     .nav-modules {
       width: 84px;
       display: flex;
@@ -290,7 +290,7 @@
       .nav-system:hover .nav-wordmark { opacity: 1; }
       .nav-system:hover .toc-label { opacity: 1; }
 
-      /* 仅键盘聚焦（:focus-visible）时保持展开；鼠标点击不会锁住展开状态，移开即收回 */
+      /* 键盘聚焦时同样展开 */
       @supports selector(:has(*)) {
         .nav-system:has(:focus-visible) {
           width: 252px;
@@ -307,7 +307,7 @@
       }
     }
 
-    /* 屏幕不高时收紧图标行距，保证整列放得下 */
+    /* 矮屏收紧行距 */
     @media (min-width: 861px) and (max-height: 680px) {
       .nav-toc-item { height: 30px; }
     }
@@ -1279,6 +1279,7 @@
           <h3 class="card-title">god.m4a</h3>
           <p class="card-desc">
             3.4 MB · m4a<br>
+            Somniomancer [null set]<br>
             调查维基 v3（GOD SAYS）音频
           </p>
           <div class="card-enter">Download <span>↓</span></div>
@@ -1289,6 +1290,7 @@
           <h3 class="card-title">GDF-ALERT-LEVEL-III.mp3</h3>
           <p class="card-desc">
             9.2 MB · mp3<br>
+            脑叶公司三级警报<br>
             大黄昏预测 v2 警报音频
           </p>
           <div class="card-enter">Download <span>↓</span></div>
@@ -1521,7 +1523,7 @@
     const mobileQuery = window.matchMedia('(max-width: 860px)');
     const isMobile = () => mobileQuery.matches;
 
-    /* 侧边栏目录：桌面悬停扩展 / 移动端汉堡菜单 */
+    /* 侧边栏目录 */
     const nav = document.querySelector('.nav-system');
     const burger = document.getElementById('nav-burger');
     const tocList = document.getElementById('nav-toc');

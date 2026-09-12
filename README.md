@@ -140,8 +140,8 @@ SILVERFISH_0-Archive/
 | `readme.zip` | `wiki/v1/` | 508 B，原始加密文件 |
 | `local-continuity-probe-0.1.0.jar` | `number-of-motion/files/` | 9.8 KB，本地连续性探针 |
 | `CHECKSUMS.txt` | `number-of-motion/files/` | 658 B，探针三个文件的 SHA-256 与使用须知 |
-| `god.m4a` | `wiki/v3/` | 3.4 MB，调查维基 v3（GOD SAYS）音频 |
-| `GDF-ALERT-LEVEL-III.mp3` | `forecast/v2/` | 9.2 MB，大黄昏预测 v2 警报音频 |
+| `god.m4a` | `wiki/v3/` | 3.4 MB，Somniomancer [null set]，调查维基 v3（GOD SAYS）音频 |
+| `GDF-ALERT-LEVEL-III.mp3` | `forecast/v2/` | 9.2 MB，脑叶公司三级警报，大黄昏预测 v2 警报音频 |
 
 ### 杂项 (MISC)
 
