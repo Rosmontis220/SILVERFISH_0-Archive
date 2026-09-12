@@ -246,15 +246,34 @@
     }
 
     .noise {
+      display: flex;
+      justify-content: space-between;
+      gap: 2px;
       margin: 6px 0 0;
       padding: 10px 12px;
       border: 1px solid var(--line);
       background: rgba(0, 0, 0, 0.78);
-      font: 400 12px/1.85 var(--mono);
-      letter-spacing: 0.1em;
-      color: rgba(241, 235, 227, 0.84);
-      word-break: normal;
       overflow: hidden;
+    }
+
+    .noise .reel {
+      display: block;
+      flex: 0 0 auto;
+      width: 1.25em;
+      height: calc(var(--rows, 1) * 1.7em);
+      overflow: hidden;
+      font: 400 12px/1.7 var(--mono);
+      color: rgba(241, 235, 227, 0.86);
+      text-align: center;
+      animation: reel-spin var(--dur, 2.4s) linear infinite;
+      animation-delay: var(--delay, 0s);
+    }
+
+    .noise .reel-inner { display: block; white-space: pre; }
+
+    @keyframes reel-spin {
+      from { transform: translateY(0); }
+      to { transform: translateY(-50%); }
     }
 
     .warning {
@@ -676,32 +695,31 @@
     const paint = () => {
       noiseBlocks.forEach((block) => {
         const rows = Number(block.dataset.noise) || 1;
-        const perRow = Math.max(20, Math.round((block.clientWidth || 720) / 17));
-        const lines = [];
-        for (let r = 0; r < rows; r++) {
-          const cells = [];
-          for (let i = 0; i < perRow; i++) cells.push(GLYPHS[Math.floor(Math.random() * GLYPHS.length)]);
-          lines.push(cells.join(' '));
+        const cols = Math.max(8, Math.round((block.clientWidth || 720) / 16));
+        block.style.setProperty('--rows', String(rows));
+        block.textContent = '';
+        for (let c = 0; c < cols; c++) {
+          const reel = document.createElement('span');
+          reel.className = 'reel';
+          reel.style.setProperty('--dur', (1.2 + Math.random() * 2.4).toFixed(2) + 's');
+          reel.style.setProperty('--delay', (-Math.random() * 2.4).toFixed(2) + 's');
+          const seq = [];
+          for (let i = 0; i < rows; i++) seq.push(GLYPHS[Math.floor(Math.random() * GLYPHS.length)]);
+          const inner = document.createElement('span');
+          inner.className = 'reel-inner';
+          inner.textContent = seq.join('\n') + '\n' + seq.join('\n');
+          reel.appendChild(inner);
+          block.appendChild(reel);
         }
-        block.textContent = lines.join('\n');
       });
     };
 
     paint();
-    if (!reduce) {
-      window.setInterval(() => {
-        noiseBlocks.forEach((block) => {
-          const cells = block.textContent.split(' ');
-          if (!cells.length) return;
-          for (let i = 0; i < 8; i++) {
-            const at = Math.floor(Math.random() * cells.length);
-            if (cells[at] && cells[at].length === 1) cells[at] = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-          }
-          block.textContent = cells.join(' ');
-        });
-      }, 420);
-      window.addEventListener('resize', paint);
-    }
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(paint, 320);
+    });
 
     const audio = document.getElementById('god-voice');
     const hint = document.getElementById('listen-hint');
