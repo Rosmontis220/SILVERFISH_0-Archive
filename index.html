@@ -49,7 +49,7 @@
       --line: rgba(128, 128, 128, 0.25);
     }
 
-    /* 第三主题（解锁后出现）：SF 本体站点的黑红配色 */
+    /* 第三主题：黑红 */
     html.crimson {
       --ef-yellow: #ff1b13;
       --ef-dim: rgba(255, 27, 19, 0.1);
@@ -62,7 +62,7 @@
       --line: rgba(255, 27, 19, 0.28);
     }
 
-    /* 黑红主题的故障效果：遮挡条 + 扫描线 */
+    /* 黑红主题效果 */
     .crimson-fx { display: none; }
 
     html.crimson .crimson-fx {
@@ -1559,7 +1559,6 @@
   (function () {
     const THEMES = ['dark', 'light', 'crimson'];
     const NAMES = { dark: '暗色', light: '亮色', crimson: '黑红' };
-    /* 图标表示当前主题本身，不做"下一个是谁"的推断 */
     const ICONS = { dark: '🌙', light: '☀️', crimson: '🩸' };
     const TRACKS = {
       dark: 'call-of-iberia.mp3',
@@ -1608,7 +1607,7 @@
         count = now - last > 1200 ? 1 : count + 1;
         last = now;
 
-        /* 连点五次解锁黑红主题，第五次直接落在这里 */
+        /* 连点五次解锁 */
         if (count >= 5) {
           count = 0;
           unlocked = true;
