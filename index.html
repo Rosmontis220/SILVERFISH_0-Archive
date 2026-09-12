@@ -1098,78 +1098,69 @@
 <audio id="archive-music" src="call-of-iberia.mp3" loop preload="auto" style="position: fixed; width: 1px; height: 1px; opacity: 0; pointer-events: none;" aria-hidden="true"></audio>
 
 <script>
-  /* 点击与滑动音效：Web Audio 实时合成，不用音频文件 */
+  /* 点击与翻页音效 */
   (function () {
-    const AudioCtor = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtor) return;
-    let ctx = null;
+    const SOURCES = {
+      click: 'sfx/common_click.52e9d4.mp3',
+      menu: 'sfx/menu_click.d51e70.mp3',
+      page: 'sfx/arrow_click.a72c10.mp3',
+      enter: 'sfx/home_enter.6aefd5.mp3',
+      close: 'sfx/close_click.fe1dc4.mp3'
+    };
+    const VOLUME = 0.5;
+    const MAX_VOICES = 4;
+    const pools = {};
 
     const allowed = () => window.__archiveSoundAllowed !== false;
-    const ensure = () => {
-      if (!allowed()) return null;
-      if (!ctx) {
-        try { ctx = new AudioCtor(); } catch (e) { return null; }
+
+    const slotFor = (key) => {
+      const src = SOURCES[key];
+      if (!src || typeof window.Audio !== 'function') return null;
+      if (!pools[key]) {
+        const base = new window.Audio(src);
+        base.preload = 'auto';
+        base.volume = VOLUME;
+        pools[key] = { base, voices: [] };
       }
-      if (ctx.state === 'suspended') {
-        const resumed = ctx.resume();
-        if (resumed && typeof resumed.catch === 'function') resumed.catch(() => {});
+      return pools[key];
+    };
+
+    const play = (key) => {
+      if (!allowed()) return;
+      const slot = slotFor(key);
+      if (!slot) return;
+      let voice = slot.voices.find((v) => v.paused || v.ended);
+      if (!voice) {
+        if (slot.voices.length >= MAX_VOICES) {
+          const oldest = slot.voices.shift();
+          try { oldest.pause(); } catch (e) { /* 忽略 */ }
+        }
+        voice = slot.base.cloneNode(true);
+        voice.volume = VOLUME;
+        slot.voices.push(voice);
       }
-      return ctx;
+      try { voice.currentTime = 0; } catch (e) { /* 忽略 */ }
+      const attempt = voice.play();
+      if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
     };
 
-    const click = () => {
-      const ac = ensure();
-      if (!ac) return;
-      const t = ac.currentTime;
-      const osc = ac.createOscillator();
-      const gain = ac.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(920, t);
-      osc.frequency.exponentialRampToValueAtTime(300, t + 0.06);
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(0.07, t + 0.006);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
-      osc.connect(gain).connect(ac.destination);
-      osc.start(t);
-      osc.stop(t + 0.11);
+    window.__archiveSfx = {
+      click: () => play('click'),
+      menu: () => play('menu'),
+      slide: () => play('page'),
+      enter: () => play('enter'),
+      close: () => play('close'),
+      preload: () => Object.keys(SOURCES).forEach(slotFor)
     };
 
-    const slide = () => {
-      const ac = ensure();
-      if (!ac) return;
-      const t = ac.currentTime;
-      const length = 0.34;
-      const frames = Math.floor(ac.sampleRate * length);
-      const buffer = ac.createBuffer(1, frames, ac.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < frames; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / frames);
-      const source = ac.createBufferSource();
-      source.buffer = buffer;
-      const filter = ac.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.Q.value = 1.2;
-      filter.frequency.setValueAtTime(300, t);
-      filter.frequency.exponentialRampToValueAtTime(2600, t + length);
-      const gain = ac.createGain();
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(0.05, t + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + length);
-      source.connect(filter).connect(gain).connect(ac.destination);
-      source.start(t);
-      source.stop(t + length);
-    };
-
-    window.__archiveSfx = { click, slide, state: () => (ctx ? ctx.state : 'none') };
-
-    window.addEventListener('pointerdown', ensure, { once: true });
-    window.addEventListener('keydown', ensure, { once: true });
+    window.__archiveSfx.preload();
 
     document.addEventListener('click', (event) => {
       const target = event.target;
       if (!target || !target.closest) return;
-      if (!target.closest('a, button, .entry-card, .nav-toc-item')) return;
       if (target.closest('#sound-toggle')) return;
-      click();
+      if (target.closest('.nav-toc-item')) { play('menu'); return; }
+      if (target.closest('a, button, .entry-card')) play('click');
     }, true);
   })();
 </script>
@@ -1848,7 +1839,7 @@
       burger.addEventListener('click', () => {
         const open = nav.classList.toggle('menu-open');
         burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (window.__archiveSfx) window.__archiveSfx.slide();
+        if (window.__archiveSfx) (open ? window.__archiveSfx.menu : window.__archiveSfx.close)();
       });
     }
     document.addEventListener('click', (e) => {
@@ -1929,6 +1920,7 @@
       try { sessionStorage.setItem('sf-module', String(currentIndex())); } catch (err) { /* storage unavailable */ }
     }, true);
     enter.addEventListener('click', () => {
+      if (window.__archiveSfx) window.__archiveSfx.enter();
       unlock(true);
       window.setTimeout(() => go(1), 550);
     });
