@@ -1143,7 +1143,7 @@
 </nav>
 
 <main class="page locked" id="page">
-  <section class="module" aria-label="档案简介">
+  <section class="module" aria-label="档案简介" data-god="不需要存档">
     <header class="hero">
     <div class="kicker">Complete Archive // 完整存档</div>
     <h1>SILVERFISH_0 <span class="h1-sub">ARCHIVE</span></h1>
@@ -1155,13 +1155,13 @@
       <span>ARCHIVE_CHANNEL: ACTIVE</span>
     </div>
     <button id="enter-archive" class="archive-entry-btn" type="button">
-      进入档案库 <span aria-hidden="true">→</span>
+      <span class="label" data-god="不需要入口">进入档案库</span> <span aria-hidden="true">→</span>
     </button>
     <p class="enter-hint" id="enter-hint" hidden>↓ 已解锁 · 滚动查看各模块 / Scroll to Explore</p>
     </header>
   </section>
 
-  <section class="module" aria-label="调查维基">
+  <section class="module" aria-label="调查维基" data-god="不需要证据">
     <div class="module-main">
     <div class="series-head">
       <h2 class="series-name"><span class="no">01</span>调查维基 / WIKI</h2>
@@ -1201,7 +1201,7 @@
     </div>
   </section>
 
-  <section class="module" aria-label="大黄昏预测">
+  <section class="module" aria-label="大黄昏预测" data-god="不需要预测">
     <div class="module-main">
     <div class="series-head">
       <h2 class="series-name"><span class="no">02</span>大黄昏预测 / FORECAST</h2>
@@ -1233,7 +1233,7 @@
     </div>
   </section>
 
-  <section class="module" aria-label="运动之数">
+  <section class="module" aria-label="运动之数" data-god="不需要记录">
     <div class="module-main">
       <div class="series-head">
         <h2 class="series-name"><span class="no">03</span>运动之数 / NUMBER OF MOTION</h2>
@@ -1266,7 +1266,7 @@
     </div>
   </section>
 
-  <section class="module" aria-label="汉化">
+  <section class="module" aria-label="汉化" data-god="不需要解释">
     <div class="module-main">
       <div class="series-head">
         <h2 class="series-name"><span class="no">04</span>汉化 / LOCALIZED</h2>
@@ -1296,7 +1296,7 @@
     </div>
   </section>
 
-  <section class="module" aria-label="文件下载">
+  <section class="module" aria-label="文件下载" data-god="不需要备份">
     <div class="module-main">
       <div class="series-head">
         <h2 class="series-name"><span class="no">05</span>文件下载 / DOWNLOADS</h2>
@@ -1368,7 +1368,7 @@
     </div>
   </section>
 
-  <section class="module module-last" aria-label="杂项">
+  <section class="module module-last" aria-label="杂项" data-god="不需要联系">
     <div class="module-main">
       <div class="series-head">
         <h2 class="series-name"><span class="no">06</span>杂项 / MISC</h2>
@@ -1559,6 +1559,13 @@
       light: 'call-of-iberia.mp3',
       crimson: 'Mayors-the-Yearning-Flotsam.mp3'
     };
+    /* 黑红主题下按钮改由神的口吻注释 */
+    const ACTION_GOD = {
+      'Open Record': '不需要打开',
+      'Download': '不需要备份',
+      'Open Link': '不需要联系',
+      'Open File': '不需要阅读'
+    };
     const root = document.documentElement;
     const toggle = document.getElementById('theme-toggle');
     const icon = document.getElementById('theme-icon');
@@ -1581,6 +1588,38 @@
       }
     };
 
+    /* 卡片动作行统一成 "<span class=label>文字</span> <span>箭头</span>"，便于整段替换 */
+    const labelTargets = () => {
+      const out = [];
+      document.querySelectorAll('.card-enter').forEach((row) => {
+        let label = row.querySelector('.label');
+        if (!label) {
+          const arrow = row.querySelector('span');
+          const text = row.textContent.replace(arrow ? arrow.textContent : '', '').trim();
+          row.textContent = '';
+          label = document.createElement('span');
+          label.className = 'label';
+          label.textContent = text;
+          row.appendChild(label);
+          if (arrow) row.appendChild(arrow);
+        }
+        out.push(label);
+      });
+      document.querySelectorAll('.nav-toc-item .toc-label span:last-child').forEach((el) => out.push(el));
+      document.querySelectorAll('#enter-archive .label').forEach((el) => out.push(el));
+      return out;
+    };
+
+    const applyLabels = (theme) => {
+      const god = theme === 'crimson';
+      labelTargets().forEach((el) => {
+        if (!el.dataset.plain) el.dataset.plain = el.textContent.trim();
+        const plain = el.dataset.plain;
+        el.textContent = god ? (el.dataset.god || ACTION_GOD[plain] || plain) : plain;
+      });
+    };
+    window.__applyArchiveLabels = () => applyLabels(current());
+
     const apply = (theme, persist) => {
       THEMES.forEach((t) => root.classList.toggle(t, t === theme));
       if (icon) icon.textContent = ICONS[theme] || ICONS.dark;
@@ -1589,6 +1628,7 @@
         try { localStorage.setItem('theme', theme); } catch (e) { /* storage unavailable */ }
       }
       applyTrack(theme);
+      applyLabels(theme);
     };
 
     apply(current(), false);
@@ -1699,6 +1739,7 @@
         }
         const nameEl = document.createElement('span');
         nameEl.textContent = name;
+        if (m.dataset.god) nameEl.dataset.god = m.dataset.god;
         wrap.appendChild(nameEl);
         btn.appendChild(wrap);
         btn.addEventListener('click', () => jumpTo(idx));
@@ -1780,9 +1821,10 @@
       if (!locked()) return;
       page.classList.remove('locked');
       enter.disabled = true;
-      enter.innerHTML = '已进入档案库 <span aria-hidden="true">✓</span>';
+      enter.innerHTML = '<span class="label" data-god="不需要再进入">已进入档案库</span> <span aria-hidden="true">✓</span>';
       hint.hidden = !showHint;
       try { sessionStorage.setItem('sf-entry', '1'); } catch (e) { /* storage unavailable */ }
+      if (window.__applyArchiveLabels) window.__applyArchiveLabels();
       setState();
     };
     page.addEventListener('wheel', (e) => {
