@@ -247,13 +247,13 @@
 
     .noise {
       margin: 6px 0 0;
-      padding: 9px 11px;
+      padding: 10px 12px;
       border: 1px solid var(--line);
       background: rgba(0, 0, 0, 0.78);
-      font: 700 11px/1.18 var(--mono);
-      letter-spacing: 0.06em;
-      color: rgba(241, 235, 227, 0.8);
-      word-break: break-all;
+      font: 400 12px/1.85 var(--mono);
+      letter-spacing: 0.1em;
+      color: rgba(241, 235, 227, 0.84);
+      word-break: normal;
       overflow: hidden;
     }
 
@@ -509,7 +509,7 @@
     <p class="kicker">complete archive // 完整存档</p>
     <h1 class="declaration">不需要存档</h1>
     <p class="seal">GOD SAYS</p>
-    <p class="noise" data-noise="3" aria-hidden="true"></p>
+    <p class="noise" data-noise="5" aria-hidden="true"></p>
 
     <div class="warning">
       <span>▲ WARNING: OVERWRITE IN PROGRESS</span>
@@ -665,19 +665,23 @@
 
 <script>
   (function () {
-    const GLYPHS = "徙逃默噬嵬潮窗口血肉醉亡脱迷吞划死恶魔鬼失沉黑计无据录预证语言译神记录不需要アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホ▀▄█▓▒░●◆■□▲▼☆★¤§¶☠☢☣0123456789ABCDEF<>{}[]/\\|#$%&*+=~";
+    const GLYPHS =
+      "锚点断联大黄昏巨爆盲续态归档中继本地记录调查维基预测运动之数汉化探针密钥校验目录索引神曰存信道号失雾蠹虫刻先后来回交接原件副本哈希字节读写覆盖沉默证据规则模型窗口偏移降临呼吸眼睛名字烧掉重生" +
+      "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホ" +
+      "0123456789ABCDEF" +
+      "◆■□▲▼●○◇▽△☆★☠☢☣¤§¶※†‡+=-*/\\|<>[]{}()#%&@!?";
     const noiseBlocks = [...document.querySelectorAll('[data-noise]')];
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const paint = () => {
       noiseBlocks.forEach((block) => {
         const rows = Number(block.dataset.noise) || 1;
-        const width = Math.max(48, Math.round((block.clientWidth || 720) / 9.4));
+        const perRow = Math.max(20, Math.round((block.clientWidth || 720) / 17));
         const lines = [];
         for (let r = 0; r < rows; r++) {
-          let line = '';
-          for (let i = 0; i < width; i++) line += GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-          lines.push(line);
+          const cells = [];
+          for (let i = 0; i < perRow; i++) cells.push(GLYPHS[Math.floor(Math.random() * GLYPHS.length)]);
+          lines.push(cells.join(' '));
         }
         block.textContent = lines.join('\n');
       });
@@ -687,14 +691,13 @@
     if (!reduce) {
       window.setInterval(() => {
         noiseBlocks.forEach((block) => {
-          const text = block.textContent;
-          if (!text) return;
-          const chars = text.split('');
-          for (let i = 0; i < 6; i++) {
-            const at = Math.floor(Math.random() * chars.length);
-            if (chars[at] !== '\n') chars[at] = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+          const cells = block.textContent.split(' ');
+          if (!cells.length) return;
+          for (let i = 0; i < 8; i++) {
+            const at = Math.floor(Math.random() * cells.length);
+            if (cells[at] && cells[at].length === 1) cells[at] = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
           }
-          block.textContent = chars.join('');
+          block.textContent = cells.join(' ');
         });
       }, 420);
       window.addEventListener('resize', paint);
