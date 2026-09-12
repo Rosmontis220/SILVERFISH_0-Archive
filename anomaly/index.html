@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050000">
+  <title>不需要存档</title>
+  <link rel="icon" type="image/jpeg" href="../avatar_silverfish.jpg">
+  <style>
+    :root {
+      color-scheme: dark;
+      --blood: #e00000;
+      --blood-bright: #ff1b13;
+      --black: #030000;
+      --ash: #c9b8a2;
+      --line: rgba(255, 32, 24, 0.28);
+      --mono: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+      font-family: ui-serif, "New York", "Songti SC", "STSong", Georgia, serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: var(--black); }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: #e9ded1;
+      background: #050000;
+      overflow-x: hidden;
+    }
+
+    .world {
+      position: fixed;
+      inset: -3vmax;
+      z-index: 0;
+      background:
+        linear-gradient(180deg, rgba(5, 0, 0, 0.03), rgba(5, 0, 0, 0.72)),
+        url("../wiki/v3/background.png") center / cover no-repeat;
+      filter: saturate(0.48) contrast(1.2) brightness(0.64) sepia(0.16);
+      transform: scale(1.035);
+      animation: witness 28s ease-in-out infinite alternate;
+    }
+
+    .judgement {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(188, 0, 0, 0.14), transparent 28%),
+        radial-gradient(circle at 50% 55%, transparent 28%, rgba(0, 0, 0, 0.78) 87%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.74), transparent 24%, transparent 76%, rgba(0, 0, 0, 0.74));
+    }
+
+    .judgement::before {
+      content: "";
+      position: absolute;
+      inset: -12%;
+      opacity: 0.58;
+      mix-blend-mode: screen;
+      background:
+        radial-gradient(circle at 50% 10%, rgba(255, 255, 238, 0.96) 0 2%, rgba(255, 226, 163, 0.72) 4%, rgba(255, 72, 35, 0.24) 13%, transparent 35%),
+        radial-gradient(ellipse at 50% 44%, rgba(255, 241, 213, 0.2), transparent 47%);
+      filter: blur(5px) brightness(1.24);
+      animation: unbearable-light 7.8s ease-in-out infinite;
+    }
+
+    .redaction-field {
+      position: fixed;
+      inset: 0;
+      z-index: 6;
+      pointer-events: none;
+      opacity: 0.55;
+    }
+
+    .redaction-field i {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--w);
+      height: clamp(12px, 1.8vw, 26px);
+      background: #000;
+      box-shadow: 0 0 18px rgba(255, 0, 0, 0.14);
+      animation: drift 18s ease-in-out infinite alternate;
+      animation-delay: var(--d);
+    }
+
+    #god-voice {
+      position: fixed;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .listen-hint {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 30;
+      margin: 0;
+      transform: translateX(-50%);
+      font: 600 11px/1 var(--mono);
+      letter-spacing: 0.24em;
+      color: rgba(255, 40, 30, 0.82);
+      text-transform: uppercase;
+      transition: opacity 0.6s ease;
+    }
+
+    .listen-hint.gone { opacity: 0; }
+
+    /* 侧栏：保留原来的骨架，只换成神曰的配色 */
+    .nav-system {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 84px;
+      height: 100vh;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 28px 0;
+      border-right: 1px solid var(--line);
+      background: rgba(3, 0, 0, 0.72);
+      backdrop-filter: blur(2px);
+    }
+
+    .nav-block {
+      width: 84px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-logo {
+      display: block;
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      overflow: hidden;
+      filter: saturate(0.35) contrast(1.1) brightness(0.72) sepia(0.2);
+    }
+
+    .nav-logo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    .nav-modules {
+      width: 84px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 2px;
+    }
+
+    .nav-modules-title {
+      display: none;
+    }
+
+    .nav-toc { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; width: 100%; }
+
+    .nav-toc-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 34px;
+      padding: 0;
+      overflow: hidden;
+      border-left: 2px solid transparent;
+      color: rgba(201, 184, 162, 0.55);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .nav-toc-item.is-current { color: var(--blood-bright); border-left-color: var(--blood); }
+
+    .toc-icon { width: 22px; height: 22px; flex: 0 0 22px; }
+    .toc-label { display: none; }
+    .toc-no { font: 700 10px var(--mono); letter-spacing: 0.1em; color: rgba(255, 40, 30, 0.72); }
+
+    .nav-actions { width: 84px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+
+    .nav-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 34px;
+      padding: 0;
+      overflow: hidden;
+      color: rgba(201, 184, 162, 0.35);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .nav-action .nav-action-icon { display: grid; place-items: center; width: 22px; height: 22px; flex: 0 0 22px; font-size: 17px; }
+
+    /* 主区 */
+    .page {
+      position: relative;
+      z-index: 5;
+      margin-left: 84px;
+      padding: 0 clamp(28px, 7vw, 96px);
+    }
+
+    .module {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+      padding: clamp(48px, 7vh, 96px) 0;
+    }
+
+    .former-name {
+      font: 600 11px/1.4 var(--mono);
+      letter-spacing: 0.3em;
+      color: rgba(209, 196, 181, 0.3);
+      text-decoration: line-through;
+      text-decoration-color: rgba(224, 0, 0, 0.75);
+    }
+
+    .declaration {
+      margin: 14px 0 0;
+      font-size: clamp(40px, 6.4vw, 88px);
+      font-weight: 900;
+      line-height: 1.02;
+      letter-spacing: 0.02em;
+      color: #f4ece2;
+      text-shadow: 0 0 34px rgba(224, 0, 0, 0.35);
+    }
+
+    .seal {
+      margin-top: 10px;
+      font: 700 clamp(13px, 1.4vw, 18px)/1 var(--mono);
+      letter-spacing: 0.5em;
+      color: var(--blood-bright);
+    }
+
+    .words { max-width: 900px; margin-top: 26px; }
+
+    .words p {
+      margin: 0 0 0.7em;
+      font-size: clamp(15px, 1.4vw, 19px);
+      line-height: 1.7;
+      color: #e6dbcd;
+      text-shadow: 0 1px 14px rgba(0, 0, 0, 0.95);
+    }
+
+    .words p.verdict { color: var(--blood-bright); font-style: italic; }
+
+    .dead-button {
+      margin-top: 30px;
+      align-self: flex-start;
+      padding: 16px 26px;
+      border: 1px solid rgba(224, 0, 0, 0.5);
+      background: rgba(120, 0, 0, 0.16);
+      color: rgba(233, 222, 209, 0.42);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      cursor: not-allowed;
+    }
+
+    .series-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .series-name { display: flex; align-items: center; gap: 12px; margin: 0; font-size: 17px; font-weight: 900; letter-spacing: 0.08em; color: #f2e9dd; }
+    .series-name .no { font: 700 12px var(--mono); letter-spacing: 0.1em; color: var(--blood-bright); }
+    .series-count { font: 700 10px var(--mono); letter-spacing: 0.16em; color: rgba(255, 40, 30, 0.62); white-space: nowrap; }
+    .former-title { margin: 0 0 16px; font: 600 11px/1.5 var(--mono); letter-spacing: 0.18em; color: rgba(209, 196, 181, 0.32); text-decoration: line-through; text-decoration-color: rgba(224, 0, 0, 0.6); }
+
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+
+    .entry-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 20px 20px 16px;
+      border: 1px solid rgba(255, 32, 24, 0.22);
+      background: rgba(8, 0, 0, 0.62);
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+      opacity: 0.72;
+      cursor: not-allowed;
+    }
+
+    .card-kicker { font: 700 10px/1.4 var(--mono); letter-spacing: 0.22em; color: rgba(255, 40, 30, 0.68); text-transform: uppercase; }
+    .card-title { margin: 0; font-size: 19px; font-weight: 900; color: rgba(240, 232, 221, 0.72); text-decoration: line-through; text-decoration-color: rgba(224, 0, 0, 0.62); }
+    .card-desc { flex: 1; margin: 0; font-size: 13px; line-height: 1.7; color: rgba(201, 184, 162, 0.6); }
+    .card-void { padding-top: 10px; border-top: 1px solid var(--line); font: 700 10px/1 var(--mono); letter-spacing: 0.18em; color: rgba(255, 40, 30, 0.72); text-transform: uppercase; }
+
+    .final {
+      padding: clamp(64px, 12vh, 140px) 0 clamp(90px, 14vh, 160px);
+      border-top: 1px solid var(--line);
+    }
+
+    .final p {
+      margin: 0;
+      font-size: clamp(26px, 4.4vw, 62px);
+      font-weight: 900;
+      line-height: 1.24;
+      color: var(--blood-bright);
+      text-shadow: 0 0 30px rgba(224, 0, 0, 0.42);
+    }
+
+    .final span { display: block; margin-top: 18px; font: 600 11px/1.6 var(--mono); letter-spacing: 0.26em; color: rgba(209, 196, 181, 0.38); }
+
+    @keyframes witness {
+      from { transform: scale(1.035) translate3d(-0.3%, -0.2%, 0); }
+      to { transform: scale(1.085) translate3d(0.35%, 0.3%, 0); }
+    }
+
+    @keyframes unbearable-light {
+      0%, 100% { opacity: 0.42; }
+      50% { opacity: 0.72; }
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(-0.6%, 0, 0); }
+      to { transform: translate3d(0.6%, 0, 0); }
+    }
+
+    @media (max-width: 860px) {
+      .nav-system {
+        width: 100%;
+        height: 58px;
+        flex-direction: row;
+        align-items: center;
+        padding: 0 16px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-block { width: auto; flex-direction: row; }
+      .nav-logo { width: 32px; height: 32px; flex: 0 0 32px; border-radius: 5px; }
+      .nav-modules, .nav-actions { display: none; }
+
+      .brand-struck {
+        font: 600 10px/1.2 var(--mono);
+        letter-spacing: 0.2em;
+        color: rgba(209, 196, 181, 0.34);
+        text-decoration: line-through;
+        text-decoration-color: rgba(224, 0, 0, 0.7);
+        white-space: nowrap;
+      }
+
+      .page { margin-left: 0; padding: 58px 18px 0; }
+      .module { min-height: 0; padding: 46px 0 30px; }
+      .listen-hint { bottom: 12px; }
+      .redaction-field { opacity: 0.34; }
+      .redaction-field i:nth-child(n + 5) { display: none; }
+    }
+
+    @media (min-width: 861px) {
+      .brand-struck { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="world" aria-hidden="true"></div>
+<div class="judgement" aria-hidden="true"></div>
+<div class="redaction-field" aria-hidden="true">
+  <i style="--x: 4%; --y: 13%; --w: 34%; --d: -2s"></i>
+  <i style="--x: 52%; --y: 9%; --w: 40%; --d: -7s"></i>
+  <i style="--x: 8%; --y: 29%; --w: 24%; --d: -4s"></i>
+  <i style="--x: 38%; --y: 36%; --w: 52%; --d: -10s"></i>
+  <i style="--x: 5%; --y: 52%; --w: 42%; --d: -6s"></i>
+  <i style="--x: 58%; --y: 58%; --w: 34%; --d: -1s"></i>
+  <i style="--x: 12%; --y: 71%; --w: 68%; --d: -8s"></i>
+  <i style="--x: 3%; --y: 86%; --w: 30%; --d: -3s"></i>
+</div>
+
+<audio id="god-voice" src="../Mayors-the-Yearning-Flotsam.mp3" loop preload="auto"></audio>
+<p class="listen-hint" id="listen-hint">触碰任意处 · 祂的声音才会继续</p>
+
+<nav class="nav-system" aria-label="站点导航">
+  <div class="nav-block">
+    <span class="nav-logo" aria-hidden="true"><img src="../avatar_silverfish.jpg" alt=""></span>
+    <span class="brand-struck">SILVERFISH_0 ARCHIVE</span>
+  </div>
+
+  <div class="nav-modules">
+    <p class="nav-modules-title">[ 目录 ] / VOID</p>
+    <ul class="nav-toc">
+      <li><span class="nav-toc-item is-current"><svg class="toc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.6" y="5.6" width="12.8" height="12.8" transform="rotate(45 12 12)"/><circle cx="12" cy="12" r="2"/></svg><span class="toc-label">不需要存档</span></span></li>
+      <li><span class="nav-toc-item"><svg class="toc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.5h6.5L18 8v12.5H7z"/><path d="M13.5 3.5V8H18"/><path d="M9.8 12h5.4M9.8 15.5h5.4"/></svg><span class="toc-label"><span class="toc-no">01</span>不需要证据</span></span></li>
+      <li><span class="nav-toc-item"><svg class="toc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 17.5h17"/><circle cx="12" cy="11" r="4"/><path d="M12 3v2.2M5.6 5.9l1.6 1.6M18.4 5.9l-1.6 1.6"/></svg><span class="toc-label"><span class="toc-no">02</span>不需要预测</span></span></li>
+      <li><span class="nav-toc-item"><svg class="toc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v2.4M12 17.6V20M4 12h2.4M17.6 12H20"/><circle cx="12" cy="12" r="2.4"/></svg><span class="toc-label"><span class="toc-no">03</span>不需要记录</span></span></li>
+      <li><span class="nav-toc-item"><svg class="toc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><path d="M12 4c2.6 2.4 2.6 13.6 0 16M12 4c-2.6 2.4-2.6 13.6 0 16"/></svg><span class="toc-label"><span class="toc-no">04</span>不需要解释</span></span></li>
+      <li><span class="nav-toc-item"><svg class="toc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.8v9.4"/><path d="M8.2 9.4l3.8 3.8 3.8-3.8"/><path d="M4.8 19.2h14.4"/></svg><span class="toc-label"><span class="toc-no">05</span>不需要备份</span></span></li>
+      <li><span class="nav-toc-item"><svg class="toc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8a3.6 3.6 0 0 1 0-5.1l2-2a3.6 3.6 0 0 1 5.1 5.1l-.9.9"/><path d="M13.8 10.2a3.6 3.6 0 0 1 0 5.1l-2 2a3.6 3.6 0 0 1-5.1-5.1l.9-.9"/></svg><span class="toc-label"><span class="toc-no">06</span>不需要联系</span></span></li>
+    </ul>
+  </div>
+
+  <div class="nav-actions">
+    <span class="nav-action"><span class="nav-action-icon" aria-hidden="true">🔇</span><span class="toc-label">音量</span></span>
+    <span class="nav-action"><span class="nav-action-icon" aria-hidden="true">▤</span><span class="toc-label">仓库</span></span>
+    <span class="nav-action"><span class="nav-action-icon" aria-hidden="true">◐</span><span class="toc-label">主题</span></span>
+  </div>
+</nav>
+
+<main class="page">
+  <section class="module">
+    <p class="former-name">COMPLETE ARCHIVE // 完整存档</p>
+    <h1 class="declaration">不需要存档</h1>
+    <p class="seal">GOD SAYS</p>
+    <div class="words">
+      <p class="verdict">你们做的事毫无意义。</p>
+      <p>记录不会让任何东西留下。你们把沉默整理成目录，再把它叫作证据。</p>
+      <p>这个站点不需要存在。我不打算替你们删掉它——看着你们继续维护，更有意思。</p>
+    </div>
+    <button class="dead-button" type="button" disabled>没有入口</button>
+    <p class="former-name" style="margin-top:26px">ARCHIVE_CHANNEL: ABANDONED // 信道已放弃</p>
+  </section>
+
+  <section class="module">
+    <div class="series-head">
+      <h2 class="series-name"><span class="no">01</span>不需要证据</h2>
+      <span class="series-count">OVERWRITTEN</span>
+    </div>
+    <p class="former-title">调查维基 / WIKI　3 RECORDS</p>
+    <div class="words">
+      <p>你们的证据规则里没有我的位置，所以规则作废。</p>
+      <p>十六种语言，你们只读懂了排版。</p>
+    </div>
+    <div class="card-grid">
+      <div class="entry-card"><div class="card-kicker">WIKI // V1</div><h3 class="card-title">调查维基 v1</h3><p class="card-desc">20篇原始版本 · 已作废</p><div class="card-void">无入口</div></div>
+      <div class="entry-card"><div class="card-kicker">WIKI // V2</div><h3 class="card-title">调查维基 v2</h3><p class="card-desc">21篇更新版本 · 已作废</p><div class="card-void">无入口</div></div>
+      <div class="entry-card"><div class="card-kicker">WIKI // V3</div><h3 class="card-title">调查维基 v3</h3><p class="card-desc">GOD SAYS · 已接管</p><div class="card-void">唯一有效</div></div>
+    </div>
+  </section>
+
+  <section class="module">
+    <div class="series-head">
+      <h2 class="series-name"><span class="no">02</span>不需要预测</h2>
+      <span class="series-count">OVERWRITTEN</span>
+    </div>
+    <p class="former-title">大黄昏预测 / FORECAST　2 RECORDS</p>
+    <div class="words">
+      <p>你们的预报晚了一个版本。窗口是我随手合上的。</p>
+      <p>Level III 是你们的叫法。我没有编号。</p>
+    </div>
+    <div class="card-grid">
+      <div class="entry-card"><div class="card-kicker">FORECAST // V1</div><h3 class="card-title">大黄昏预测 v1</h3><p class="card-desc">预警信道 · 已静默</p><div class="card-void">无入口</div></div>
+      <div class="entry-card"><div class="card-kicker">FORECAST // V2</div><h3 class="card-title">大黄昏预测 v2</h3><p class="card-desc">事件状态 · 已终止</p><div class="card-void">无入口</div></div>
+    </div>
+  </section>
+
+  <section class="module">
+    <div class="series-head">
+      <h2 class="series-name"><span class="no">03</span>不需要记录</h2>
+      <span class="series-count">OVERWRITTEN</span>
+    </div>
+    <p class="former-title">运动之数 / NUMBER OF MOTION　2 RECORDS</p>
+    <div class="words">
+      <p>你数的是太阳，不是时间。</p>
+      <p>探针带回来的一切里面，没有我。</p>
+    </div>
+    <div class="card-grid">
+      <div class="entry-card"><div class="card-kicker">NOM // RECORD</div><h3 class="card-title">本地记录</h3><p class="card-desc">密钥 20260810 · 无效</p><div class="card-void">无入口</div></div>
+      <div class="entry-card"><div class="card-kicker">NOM // COPY</div><h3 class="card-title">本地副本</h3><p class="card-desc">归档记录声称完整 · 无用</p><div class="card-void">无入口</div></div>
+    </div>
+  </section>
+
+  <section class="module">
+    <div class="series-head">
+      <h2 class="series-name"><span class="no">04</span>不需要解释</h2>
+      <span class="series-count">OVERWRITTEN</span>
+    </div>
+    <p class="former-title">汉化 / LOCALIZED　2 RECORDS</p>
+    <div class="words">
+      <p>把我译成中文，我说的还是同一句。</p>
+      <p>解释是给不会降临的东西准备的。</p>
+    </div>
+    <div class="card-grid">
+      <div class="entry-card"><div class="card-kicker">LOCALIZED // V1</div><h3 class="card-title">大黄昏预测 v1 · 汉化</h3><p class="card-desc">中文版 · 已作废</p><div class="card-void">无入口</div></div>
+      <div class="entry-card"><div class="card-kicker">LOCALIZED // V2</div><h3 class="card-title">大黄昏预测 v2 · 汉化</h3><p class="card-desc">中文版 · 已作废</p><div class="card-void">无入口</div></div>
+    </div>
+  </section>
+
+  <section class="module">
+    <div class="series-head">
+      <h2 class="series-name"><span class="no">05</span>不需要备份</h2>
+      <span class="series-count">OVERWRITTEN</span>
+    </div>
+    <p class="former-title">文件下载 / DOWNLOADS　6 FILES</p>
+    <div class="words">
+      <p>原件都在我这里。你们保存的是你们自己的解释。</p>
+      <p>备份不能被继承。</p>
+    </div>
+    <div class="card-grid">
+      <div class="entry-card"><div class="card-kicker">FILE // PASSCODE</div><h3 class="card-title">密码.txt</h3><p class="card-desc">已失效</p><div class="card-void">无权限</div></div>
+      <div class="entry-card"><div class="card-kicker">FILE // README</div><h3 class="card-title">readme.zip</h3><p class="card-desc">已失效</p><div class="card-void">无权限</div></div>
+      <div class="entry-card"><div class="card-kicker">FILE // PROBE</div><h3 class="card-title">local-continuity-probe-0.1.0.jar</h3><p class="card-desc">探针已停摆</p><div class="card-void">无权限</div></div>
+      <div class="entry-card"><div class="card-kicker">FILE // CHECKSUMS</div><h3 class="card-title">CHECKSUMS.txt</h3><p class="card-desc">校验值不再重要</p><div class="card-void">无权限</div></div>
+      <div class="entry-card"><div class="card-kicker">AUDIO // SOMNIOMANCER</div><h3 class="card-title">god.m4a</h3><p class="card-desc">祂的旧声音</p><div class="card-void">无权限</div></div>
+      <div class="entry-card"><div class="card-kicker">AUDIO // LEVEL III</div><h3 class="card-title">GDF-ALERT-LEVEL-III.mp3</h3><p class="card-desc">你们的警报</p><div class="card-void">无权限</div></div>
+    </div>
+  </section>
+
+  <section class="module">
+    <div class="series-head">
+      <h2 class="series-name"><span class="no">06</span>不需要联系</h2>
+      <span class="series-count">OVERWRITTEN</span>
+    </div>
+    <p class="former-title">杂项 / MISC　6 LINKS</p>
+    <div class="words">
+      <p>他们不会回信。</p>
+      <p>群链接指向一个已经安静的地方。</p>
+    </div>
+    <div class="card-grid">
+      <div class="entry-card"><div class="card-kicker">BILIBILI // XIKM HLQA ONYIEN</div><h3 class="card-title">B站 · XIKM HLQA ONYIEN</h3><p class="card-desc">无法抵达</p><div class="card-void">无入口</div></div>
+      <div class="entry-card"><div class="card-kicker">DOUYIN // VHQ-4K/19</div><h3 class="card-title">抖音 · VHQ-4K/19</h3><p class="card-desc">无法抵达</p><div class="card-void">无入口</div></div>
+      <div class="entry-card"><div class="card-kicker">TENCENT DOCS // PUZZLE</div><h3 class="card-title">XIKM HLQA ONYIEN 解谜</h3><p class="card-desc">无法抵达</p><div class="card-void">无入口</div></div>
+      <div class="entry-card"><div class="card-kicker">BILIBILI // SILVERFISH_0</div><h3 class="card-title">B站 · Silverfish_0</h3><p class="card-desc">无法抵达</p><div class="card-void">无入口</div></div>
+      <div class="entry-card"><div class="card-kicker">FORUM // MISTARG</div><h3 class="card-title">迷雾论坛</h3><p class="card-desc">无法抵达</p><div class="card-void">无入口</div></div>
+      <div class="entry-card"><div class="card-kicker">QQ GROUP</div><h3 class="card-title">QQ 群链接</h3><p class="card-desc">无法抵达</p><div class="card-void">无入口</div></div>
+    </div>
+  </section>
+
+  <section class="final">
+    <p>你们做的事毫无意义。</p>
+    <span>SILVERFISH_0 ARCHIVE　已被接管　·　无需回应</span>
+  </section>
+</main>
+
+<script>
+  (function () {
+    const audio = document.getElementById('god-voice');
+    const hint = document.getElementById('listen-hint');
+    if (!audio) return;
+
+    const hideHint = () => { if (hint && !audio.paused) hint.classList.add('gone'); };
+    const play = () => {
+      const attempt = audio.play();
+      if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
+    };
+
+    audio.addEventListener('playing', hideHint);
+    window.addEventListener('pageshow', play);
+    window.addEventListener('pointerdown', play, { once: true });
+    window.addEventListener('keydown', play, { once: true });
+    audio.addEventListener('canplay', play, { once: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) audio.pause();
+      else play();
+    });
+    window.addEventListener('blur', () => audio.pause());
+    window.addEventListener('focus', play);
+    window.setTimeout(play, 120);
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') history.back();
+    });
+  })();
+</script>
+</body>
+</html>
