@@ -1815,14 +1815,29 @@
 <script>
   (function () {
     const logo = document.querySelector('.nav-logo');
-    if (!logo) return;
+    const music = document.getElementById('archive-music');
+    if (!logo || !music) return;
+    const TRACKS = ['call-of-iberia.mp3', 'Mayors-the-Yearning-Flotsam.mp3'];
     let count = 0;
     let last = 0;
+    const currentTrack = () => {
+      const src = music.getAttribute('src') || '';
+      const i = TRACKS.findIndex((t) => src.indexOf(t) !== -1);
+      return i < 0 ? 0 : i;
+    };
     logo.addEventListener('click', () => {
       const now = Date.now();
       count = now - last > 1200 ? 1 : count + 1;
       last = now;
-      if (count >= 5) window.location.href = 'anomaly/index.html';
+      if (count < 5) return;
+      count = 0;
+      const wasPlaying = !music.paused && !music.muted && window.__archiveSoundAllowed !== false;
+      music.setAttribute('src', TRACKS[(currentTrack() + 1) % TRACKS.length]);
+      try { music.load(); } catch (e) { /* load unavailable */ }
+      if (wasPlaying) {
+        const attempt = music.play();
+        if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
+      }
     });
   })();
 </script>
