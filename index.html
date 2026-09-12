@@ -1497,7 +1497,8 @@
   (function () {
     const THEMES = ['dark', 'light', 'crimson'];
     const NAMES = { dark: '暗色', light: '亮色', crimson: '黑红' };
-    const ICONS = { dark: '☀️', light: '🩸', crimson: '🌙' };
+    /* 图标表示当前主题本身，不做"下一个是谁"的推断 */
+    const ICONS = { dark: '🌙', light: '☀️', crimson: '🩸' };
     const TRACKS = {
       dark: 'call-of-iberia.mp3',
       light: 'call-of-iberia.mp3',
