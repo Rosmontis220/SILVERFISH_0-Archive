@@ -1823,7 +1823,7 @@
     const jumpTo = (i) => {
       if (i < 0 || i >= mods.length) return;
       if (locked()) unlock(true);
-      go(i);
+      go(i, true);
       closeMenu();
     };
     const syncNavLayout = () => {
@@ -1870,18 +1870,18 @@
       down.disabled = l || i === mods.length - 1;
       mods.forEach((m, idx) => m.classList.toggle('is-active', idx === i));
     };
-    const go = (i) => {
+    const go = (i, silent) => {
       if (locked()) return;
       if (isMobile()) {
         const target = mods[Math.max(0, Math.min(mods.length - 1, i))];
-        if (window.__archiveSfx) window.__archiveSfx.slide();
+        if (!silent && window.__archiveSfx) window.__archiveSfx.slide();
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         return;
       }
       if (busy) return;
       const target = Math.max(0, Math.min(mods.length - 1, i));
       if (target === currentIndex()) return;
-      if (window.__archiveSfx) window.__archiveSfx.slide();
+      if (!silent && window.__archiveSfx) window.__archiveSfx.slide();
       busy = true;
       page.scrollTo({ top: target * page.clientHeight, behavior: 'smooth' });
       window.setTimeout(() => { busy = false; }, 1050);
