@@ -49,12 +49,43 @@ SILVERFISH_0-Archive/
 │       ├── local-copy.html
 │       └── local-continuity-probe-0.1.0.jar
 │
+├── postal-terminal/    # 邮路终端（作者换号后发布）
+│   ├── index.html      # 30 个邮票槽位，单页应用
+│   ├── 404.html        # 与 index.html 字节相同
+│   ├── first-stamp.png # 2.9 MB，雨前首封
+│   └── life-flow.mp3   # 7.5 MB，背景音乐
+│
 └── localized/          # 汉化模块（英文页面中文版）
     ├── forecast-v1/    # 大黄昏预测 v1 汉化
     │   └── index.html
     └── forecast-v2/    # 大黄昏预测 v2 汉化（加密页，音频引用原版）
         └── index.html
 ```
+
+## 首页网格
+
+`index.html` 里所有模块共用一条卡片网格规则，列数完全跟着可用宽度走：
+
+```css
+.card-grid {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));                  /* 兜底 */
+  grid-template-columns: repeat(auto-fit, minmax(max(250px, 25% - 12px), 1fr)); /* 生效 */
+}
+```
+
+轨道最小宽度取「250px」与「四等分减掉三个 16px 间隙」的较大者，于是宽屏最多排四列，
+变窄时自动降到三列、两列、一列，全程没有任何 `@media` 断点，以后加卡片也不用再调列数。
+实测列数变化：1600px 起四列 → 1200px 三列 → 1000px 两列 → 520px 一列。
+
+卡片内部用容器查询跟着列宽缩放，同样不需要断点：
+
+```css
+.card-grid > .entry-card { container-type: inline-size; }
+@container (max-width: 330px) { .card-title { font-size: 17px; } }
+```
+
+注意容器查询只能命中容器的后代，`.entry-card` 自身的内边距改不了，所以收紧的是标题和底栏。
+`文件下载` 模块额外挂一个 `.card-grid--clamp2`，把描述限制在两行。
 
 ## 版本说明
 
@@ -129,10 +160,40 @@ SILVERFISH_0-Archive/
 发布动态里那段话就是提示：「还有一个沙盒游戏，世界是在一张纸上的。那边有个叫大型模组，做了十年。后来它停更了。悼念。」
 ——一张纸上的沙盒游戏指 2D 横版世界的泰拉瑞亚，做了十年后停更的大型模组指灾厄。
 
+### 邮路终端 (postal-terminal)
+
+来自仓库 `https://github.com/0-silverfish/postal-terminal`，作者称原账号 `Silverfish-0` 遭攻击后换号，新号即 `0-silverfish`。
+单个自包含的 `index.html`（69,845 字节），无外链、无构建步骤，全部逻辑内嵌：
+
+- 30 个邮票槽位，首个位置默认解锁，其余保持静默，页面不给任何提示
+- 启动进度条：5 秒定时，缓动曲线 `1-(1-t)³`，6 段状态文案
+- 背景音乐 `life-flow.mp3`，默认音量 0.52
+- 内部有 6 位坐标答案 `6825`，是页面内的谜题，不是个人信息
+
+页面里有一段写给某位收件人的 `<template data-postal-fragment>` 碎片，原文含真实 ID 与 QQ 号。
+本存档发布前已脱敏，把这两项分别替换为 `某群友ID`、`某群友QQ号`：
+
+```html
+<template data-postal-fragment="某群友ID">某群友QQ号，我知道是你。……这是我给你的礼物。</template>
+```
+
+这段碎片是惰性的：解密后的页面逻辑从不引用 `template`、`postal-fragment` 或该属性值，
+所以替换它不影响页面任何功能，仅去掉原文里的真实身份信息。
+（原件上游 `https://0-silverfish.github.io/postal-terminal/` 仍是未脱敏版本，本仓库无法追溯修改。）
+
+`index.html` 与 `404.html` 在原件状态下字节完全相同（各 69,845 字节，SHA-256 `997b078d…`）。
+两个文件都在 `</body>` 前追加了返回按钮（与 forecast、wiki 各页同一套右下角样式），
+按钮在浅色与深色主题下都自适应：追加块本身不含换行符（1,205 字节），另加一个 CRLF 接回原件。
+脱敏再替换 7 个字节后，两个文件各 71,059 字节，SHA-256 `e47bd56f…`，且仍逐字节相同。
+
+页面内嵌一段混淆脚本（20 个反转 base64 串 → `atob` → 与 32 字节密钥数组异或 → FNV-1a 校验 `851106807`），
+解开后是 18,046 字符的正常页面逻辑，其中不含任何网络请求、外链或数据外发；
+上述 ID 与 QQ 号在解密载荷中零出现，只存在于那段惰性碎片里。
+
 ### 文件下载 (downloads)
 
-首页第五个模块，把散落在各目录里的随档文件集中成下载入口。`wiki/v1/` 与 `wiki/v2/` 的
-`密码.txt`、`readme.zip` 哈希完全一致，所以只放一份。
+首页第六个模块，把散落在各目录里的随档文件集中成下载入口。`wiki/v1/` 与 `wiki/v2/` 的
+`密码.txt`、`readme.zip` 哈希完全一致，所以只放一份。桌面宽度下是四列两行，见下方网格说明。
 
 | 文件 | 实际位置 | 说明 |
 | --- | --- | --- |
@@ -142,10 +203,12 @@ SILVERFISH_0-Archive/
 | `CHECKSUMS.txt` | `number-of-motion/files/` | 658 B，探针三个文件的 SHA-256 与使用须知 |
 | `god.m4a` | `wiki/v3/` | 3.4 MB，Somniomancer [null set]，调查维基 v3（GOD SAYS）音频 |
 | `GDF-ALERT-LEVEL-III.mp3` | `forecast/v2/` | 9.2 MB，脑叶公司三级警报，大黄昏预测 v2 警报音频 |
+| `first-stamp.png` | `postal-terminal/` | 2.9 MB，雨前首封，邮路终端首枚邮票 |
+| `life-flow.mp3` | `postal-terminal/` | 7.5 MB，邮路终端背景音乐 |
 
 ### 杂项 (MISC)
 
-外部入口，汇总在首页第四个模块：
+外部入口，汇总在首页第七个模块：
 
 - B站 · XIKM HLQA ONYIEN：`https://space.bilibili.com/3493126603803061`
 - 抖音 · VHQ-4K/19：分享主页链接
@@ -153,6 +216,16 @@ SILVERFISH_0-Archive/
 - B站 · Silverfish_0：`https://space.bilibili.com/1239867708`
 - 迷雾论坛：`https://www.mistarg.cn/`
 - QQ 群链接：`https://qm.qq.com/q/EICZzM2KTC`
+
+### GitHub 主页 (github)
+
+首页第八个模块，即末位模块，汇总三个 GitHub 主页：
+
+- `0-silverfish`：作者新主页，邮路终端所在仓库
+- `Silverfish-0`：原账号，存档与预测页来源
+- `Rosmontis220`：本存档仓库所在账号
+
+这三个链接原先放在页脚，现已独立成模块；页脚只保留标题文字。
 
 ## 留档文件（在 wiki/v1/ 和 wiki/v2/ 中）
 
@@ -176,6 +249,7 @@ SILVERFISH_0-Archive/
 - `number-of-motion/files/last-local-record.html` - 本地记录（加密）
 - `number-of-motion/files/local-copy.html` - 本地副本
 - `number-of-motion/files/local-continuity-probe-0.1.0.jar` - 本地连续性探针模组
+- `postal-terminal/index.html` - 邮路终端（30 个邮票槽位）
 - `localized/forecast-v1/index.html` - 大黄昏预测第一版汉化
 - `localized/forecast-v2/index.html` - 大黄昏预测第二版汉化
 

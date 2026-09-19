@@ -767,14 +767,15 @@
       white-space: nowrap;
     }
 
+    /* 全站唯一的卡片网格规则：列数随可用宽度自适应。
+       第一行是兜底写法；第二行把轨道最小宽度取「250px」与「四等分减掉三个间隙」
+       的较大者，于是宽度足够时最多排四列，变窄时自动降到三列、两列、一列，
+       全程不需要任何断点。 */
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(max(250px, 25% - 12px), 1fr));
       gap: 16px;
-    }
-
-    .card-grid-3 {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     .entry-card {
@@ -813,6 +814,7 @@
       font-weight: 900;
       letter-spacing: -0.01em;
       line-height: 1.2;
+      overflow-wrap: anywhere;
     }
 
     .card-desc {
@@ -821,6 +823,45 @@
       line-height: 1.75;
       color: var(--muted);
     }
+
+    /* 卡片自己作为查询容器：列数由网格自适应决定，卡片窄到放不下常规字号时
+       内部字号自动收紧，所以无论排几列都不需要再加断点。
+       注意容器查询只能命中容器的后代，.entry-card 自身的内边距改不了，
+       要收紧的是标题与底栏这些后代元素。 */
+    .card-grid > .entry-card {
+      container-type: inline-size;
+    }
+
+    @container (max-width: 330px) {
+      .card-title {
+        font-size: 17px;
+      }
+
+      .card-enter {
+        margin-top: 8px;
+        padding-top: 9px;
+      }
+    }
+
+    /* 文件下载：描述最多两行 */
+    .card-grid--clamp2 .card-desc {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .card-mark {
+      width: 15px;
+      height: 15px;
+      flex: 0 0 15px;
+      opacity: 0.7;
+      transition: opacity 0.22s ease;
+    }
+
+    .entry-card:hover .card-mark { opacity: 1; }
 
     .card-enter {
       margin-top: 12px;
@@ -1223,7 +1264,7 @@
     <div class="kicker">Complete Archive // 完整存档</div>
     <h1>SILVERFISH_0 <span class="h1-sub">ARCHIVE</span></h1>
     <p class="hero-sub">
-      断联前后的完整记录：调查维基的三个版本、大黄昏预测网页的两份状态、失联后发布的本地连续性探针、汉化页面、随档文件下载，以及相关外部入口。
+      断联前后的完整记录：调查维基的三个版本、大黄昏预测网页的两份状态、失联后发布的本地连续性探针、邮路终端、汉化页面、随档文件下载，以及相关外部入口。
     </p>
     <div class="status-line">
       <span class="status-dot" aria-hidden="true"></span>
@@ -1341,10 +1382,31 @@
     </div>
   </section>
 
+  <section class="module" aria-label="邮路终端">
+    <div class="module-main">
+      <div class="series-head">
+        <h2 class="series-name"><span class="no">04</span>邮路终端 / POSTAL ROUTE TERMINAL</h2>
+        <span class="series-count">1 RECORD</span>
+      </div>
+      <div class="card-grid">
+        <a href="postal-terminal/index.html" class="entry-card">
+          <div class="card-kicker">POSTAL // TERMINAL</div>
+          <h3 class="card-title">邮路终端</h3>
+          <p class="card-desc">
+            POSTAL ROUTE TERMINAL<br>
+            30 个邮票槽位，本地会话，无提示<br>
+            来源：github.com/0-silverfish/postal-terminal
+          </p>
+          <div class="card-enter">Open Record <span>→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <section class="module" aria-label="汉化">
     <div class="module-main">
       <div class="series-head">
-        <h2 class="series-name"><span class="no">04</span>汉化 / LOCALIZED</h2>
+        <h2 class="series-name"><span class="no">05</span>汉化 / LOCALIZED</h2>
         <span class="series-count">2 RECORDS</span>
       </div>
       <div class="card-grid">
@@ -1374,16 +1436,16 @@
   <section class="module" aria-label="文件下载">
     <div class="module-main">
       <div class="series-head">
-        <h2 class="series-name"><span class="no">05</span>文件下载 / DOWNLOADS</h2>
-        <span class="series-count">6 FILES</span>
+        <h2 class="series-name"><span class="no">06</span>文件下载 / DOWNLOADS</h2>
+        <span class="series-count">8 FILES</span>
       </div>
-      <div class="card-grid card-grid-3">
+      <div class="card-grid card-grid--clamp2">
         <a href="wiki/v1/密码.txt" class="entry-card" download>
           <div class="card-kicker">FILE // PASSCODE</div>
           <h3 class="card-title">密码.txt</h3>
           <p class="card-desc">
             64 B · 纯文本<br>
-            解密密码 · 调查维基 v1 与 v2 内容相同
+            解密密码 · 维基 v1 与 v2 相同
           </p>
           <div class="card-enter">Download <span>↓</span></div>
         </a>
@@ -1393,7 +1455,7 @@
           <h3 class="card-title">readme.zip</h3>
           <p class="card-desc">
             508 B · zip<br>
-            原始加密文件 · v1 与 v2 内容相同
+            原始加密文件 · v1 与 v2 相同
           </p>
           <div class="card-enter">Download <span>↓</span></div>
         </a>
@@ -1403,7 +1465,7 @@
           <h3 class="card-title">local-continuity-probe-0.1.0.jar</h3>
           <p class="card-desc">
             9.8 KB · jar<br>
-            本地连续性探针 · Minecraft 1.20.1 / Forge 47.4.10
+            本地连续性探针 · MC 1.20.1
           </p>
           <div class="card-enter">Download <span>↓</span></div>
         </a>
@@ -1413,7 +1475,7 @@
           <h3 class="card-title">CHECKSUMS.txt</h3>
           <p class="card-desc">
             658 B · 纯文本<br>
-            探针三个文件的 SHA-256 与使用须知
+            探针三文件的 SHA-256 与须知
           </p>
           <div class="card-enter">Download <span>↓</span></div>
         </a>
@@ -1422,8 +1484,7 @@
           <div class="card-kicker">AUDIO // SOMNIOMANCER</div>
           <h3 class="card-title">god.m4a</h3>
           <p class="card-desc">
-            3.4 MB · m4a<br>
-            Somniomancer [null set]<br>
+            3.4 MB · m4a · Somniomancer<br>
             调查维基 v3（GOD SAYS）音频
           </p>
           <div class="card-enter">Download <span>↓</span></div>
@@ -1433,9 +1494,28 @@
           <div class="card-kicker">AUDIO // LEVEL III</div>
           <h3 class="card-title">GDF-ALERT-LEVEL-III.mp3</h3>
           <p class="card-desc">
-            9.2 MB · mp3<br>
-            脑叶公司三级警报<br>
+            9.2 MB · mp3 · 脑叶公司三级警报<br>
             大黄昏预测 v2 警报音频
+          </p>
+          <div class="card-enter">Download <span>↓</span></div>
+        </a>
+
+        <a href="postal-terminal/first-stamp.png" class="entry-card" download>
+          <div class="card-kicker">IMAGE // FIRST STAMP</div>
+          <h3 class="card-title">first-stamp.png</h3>
+          <p class="card-desc">
+            2.9 MB · png · 雨前首封<br>
+            邮路终端首枚邮票
+          </p>
+          <div class="card-enter">Download <span>↓</span></div>
+        </a>
+
+        <a href="postal-terminal/life-flow.mp3" class="entry-card" download>
+          <div class="card-kicker">AUDIO // LIFE FLOW</div>
+          <h3 class="card-title">life-flow.mp3</h3>
+          <p class="card-desc">
+            7.5 MB · mp3<br>
+            邮路终端背景音乐
           </p>
           <div class="card-enter">Download <span>↓</span></div>
         </a>
@@ -1443,13 +1523,13 @@
     </div>
   </section>
 
-  <section class="module module-last" aria-label="杂项">
+  <section class="module" aria-label="杂项">
     <div class="module-main">
       <div class="series-head">
-        <h2 class="series-name"><span class="no">06</span>杂项 / MISC</h2>
+        <h2 class="series-name"><span class="no">07</span>杂项 / MISC</h2>
         <span class="series-count">6 LINKS</span>
       </div>
-      <div class="card-grid card-grid-3">
+      <div class="card-grid">
         <a href="https://space.bilibili.com/3493126603803061" class="entry-card" target="_blank" rel="noopener">
           <div class="card-kicker">BILIBILI // XIKM HLQA ONYIEN</div>
           <h3 class="card-title">B站 · XIKM HLQA ONYIEN</h3>
@@ -1493,28 +1573,71 @@
         </a>
       </div>
     </div>
+  </section>
+
+  <section class="module module-last" aria-label="GitHub 主页">
+    <div class="module-main">
+      <div class="series-head">
+        <h2 class="series-name"><span class="no">08</span>GitHub 主页 / GITHUB</h2>
+        <span class="series-count">3 PROFILES</span>
+      </div>
+      <div class="card-grid">
+        <a href="https://github.com/0-silverfish" class="entry-card" target="_blank" rel="noopener">
+          <div class="card-kicker">
+            <span>GITHUB // 0-SILVERFISH</span>
+            <svg class="card-mark" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+            </svg>
+          </div>
+          <h3 class="card-title">0-silverfish</h3>
+          <p class="card-desc">
+            作者新主页 · 邮路终端所在<br>
+            原账号遭攻击后启用
+          </p>
+          <div class="card-enter">Open Profile <span>↗</span></div>
+        </a>
+
+        <a href="https://github.com/Silverfish-0" class="entry-card" target="_blank" rel="noopener">
+          <div class="card-kicker">
+            <span>GITHUB // SILVERFISH-0</span>
+            <svg class="card-mark" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+            </svg>
+          </div>
+          <h3 class="card-title">Silverfish-0</h3>
+          <p class="card-desc">
+            原账号 · 存档与预测页来源<br>
+            断联后停止更新
+          </p>
+          <div class="card-enter">Open Profile <span>↗</span></div>
+        </a>
+
+        <a href="https://github.com/Rosmontis220" class="entry-card" target="_blank" rel="noopener">
+          <div class="card-kicker">
+            <span>GITHUB // ROSMONTIS220</span>
+            <svg class="card-mark" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+            </svg>
+          </div>
+          <h3 class="card-title">Rosmontis220</h3>
+          <p class="card-desc">
+            本存档仓库所在账号<br>
+            SILVERFISH_0-Archive
+          </p>
+          <div class="card-enter">Open Profile <span>↗</span></div>
+        </a>
+      </div>
+    </div>
 
     <footer class="archive-footer">
       <span>SILVERFISH_0 · COMPLETE ARCHIVE</span>
-      <div class="footer-links">
-        <a href="https://github.com/Silverfish-0" target="_blank" rel="noopener">
-          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-          </svg> GITHUB / SILVERFISH_0
-        </a>
-        <a href="https://github.com/Rosmontis220" target="_blank" rel="noopener">
-          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-          </svg> GITHUB / ROSMONTIS220
-        </a>
-      </div>
     </footer>
   </section>
 </main>
 
 <div class="module-nav" aria-label="模块定位">
   <button id="module-up" type="button" aria-label="上一个模块">↑</button>
-  <span class="module-count" id="module-count" aria-hidden="true">01 / 07</span>
+  <span class="module-count" id="module-count" aria-hidden="true">01 / 09</span>
   <button id="module-down" type="button" aria-label="下一个模块">↓</button>
 </div>
 
@@ -1556,7 +1679,8 @@
       'forecast/v2/index.html', 'forecast/v2/GDF-ALERT-LEVEL-III.mp3',
       'number-of-motion/files/last-local-record.html',
       'number-of-motion/files/local-copy.html',
-      'localized/forecast-v1/index.html', 'localized/forecast-v2/index.html'
+      'localized/forecast-v1/index.html', 'localized/forecast-v2/index.html',
+      'postal-terminal/index.html'
     ];
     const totalFiles = PRELOAD_FILES.length;
     let doneFiles = 0;
@@ -1655,7 +1779,13 @@
       'XIKM HLQA ONYIEN 解谜': '不需要解谜。',
       'B站 · Silverfish_0': '不需要记录。',
       '迷雾论坛': '不需要讨论。',
-      'QQ 群链接': '不需要加入。'
+      'QQ 群链接': '不需要加入。',
+      '邮路终端': '不需要投递。',
+      'first-stamp.png': '不需要盖章。',
+      'life-flow.mp3': '不需要循环。',
+      '0-silverfish': '不需要前往。',
+      'Silverfish-0': '不需要回访。',
+      'Rosmontis220': '不需要收藏。'
     };
     const root = document.documentElement;
     const toggle = document.getElementById('theme-toggle');
@@ -1768,9 +1898,11 @@
       '<path d="M7 3.5h6.5L18 8v12.5H7z"/><path d="M13.5 3.5V8H18"/><path d="M9.8 12h5.4M9.8 15.5h5.4"/>',
       '<path d="M3.5 17.5h17"/><circle cx="12" cy="11" r="4"/><path d="M12 3v2.2M5.6 5.9l1.6 1.6M18.4 5.9l-1.6 1.6"/>',
       '<circle cx="12" cy="12" r="8"/><path d="M12 4v2.4M12 17.6V20M4 12h2.4M17.6 12H20"/><circle cx="12" cy="12" r="2.4"/>',
+      '<rect x="3.4" y="6.2" width="17.2" height="11.6" rx="1"/><path d="M3.9 6.9 12 12.4l8.1-5.5"/>',
       '<circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><path d="M12 4c2.6 2.4 2.6 13.6 0 16M12 4c-2.6 2.4-2.6 13.6 0 16"/>',
       '<path d="M12 3.8v9.4"/><path d="M8.2 9.4l3.8 3.8 3.8-3.8"/><path d="M4.8 19.2h14.4"/>',
-      '<path d="M10.2 13.8a3.6 3.6 0 0 1 0-5.1l2-2a3.6 3.6 0 0 1 5.1 5.1l-.9.9"/><path d="M13.8 10.2a3.6 3.6 0 0 1 0 5.1l-2 2a3.6 3.6 0 0 1-5.1-5.1l.9-.9"/>'
+      '<path d="M10.2 13.8a3.6 3.6 0 0 1 0-5.1l2-2a3.6 3.6 0 0 1 5.1 5.1l-.9.9"/><path d="M13.8 10.2a3.6 3.6 0 0 1 0 5.1l-2 2a3.6 3.6 0 0 1-5.1-5.1l.9-.9"/>',
+      '<g transform="scale(1.5)"><path fill="currentColor" stroke="none" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></g>'
     ];
     const makeTocIcon = (idx) => {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
