@@ -49,11 +49,23 @@ SILVERFISH_0-Archive/
 │       ├── local-copy.html
 │       └── local-continuity-probe-0.1.0.jar
 │
-├── postal-terminal/    # 邮路终端（作者换号后发布）
-│   ├── index.html      # 30 个邮票槽位，单页应用
-│   ├── 404.html        # 与 index.html 字节相同
-│   ├── first-stamp.png # 2.9 MB，雨前首封
-│   └── life-flow.mp3   # 7.5 MB，背景音乐
+├── postal-terminal/    # 邮路终端（作者换号后发布，两代并存）
+│   ├── v1/             # 上游旧历史 b65f684
+│   │   ├── index.html  # 30 个邮票槽位，单页应用
+│   │   ├── 404.html    # 与 index.html 字节相同
+│   │   ├── first-stamp.png # 2.9 MB，雨前首封
+│   │   └── life-flow.mp3   # 7.5 MB，背景音乐
+│   └── v2/             # 上游当前历史 0df8c37（重制版）
+│       ├── index.html  # 身份门 + 2 枚邮票 + AES 加密资源
+│       ├── 404.html    # 与 index.html 字节相同
+│       ├── r0.bin      # AES-GCM 密文，解出为 first-stamp.png
+│       ├── r1.bin      # AES-GCM 密文，解出为第二枚邮票
+│       ├── r2.bin      # AES-GCM 密文，解出为 life-flow.mp3
+│       ├── night-route-signal.bin # AES-GCM 密文，ID 模式音频
+│       ├── return-portrait.bin    # AES-GCM 密文，ID 模式头像
+│       ├── starrev-stamp.png      # 解密后的第二枚邮票
+│       ├── night-route-signal.m4a # 解密后的音频
+│       └── return-portrait.jpg    # 解密后的头像
 │
 └── localized/          # 汉化模块（英文页面中文版）
     ├── forecast-v1/    # 大黄昏预测 v1 汉化
@@ -163,32 +175,54 @@ SILVERFISH_0-Archive/
 ### 邮路终端 (postal-terminal)
 
 来自仓库 `https://github.com/0-silverfish/postal-terminal`，作者称原账号 `Silverfish-0` 遭攻击后换号，新号即 `0-silverfish`。
-单个自包含的 `index.html`（69,845 字节），无外链、无构建步骤，全部逻辑内嵌：
 
-- 30 个邮票槽位，首个位置默认解锁，其余保持静默，页面不给任何提示
+上游于 2026-09-20 强制重写历史，旧提交 `6b1ea71` / `b65f684` 被新提交 `710fb72` / `bad843c` / `0df8c37` 取代。
+因此本存档按版本分目录保留两代：`postal-terminal/v1/` 与 `postal-terminal/v2/`。
+
+#### v1（对应上游旧历史 `b65f684`）
+
+单个自包含的 `index.html`（原件 69,351 字节），无外链、无构建步骤，全部逻辑内嵌：
+
+- 30 个邮票槽位，其余保持静默，页面不给任何提示
 - 启动进度条：5 秒定时，缓动曲线 `1-(1-t)³`，6 段状态文案
 - 背景音乐 `life-flow.mp3`，默认音量 0.52
-- 内部有 6 位坐标答案 `6825`，是页面内的谜题，不是个人信息
+- **4 位坐标答案 `6825`**，源码里写作十六进制字节数组 `[0x36,0x38,0x32,0x35]`
+- 解锁路径：点中央 `30` 圆环 → 进入 `.hunt-mode` → 鼠标当手电筒照出完全透明的坐标门（230px 内平方衰减）→ 输入 4 位坐标
+- 进度**不持久化**，刷新即回到 0 / 30（源码里没有任何 storage 调用）
 
-页面里有一段写给某位收件人的 `<template data-postal-fragment>` 碎片，原文含真实 ID 与 QQ 号。
-本存档发布前已脱敏，把这两项分别替换为 `某群友ID`、`某群友QQ号`：
-
-```html
-<template data-postal-fragment="某群友ID">某群友QQ号，我知道是你。……这是我给你的礼物。</template>
-```
-
+页面内含一段写给某位收件人的 `<template data-postal-fragment>` 碎片，其中有真实 ID（`xinghuan`）与 QQ 号。
 这段碎片是惰性的：解密后的页面逻辑从不引用 `template`、`postal-fragment` 或该属性值，
-所以替换它不影响页面任何功能，仅去掉原文里的真实身份信息。
-（原件上游 `https://0-silverfish.github.io/postal-terminal/` 仍是未脱敏版本，本仓库无法追溯修改。）
+所以它不影响页面任何功能，只是静态文本，**本存档按作者原意保留原文，未脱敏**。
 
-`index.html` 与 `404.html` 在原件状态下字节完全相同（各 69,845 字节，SHA-256 `997b078d…`）。
-两个文件都在 `</body>` 前追加了返回按钮（与 forecast、wiki 各页同一套右下角样式），
-按钮在浅色与深色主题下都自适应：追加块本身不含换行符（1,205 字节），另加一个 CRLF 接回原件。
-脱敏再替换 7 个字节后，两个文件各 71,059 字节，SHA-256 `e47bd56f…`，且仍逐字节相同。
+#### v2（对应上游当前历史 `0df8c37`）
 
-页面内嵌一段混淆脚本（20 个反转 base64 串 → `atob` → 与 32 字节密钥数组异或 → FNV-1a 校验 `851106807`），
-解开后是 18,046 字符的正常页面逻辑，其中不含任何网络请求、外链或数据外发；
-上述 ID 与 QQ 号在解密载荷中零出现，只存在于那段惰性碎片里。
+重制版，`index.html` 93,938 字节，混淆载荷由 18,788 字节增长到 31,568 字节：
+
+- 混淆同族但参数全换：27 个反转 base64 串，仍为 32 字节密钥，FNV-1a 校验值变为 `3689329001`
+- 5 个资源全部改为 **AES-256-GCM** 加密的 `.bin`，浏览器内经 `crypto.subtle` 解密成 blob URL
+- 新增**身份门**：访客 / ID 双身份，ID 模式校验载荷内硬编码的 `ALLOWED_ID`
+- 新增 **localStorage 持久化**（`prt_identity_v3` / `prt_firstcover_v1` / `prt_starrev_v2`），刷新不再归零
+- 邮票由 1 枚变 2 枚：`雨前首封`（ARC-00）与 `星幻_StarRev`（《废墟图书馆》）
+
+v2 资源解密结果（密钥内嵌于载荷，本存档已实测全部解出）：
+
+| 密文 | 明文类型 | 大小 | 说明 |
+| --- | --- | --- | --- |
+| `r0.bin` | PNG | 3,041,794 B | 与 v1 的 `first-stamp.png` 逐字节相同 |
+| `r1.bin` | PNG | 3,047,581 B | 第二枚邮票 `星幻_StarRev` |
+| `r2.bin` | MP3 | 7,843,330 B | 与 v1 的 `life-flow.mp3` 逐字节相同 |
+| `night-route-signal.bin` | M4A | 3,618,616 B | 夜航邮路信号，ID 模式专属 |
+| `return-portrait.bin` | JPEG | 52,643 B | 返程头像，ID 模式专属 |
+
+密文比明文各多 16 字节（GCM 认证标签）。解出的明文副本以规范扩展名另存于 `v2/`
+（`starrev-stamp.png`、`night-route-signal.m4a`、`return-portrait.jpg`），便于直接查看与下载。
+
+两代的 `index.html` 与 `404.html` 都在 `</body>` 前追加了返回按钮（与 forecast、wiki 各页同一套右下角样式），
+追加块本身不含换行符，另加一个 CRLF 接回原件。`v1` 与 `v2` 各自的两个文件在原件状态下字节完全相同。
+去掉返回按钮并归一化行尾后，`v1` 的两个文件与上游 `b65f684` 对应文件**逐字节一致**。
+
+v2 依赖 `crypto.subtle`，只在**安全上下文**（HTTPS 或 localhost）可用；
+直接用 `file://` 双击打开会因资源解密失败而空白。GitHub Pages 是 HTTPS，不受影响。
 
 ### 文件下载 (downloads)
 
@@ -203,8 +237,11 @@ SILVERFISH_0-Archive/
 | `CHECKSUMS.txt` | `number-of-motion/files/` | 658 B，探针三个文件的 SHA-256 与使用须知 |
 | `god.m4a` | `wiki/v3/` | 3.4 MB，Somniomancer [null set]，调查维基 v3（GOD SAYS）音频 |
 | `GDF-ALERT-LEVEL-III.mp3` | `forecast/v2/` | 9.2 MB，脑叶公司三级警报，大黄昏预测 v2 警报音频 |
-| `first-stamp.png` | `postal-terminal/` | 2.9 MB，雨前首封，邮路终端首枚邮票 |
-| `life-flow.mp3` | `postal-terminal/` | 7.5 MB，邮路终端背景音乐 |
+| `first-stamp.png` | `postal-terminal/v1/` | 2.9 MB，雨前首封，邮路终端 v1 首枚邮票 |
+| `life-flow.mp3` | `postal-terminal/v1/` | 7.5 MB，邮路终端 v1 背景音乐 |
+| `starrev-stamp.png` | `postal-terminal/v2/` | 2.9 MB，星幻_StarRev，邮路终端 v2 第二枚邮票 |
+| `night-route-signal.m4a` | `postal-terminal/v2/` | 3.5 MB，夜航邮路信号，ID 模式专属 |
+| `return-portrait.jpg` | `postal-terminal/v2/` | 51 KB，返程头像，ID 模式专属 |
 
 ### 杂项 (MISC)
 
