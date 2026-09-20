@@ -853,6 +853,165 @@
       line-height: 1.6;
     }
 
+    .download-tools {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 14px 0 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .download-filters {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .download-filter {
+      min-height: 30px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      font: 700 10px/1 var(--mono);
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .download-filter:hover,
+    .download-filter[aria-pressed="true"] {
+      border-color: var(--ef-yellow);
+      background: var(--ef-light);
+      color: var(--ef-yellow);
+    }
+
+    .download-filter:focus-visible,
+    .download-search:focus-visible {
+      outline: 2px solid var(--ef-yellow);
+      outline-offset: 3px;
+    }
+
+    .download-search-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-width: min(100%, 260px);
+      flex: 1 1 220px;
+      max-width: 320px;
+    }
+
+    .download-search-icon {
+      position: absolute;
+      left: 11px;
+      width: 14px;
+      height: 14px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .download-search {
+      width: 100%;
+      min-height: 32px;
+      padding: 0 12px 0 34px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: var(--surface);
+      color: var(--text);
+      font: 600 12px/1 var(--mono);
+    }
+
+    .download-search::placeholder { color: var(--muted); }
+
+    .download-result-count {
+      flex: 0 0 100%;
+      color: var(--muted);
+      font: 700 10px/1.4 var(--mono);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .download-pager {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0 14px;
+    }
+
+    .download-page-button {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font: 700 16px/1 var(--mono);
+      transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .download-page-button:hover:not(:disabled) {
+      border-color: var(--ef-yellow);
+      background: var(--ef-light);
+      color: var(--ef-yellow);
+    }
+
+    .download-page-button:disabled {
+      opacity: 0.28;
+      cursor: default;
+    }
+
+    .download-page-button:focus-visible {
+      outline: 2px solid var(--ef-yellow);
+      outline-offset: 3px;
+    }
+
+    .download-page-status {
+      color: var(--muted);
+      font: 700 10px/1.4 var(--mono);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .download-card.is-filtered,
+    .download-card.is-page-hidden { display: none; }
+
+    .download-grid--next .download-card:not(.is-filtered):not(.is-page-hidden) {
+      animation: download-page-in-next 0.34s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+
+    .download-grid--prev .download-card:not(.is-filtered):not(.is-page-hidden) {
+      animation: download-page-in-prev 0.34s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+
+    @keyframes download-page-in-next {
+      from { opacity: 0; transform: translateX(24px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes download-page-in-prev {
+      from { opacity: 0; transform: translateX(-24px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .download-empty {
+      display: none;
+      padding: 36px 20px;
+      border: 1px dashed var(--line);
+      color: var(--muted);
+      font: 700 11px/1.6 var(--mono);
+      letter-spacing: 0.12em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .download-empty.is-visible { display: block; }
+
     .card-mark {
       width: 15px;
       height: 15px;
@@ -1091,6 +1250,10 @@
       .module { padding: 20px 16px 36px; }
       .nav-actions { gap: 8px; }
       .series-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+      .download-tools { align-items: stretch; }
+      .download-filters { width: 100%; }
+      .download-filter { flex: 1 1 calc(50% - 6px); }
+      .download-search-wrap { max-width: none; }
       .card-grid { grid-template-columns: 1fr; }
       .archive-footer { flex-direction: column; align-items: flex-start; }
     }
@@ -1450,8 +1613,30 @@
         <h2 class="series-name"><span class="no">06</span>文件下载 / DOWNLOADS</h2>
         <span class="series-count">11 FILES</span>
       </div>
-      <div class="card-grid card-grid--clamp2">
-        <a href="wiki/v1/密码.txt" class="entry-card" download>
+      <div class="download-tools" role="search" aria-label="文件下载筛选">
+        <div class="download-filters" role="group" aria-label="按文件类型筛选">
+          <button class="download-filter" type="button" data-download-filter="all" aria-pressed="true">全部</button>
+          <button class="download-filter" type="button" data-download-filter="text" aria-pressed="false">文本</button>
+          <button class="download-filter" type="button" data-download-filter="audio" aria-pressed="false">音频</button>
+          <button class="download-filter" type="button" data-download-filter="image" aria-pressed="false">图像</button>
+          <button class="download-filter" type="button" data-download-filter="archive" aria-pressed="false">压缩包</button>
+        </div>
+        <label class="download-search-wrap">
+          <svg class="download-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="11" cy="11" r="6.5"></circle>
+            <path d="m16 16 4.5 4.5"></path>
+          </svg>
+          <input class="download-search" id="download-search" type="search" aria-label="搜索下载文件" placeholder="搜索文件名、格式或说明" autocomplete="off" spellcheck="false">
+        </label>
+        <span class="download-result-count" id="download-result-count" aria-live="polite">显示 11 / 11 个文件</span>
+      </div>
+      <div class="download-pager" aria-label="文件分页">
+        <button class="download-page-button" id="download-prev" type="button" aria-label="上一页">←</button>
+        <span class="download-page-status" id="download-page-status" aria-live="polite">第 1 / 3 页</span>
+        <button class="download-page-button" id="download-next" type="button" aria-label="下一页">→</button>
+      </div>
+      <div class="card-grid card-grid--clamp2" id="download-grid">
+        <a href="wiki/v1/密码.txt" class="entry-card download-card" data-download-type="text" data-download-search="密码.txt txt 纯文本 解密密码 维基 v1 v2" download>
           <div class="card-kicker">FILE // PASSCODE</div>
           <h3 class="card-title">密码.txt</h3>
           <p class="card-desc">
@@ -1461,7 +1646,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="wiki/v1/readme.zip" class="entry-card" download>
+        <a href="wiki/v1/readme.zip" class="entry-card download-card" data-download-type="archive" data-download-search="readme.zip zip 压缩包 原始加密文件 v1 v2" download>
           <div class="card-kicker">FILE // README</div>
           <h3 class="card-title">readme.zip</h3>
           <p class="card-desc">
@@ -1471,7 +1656,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="number-of-motion/files/local-continuity-probe-0.1.0.jar" class="entry-card" download>
+        <a href="number-of-motion/files/local-continuity-probe-0.1.0.jar" class="entry-card download-card" data-download-type="archive" data-download-search="local-continuity-probe-0.1.0.jar jar 压缩包 本地连续性探针 MC 1.20.1" download>
           <div class="card-kicker">FILE // PROBE</div>
           <h3 class="card-title">local-continuity-probe-0.1.0.jar</h3>
           <p class="card-desc">
@@ -1481,7 +1666,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="number-of-motion/files/CHECKSUMS.txt" class="entry-card" download>
+        <a href="number-of-motion/files/CHECKSUMS.txt" class="entry-card download-card" data-download-type="text" data-download-search="CHECKSUMS.txt txt 纯文本 SHA-256 探针 须知" download>
           <div class="card-kicker">FILE // CHECKSUMS</div>
           <h3 class="card-title">CHECKSUMS.txt</h3>
           <p class="card-desc">
@@ -1491,7 +1676,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="wiki/v3/god.m4a" class="entry-card" download>
+        <a href="wiki/v3/god.m4a" class="entry-card download-card" data-download-type="audio" data-download-search="god.m4a m4a 音频 Somniomancer 调查维基 v3 GOD SAYS" download>
           <div class="card-kicker">AUDIO // SOMNIOMANCER</div>
           <h3 class="card-title">god.m4a</h3>
           <p class="card-desc">
@@ -1501,7 +1686,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="forecast/v2/GDF-ALERT-LEVEL-III.mp3" class="entry-card" download>
+        <a href="forecast/v2/GDF-ALERT-LEVEL-III.mp3" class="entry-card download-card" data-download-type="audio" data-download-search="GDF-ALERT-LEVEL-III.mp3 mp3 音频 脑叶公司 三级警报 大黄昏预测 v2" download>
           <div class="card-kicker">AUDIO // LEVEL III</div>
           <h3 class="card-title">GDF-ALERT-LEVEL-III.mp3</h3>
           <p class="card-desc">
@@ -1511,7 +1696,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v1/first-stamp.png" class="entry-card" download>
+        <a href="postal-terminal/v1/first-stamp.png" class="entry-card download-card" data-download-type="image" data-download-search="first-stamp.png png 图像 雨前首封 邮路终端 首枚邮票" download>
           <div class="card-kicker">IMAGE // FIRST STAMP</div>
           <h3 class="card-title">first-stamp.png</h3>
           <p class="card-desc">
@@ -1521,7 +1706,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v1/life-flow.mp3" class="entry-card" download>
+        <a href="postal-terminal/v1/life-flow.mp3" class="entry-card download-card" data-download-type="audio" data-download-search="life-flow.mp3 mp3 音频 邮路终端 背景音乐" download>
           <div class="card-kicker">AUDIO // LIFE FLOW</div>
           <h3 class="card-title">life-flow.mp3</h3>
           <p class="card-desc">
@@ -1531,7 +1716,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v2/starrev-stamp.png" class="entry-card" download>
+        <a href="postal-terminal/v2/starrev-stamp.png" class="entry-card download-card" data-download-type="image" data-download-search="starrev-stamp.png png 图像 星幻 StarRev 邮路终端 v2 第二枚邮票" download>
           <div class="card-kicker">IMAGE // SECOND STAMP</div>
           <h3 class="card-title">starrev-stamp.png</h3>
           <p class="card-desc">
@@ -1541,7 +1726,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v2/night-route-signal.m4a" class="entry-card" download>
+        <a href="postal-terminal/v2/night-route-signal.m4a" class="entry-card download-card" data-download-type="audio" data-download-search="night-route-signal.m4a m4a 音频 夜航邮路信号 ID 模式" download>
           <div class="card-kicker">AUDIO // NIGHT ROUTE</div>
           <h3 class="card-title">night-route-signal.m4a</h3>
           <p class="card-desc">
@@ -1551,7 +1736,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v2/return-portrait.jpg" class="entry-card" download>
+        <a href="postal-terminal/v2/return-portrait.jpg" class="entry-card download-card" data-download-type="image" data-download-search="return-portrait.jpg jpg jpeg 图像 返程头像 ID 模式" download>
           <div class="card-kicker">IMAGE // RETURN PORTRAIT</div>
           <h3 class="card-title">return-portrait.jpg</h3>
           <p class="card-desc">
@@ -1561,6 +1746,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
       </div>
+      <p class="download-empty" id="download-empty" role="status">没有匹配的文件 / NO MATCHING FILES</p>
     </div>
   </section>
 
@@ -2139,6 +2325,76 @@
       } catch (e) { /* storage unavailable */ }
       window.setTimeout(() => go(origin, true), 450);
     }
+  })();
+</script>
+<script>
+  (function () {
+    const grid = document.getElementById('download-grid');
+    const search = document.getElementById('download-search');
+    const count = document.getElementById('download-result-count');
+    const empty = document.getElementById('download-empty');
+    const prev = document.getElementById('download-prev');
+    const next = document.getElementById('download-next');
+    const pageStatus = document.getElementById('download-page-status');
+    const filters = Array.from(document.querySelectorAll('[data-download-filter]'));
+    if (!grid || !search || !count || !empty || !prev || !next || !pageStatus || !filters.length) return;
+
+    const cards = Array.from(grid.querySelectorAll('.download-card'));
+    const pageSize = 4;
+    let activeType = 'all';
+    let currentPage = 0;
+
+    const apply = (direction) => {
+      const query = search.value.trim().toLocaleLowerCase();
+      const matches = cards.filter((card) => {
+        const typeMatch = activeType === 'all' || card.dataset.downloadType === activeType;
+        const text = (card.dataset.downloadSearch || card.textContent).toLocaleLowerCase();
+        return typeMatch && (!query || text.includes(query));
+      });
+      const totalPages = Math.max(1, Math.ceil(matches.length / pageSize));
+      currentPage = Math.min(currentPage, totalPages - 1);
+      const pageStart = currentPage * pageSize;
+      const pageCards = new Set(matches.slice(pageStart, pageStart + pageSize));
+
+      cards.forEach((card) => {
+        card.classList.toggle('is-filtered', !matches.includes(card));
+        card.classList.toggle('is-page-hidden', !pageCards.has(card));
+      });
+      grid.classList.remove('download-grid--next', 'download-grid--prev');
+      if (direction && matches.length > 0) {
+        void grid.offsetWidth;
+        grid.classList.add(direction === 'next' ? 'download-grid--next' : 'download-grid--prev');
+      }
+      count.textContent = '显示 ' + matches.length + ' / ' + cards.length + ' 个文件';
+      pageStatus.textContent = '第 ' + (currentPage + 1) + ' / ' + totalPages + ' 页';
+      prev.disabled = currentPage === 0 || matches.length === 0;
+      next.disabled = currentPage >= totalPages - 1 || matches.length === 0;
+      empty.classList.toggle('is-visible', matches.length === 0);
+    };
+
+    const resetPage = () => {
+      currentPage = 0;
+      apply();
+    };
+
+    filters.forEach((button) => {
+      button.addEventListener('click', () => {
+        activeType = button.dataset.downloadFilter || 'all';
+        filters.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        resetPage();
+      });
+    });
+    search.addEventListener('input', resetPage);
+    prev.addEventListener('click', () => {
+      if (currentPage === 0) return;
+      currentPage -= 1;
+      apply('prev');
+    });
+    next.addEventListener('click', () => {
+      currentPage += 1;
+      apply('next');
+    });
+    apply();
   })();
 </script>
 <script>
