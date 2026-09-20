@@ -99,6 +99,14 @@ SILVERFISH_0-Archive/
 注意容器查询只能命中容器的后代，`.entry-card` 自身的内边距改不了，所以收紧的是标题和底栏。
 `文件下载` 模块额外挂一个 `.card-grid--clamp2`，把描述限制在两行。
 
+主题切换时背景音乐同步更换，全站共用单个 `<audio id="archive-music">`，只换 `src` 不重建元素：
+
+| 主题 | 曲目 | 大小 |
+| --- | --- | --- |
+| `dark`（默认） | `call-of-iberia.mp3` | 8.9 MB |
+| `light` | `CONFRONT.mp3` | 9.5 MB |
+| `crimson`（隐藏，需解锁） | `Mayors-the-Yearning-Flotsam.mp3` | 11.4 MB |
+
 ## 版本说明
 
 ### 断联前 v1 (20篇)
