@@ -282,13 +282,17 @@ v2 依赖 `crypto.subtle`，只在**安全上下文**（HTTPS 或 localhost）�
 ### 文件下载 (downloads)
 
 首页第六个模块，把散落在各目录里的随档文件集中成下载入口。`wiki/v1/` 与 `wiki/v2/` 的
-`密码.txt`、`readme.zip` 哈希完全一致，所以只放一份。共 14 个文件，模块上方是分类筛选
+`密码.txt`、`readme.zip` 哈希完全一致，所以只放一份。共 15 个文件，模块上方是分类筛选
 （全部 / 文本 / 音频 / 图像 / 压缩包）与关键词搜索，下面按每页 4 个分页；筛选和搜索作用于
-全部 14 个文件，分页只对筛选后的结果集切页，翻页时卡片按方向从左右滑入。
+全部 15 个文件，分页只对筛选后的结果集切页，翻页时卡片按方向从左右滑入。
 
 每张下载卡片的描述里，「文件大小」那行下方是归属模块行（`.card-source`，等宽小字），再下面是
 文件说明。归属标明这份文件来自首页哪个模块，重名文件靠这一行区分；文件在仓库里的具体位置见
 下表。模块上方的搜索框会同时匹配文件名、说明文字、预设关键词和归属模块。
+
+`readme.zip` 的解压密码直接印在它自己的卡片按钮上（`.card-pass`：等宽小字、黄色、保留大小写、
+点一下整词选中），不必再去翻 `密码.txt` 或本 README。因为密码是卡片可见文字，搜索 `insight`
+也会命中这张卡片。
 
 重名或同内容的对应关系：
 
@@ -308,6 +312,7 @@ v2 依赖 `crypto.subtle`，只在**安全上下文**（HTTPS 或 localhost）�
 | `readme.zip` | `wiki/v1/` | 508 B，原始加密文件 |
 | `local-continuity-probe-0.1.0.jar` | `number-of-motion/files/` | 9.8 KB，本地连续性探针 |
 | `CHECKSUMS.txt` | `number-of-motion/files/` | 658 B，探针三个文件的 SHA-256 与使用须知 |
+| `LOCAL_COPY.txt` | `number-of-motion/files/` | 4.6 KB，本地副本内嵌文件（关于「锚」的几次改口） |
 | `README.md` | `number-of-motion/` | 452 B，运动之数发布方随附说明 |
 | `god.m4a` | `wiki/v3/` | 3.4 MB，Somniomancer [null set]，调查维基 v3（GOD SAYS）音频 |
 | `background.png` | `wiki/v3/` | 2.5 MB，调查维基 v3（GOD SAYS）背景图 |
@@ -318,6 +323,11 @@ v2 依赖 `crypto.subtle`，只在**安全上下文**（HTTPS 或 localhost）�
 | `night-route-signal.m4a` | `postal-terminal/v2/` | 3.5 MB，夜航邮路信号，ID 模式专属 |
 | `return-portrait.jpg` | `postal-terminal/v2/` | 51 KB，返程头像，ID 模式专属 |
 | `avatar_silverfish.jpg` | 根目录 | 9.3 KB，站点头像与图标原图 |
+
+`LOCAL_COPY.txt` 原本只以 ZIP 形式内嵌在 `number-of-motion/files/local-copy.html` 里（该页是加密的
+单文件页，正文中段就是一段原始 ZIP 字节），下载模块里这份是按原字节解出的单独副本：4,695 B、
+LF 换行、无 BOM，SHA-256 `cc1fe65549b900f46fefa75c47481720114eb8460761e3884dc3757bc59def76`。
+解出时与原文件逐字节一致，归属标为「运动之数 · 本地副本」。`local-copy.html` 本身没有被改动。
 
 ### 杂项 (MISC)
 
@@ -347,6 +357,8 @@ v2 依赖 `crypto.subtle`，只在**安全上下文**（HTTPS 或 localhost）�
 
 ### readme.zip
 原始加密文件，包含"巨爆大黄昏预言"的计划代号
+
+解压密码：`INSIGHTFUTURETHROUGHTHEFOG`（首页下载模块里已印在这张卡片的按钮上）
 
 ## 使用方法
 

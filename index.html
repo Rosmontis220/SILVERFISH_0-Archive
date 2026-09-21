@@ -1106,6 +1106,21 @@
     .entry-card:hover .card-enter { color: var(--ef-yellow); }
     .entry-card:hover .card-enter span { transform: translateX(4px); }
 
+    /* readme.zip 的解压密码直接印在按钮上：等宽字体、保留大小写、点一下整词选中 */
+    .card-enter--pass { flex-wrap: wrap; gap: 6px; }
+    .card-pass {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      color: var(--ef-yellow);
+      -webkit-user-select: all;
+      user-select: all;
+    }
+
+    /* 悬停时只有箭头滑动，密码留在原处，方便照着抄 */
+    .entry-card:hover .card-enter .card-pass { transform: none; }
+
     .archive-footer {
       margin-top: auto;
       padding-top: 20px;
@@ -1678,7 +1693,7 @@
     <div class="module-main">
       <div class="series-head">
         <h2 class="series-name"><span class="no">06</span>文件下载 / DOWNLOADS</h2>
-        <span class="series-count">14 FILES</span>
+        <span class="series-count">15 FILES</span>
       </div>
       <div class="download-tools" role="search" aria-label="文件下载筛选">
         <div class="download-filters" role="group" aria-label="按文件类型筛选">
@@ -1695,7 +1710,7 @@
           </svg>
           <input class="download-search" id="download-search" type="search" aria-label="搜索下载文件" placeholder="搜索文件名、格式或说明" autocomplete="off" spellcheck="false">
         </label>
-        <span class="download-result-count" id="download-result-count" aria-live="polite">显示 14 / 14 个文件</span>
+        <span class="download-result-count" id="download-result-count" aria-live="polite">显示 15 / 15 个文件</span>
       </div>
       <div class="download-pager" aria-label="文件分页">
         <button class="download-page-button" id="download-prev" type="button" aria-label="上一页">←</button>
@@ -1722,7 +1737,10 @@
             <span class="card-source">归属：调查维基 v1</span><br>
             原始加密文件 · v1 与 v2 相同
           </p>
-          <div class="card-enter">Download <span>↓</span></div>
+          <div class="card-enter card-enter--pass">
+            <span class="card-pass" title="readme.zip 解压密码">密码 INSIGHTFUTURETHROUGHTHEFOG</span>
+            <span>↓</span>
+          </div>
         </a>
 
         <a href="number-of-motion/files/local-continuity-probe-0.1.0.jar" class="entry-card download-card" data-download-type="archive" data-download-search="local-continuity-probe-0.1.0.jar jar 压缩包 本地连续性探针 MC 1.20.1" download>
@@ -1743,6 +1761,17 @@
             658 B · 纯文本<br>
             <span class="card-source">归属：运动之数</span><br>
             探针三文件的 SHA-256 与须知
+          </p>
+          <div class="card-enter">Download <span>↓</span></div>
+        </a>
+
+        <a href="number-of-motion/files/LOCAL_COPY.txt" class="entry-card download-card" data-download-type="text" data-download-search="LOCAL_COPY.txt txt 纯文本 运动之数 本地副本 锚 改口 local-copy.html 内嵌 zip 解出 4.6 KB" download>
+          <div class="card-kicker">FILE // LOCAL COPY</div>
+          <h3 class="card-title">LOCAL_COPY.txt</h3>
+          <p class="card-desc">
+            4.6 KB · 纯文本<br>
+            <span class="card-source">归属：运动之数 · 本地副本</span><br>
+            关于「锚」的几次改口 · 内嵌 zip 解出
           </p>
           <div class="card-enter">Download <span>↓</span></div>
         </a>
@@ -2111,6 +2140,7 @@
       'readme.zip': '不需要原件。',
       'local-continuity-probe-0.1.0.jar': '不需要探针。',
       'CHECKSUMS.txt': '不需要校验。',
+      'LOCAL_COPY.txt': '不需要改口。',
       'god.m4a': '不需要听。',
       'GDF-ALERT-LEVEL-III.mp3': '不需要编号。',
       'B站 · XIKM HLQA ONYIEN': '不需要关注。',
