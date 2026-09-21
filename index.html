@@ -920,6 +920,19 @@
 
     .entry-card:hover .card-source { color: var(--ef-yellow); opacity: 1; }
 
+    /* readme.zip 的解压密码：放在卡片描述里，替掉原来那行说明。
+       等宽字体、保留大小写、点一下只选中密码本身，方便直接复制。
+       不设 white-space: nowrap——密码里没有断行点，本来就断不开，
+       万一窄到放不下，整串换行也比被 clamp 裁掉好。 */
+    .card-pass {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.01em;
+      color: var(--ef-yellow);
+      -webkit-user-select: all;
+      user-select: all;
+    }
+
     .download-tools {
       display: flex;
       align-items: center;
@@ -1105,21 +1118,6 @@
     .card-enter span { transition: transform 0.22s ease; }
     .entry-card:hover .card-enter { color: var(--ef-yellow); }
     .entry-card:hover .card-enter span { transform: translateX(4px); }
-
-    /* readme.zip 的解压密码直接印在按钮上：等宽字体、保留大小写、点一下整词选中 */
-    .card-enter--pass { flex-wrap: wrap; gap: 6px; }
-    .card-pass {
-      font-family: var(--mono);
-      font-size: 9.5px;
-      letter-spacing: 0.02em;
-      text-transform: none;
-      color: var(--ef-yellow);
-      -webkit-user-select: all;
-      user-select: all;
-    }
-
-    /* 悬停时只有箭头滑动，密码留在原处，方便照着抄 */
-    .entry-card:hover .card-enter .card-pass { transform: none; }
 
     .archive-footer {
       margin-top: auto;
@@ -1735,12 +1733,9 @@
           <p class="card-desc">
             508 B · zip<br>
             <span class="card-source">归属：调查维基 v1</span><br>
-            原始加密文件 · v1 与 v2 相同
+            密码 <span class="card-pass" title="readme.zip 解压密码">INSIGHTFUTURETHROUGHTHEFOG</span>
           </p>
-          <div class="card-enter card-enter--pass">
-            <span class="card-pass" title="readme.zip 解压密码">密码 INSIGHTFUTURETHROUGHTHEFOG</span>
-            <span>↓</span>
-          </div>
+          <div class="card-enter">Download <span>↓</span></div>
         </a>
 
         <a href="number-of-motion/files/local-continuity-probe-0.1.0.jar" class="entry-card download-card" data-download-type="archive" data-download-search="local-continuity-probe-0.1.0.jar jar 压缩包 本地连续性探针 MC 1.20.1" download>
