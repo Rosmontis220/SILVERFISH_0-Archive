@@ -17,6 +17,8 @@ SILVERFISH_0-Archive/
 │
 ├── sfx/                # 界面音效（点击 / 翻页 / 进入档案库）
 │
+├── fonts/              # 首页字体（子集化 woff2，四份）
+│
 ├── wiki/               # 调查维基（断联前后）
 │   ├── v1/             # 断联前 v1（20篇原始版本）
 │   │   ├── index.html
@@ -113,6 +115,44 @@ SILVERFISH_0-Archive/
 | `dark`（默认） | `call-of-iberia.mp3` | 8.9 MB |
 | `light` | `CONFRONT.mp3` | 9.5 MB |
 | `crimson`（隐藏，需解锁） | `Mayors-the-Yearning-Flotsam.mp3` | 11.4 MB |
+
+## 字体
+
+首页用四份字体，都放在 `fonts/`，全部是子集化后的 woff2，合计约 411 KB：
+
+| 字体 | 用途 | 文件 | 大小 |
+| --- | --- | --- | --- |
+| Novecento Wide Bold | **只用在开头 hero 的 `SILVERFISH_0` 与 `ARCHIVE`**（连同同名 boot logo） | `novecento-wide-bold.woff2` | 7 KB |
+| Bender | 编号与计数小字：模块编号、`01 / 09`、分页页码、结果计数、卡片底栏 | `bender.woff2` | 9 KB |
+| 思源黑体 CN Medium | 全部正文与标签：中文正文、说明、归属行、导航、按钮、卡片 kicker、hero 副标题 | `source-han-sans-cn-medium.woff2` | 172 KB |
+| 思源宋体 CN Heavy | 中文标题（真 900）：`series-name` 与 `card-title` | `source-han-serif-cn-heavy.woff2` | 217 KB |
+
+Novecento Wide 是明日方舟的主拉丁字体，Bender 是其基建字体；中文正文与标题分别用思源黑体
+Medium 与思源宋体 Heavy。Novecento 刻意只出现在开头，其余拉丁文字一律走思源黑体。
+
+CSS 按角色分了变量：`--display`（Novecento，仅 hero）、`--title`（大小写安全的标题栈）、
+`--bender`（编号小字）、`--sans-cn`（正文与标签）、`--mono`（终端等宽，Consolas 开头、中文回落思源黑体）。
+四份都写了 `font-display: swap`，并在 `<head>` 里 preload、同时进了 boot 的 `PRELOAD_FILES`。
+
+两个坑：
+
+- **Novecento 是全大写展示字体**，小写输入会被画成大写字形（`readme.zip` 会显示成 `README.ZIP`）。
+  所以它不能用在显示文件名或版本号的地方；`card-title` 用 `--title`（思源宋体优先、大小写安全），
+  `series-name` 同理，标题的 `v1`/`v2` 才不会被改写成 `V1`。
+- 中文只有 500（黑体）与 900（宋体）两个字重，所以**含中文的元素不要把 `font-weight` 设在 600-800**，
+  否则浏览器会算法加粗，得到假粗。拉丁侧 Novecento 是真 700、Bender 是真 400，同理不要往上加粗。
+
+子集化按全站文本里的汉字加 ASCII 与常用符号裁剪，原始 19.7 MB 压到 411 KB。文案大幅变动后需要重新生成：
+
+```bash
+pip install brotli   # woff2 输出依赖
+pyftsubset SourceHanSansCN-Medium.otf --text-file=chars.txt \
+  --unicodes=U+0020-007E,U+00A0-00FF,U+2000-206F,U+2190-21FF,U+2200-22FF,U+25A0-25FF,U+2713 \
+  --output-file=fonts/source-han-sans-cn-medium.woff2 --flavor=woff2 --no-hinting --desubroutinize
+```
+
+其中 `chars.txt` 是把存档里 `*.html`、`*.js`、`*.css`、`*.md` 中出现过的汉字与中文标点去重后
+拼成的一行文本。子集只覆盖当前用字，新增生僻字若不在集合内会回落到系统字体。
 
 ## 版本说明
 

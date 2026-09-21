@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="SILVERFISH_0 完整存档：调查维基 v1-v3、大黄昏预测两版、失联后发布的本地连续性探针，以及随档文件的下载入口。">
   <link rel="icon" type="image/jpeg" href="avatar_silverfish.jpg">
+  <link rel="preload" href="fonts/novecento-wide-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/bender.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/source-han-sans-cn-medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/source-han-serif-cn-heavy.woff2" as="font" type="font/woff2" crossorigin>
   <title>SILVERFISH_0 // Archive</title>
   <script>
     (function () {
@@ -18,11 +22,60 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* 字体四份，全部是子集化 woff2（见 fonts/ 与 README）：
+       Novecento Wide 拉丁展示（明日方舟主拉丁字体）
+       Bender 编号与计数小字（明日方舟基建字体）
+       思源黑体 CN Medium 中文正文（真 500）
+       思源宋体 CN Heavy 中文标题（真 900）
+       中文只有 500 与 900 两个字重，所以含中文的元素不要用 600-800，
+       否则浏览器会算法加粗，得到假粗。 */
+    @font-face {
+      font-family: 'Novecento Wide';
+      src: url('fonts/novecento-wide-bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Bender';
+      src: url('fonts/bender.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Source Han Sans CN';
+      src: url('fonts/source-han-sans-cn-medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Source Han Serif CN';
+      src: url('fonts/source-han-serif-cn-heavy.woff2') format('woff2');
+      font-weight: 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
     :root {
       --bg-dark: #0a0a0a;
       --bg-light: #eaebed;
       --gray-lines: rgba(128, 128, 128, 0.3);
-      --mono: 'Consolas', 'SFMono-Regular', Menlo, monospace;
+      /* 终端等宽：保留 Consolas，中文回落到思源黑体 */
+      --mono: 'Consolas', 'Source Han Sans CN', 'SFMono-Regular', Menlo, monospace;
+      /* 编号与计数小字 */
+      --bender: 'Bender', 'Source Han Sans CN', Consolas, monospace;
+      /* 拉丁展示字体只用在开头 hero 的 SILVERFISH_0 与 ARCHIVE 上 */
+      --display: 'Novecento Wide', 'Source Han Serif CN', 'Source Han Sans CN', sans-serif;
+      /* 大小写敏感的标题：Novecento 是全大写展示字体，会把 readme.zip 写成 README.ZIP，
+         所以卡片标题（含文件名与 v1/v2）改用宋体优先，中文走 Heavy、拉丁走宋体自带拉丁 */
+      --title: 'Source Han Serif CN', 'Source Han Sans CN', serif;
+      /* 中文正文 */
+      --sans-cn: 'Source Han Sans CN', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Segoe UI', sans-serif;
     }
 
     html {
@@ -114,7 +167,7 @@
     }
 
     body {
-      font-family: 'Noto Sans Hans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+      font-family: var(--sans-cn);
       background: var(--bg-page);
       color: var(--text);
       transition: background 0.3s ease, color 0.3s ease;
@@ -202,7 +255,7 @@
 
     .nav-wordmark {
       flex: 0 0 auto;
-      font: 700 11px/1.2 var(--mono);
+      font: 500 11px/1.2 var(--sans-cn);
       letter-spacing: 0.16em;
       white-space: nowrap;
       color: var(--text);
@@ -249,7 +302,7 @@
     .nav-modules-title {
       opacity: 0;
       padding: 0 20px;
-      font: 700 10px/1.4 var(--mono);
+      font: 500 10px/1.4 var(--sans-cn);
       letter-spacing: 0.2em;
       color: var(--muted);
       text-transform: uppercase;
@@ -281,7 +334,7 @@
       color: var(--muted);
       font-family: inherit;
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 500;
       line-height: 1;
       text-align: left;
       cursor: pointer;
@@ -305,7 +358,7 @@
     }
 
     .nav-toc-item .toc-no {
-      font: 700 10px var(--mono);
+      font: 400 10px var(--bender);
       letter-spacing: 0.1em;
       color: var(--muted);
     }
@@ -466,7 +519,7 @@
     }
 
     .module-count {
-      font: 700 10px/1.4 var(--mono);
+      font: 400 10px/1.4 var(--bender);
       letter-spacing: 0.14em;
       color: var(--muted);
       text-align: center;
@@ -482,7 +535,7 @@
       color: var(--btn-text);
       font-family: inherit;
       font-size: 15px;
-      font-weight: 900;
+      font-weight: 500;
       letter-spacing: 0.12em;
       padding: 16px 26px;
       cursor: pointer;
@@ -494,7 +547,7 @@
 
     .enter-hint {
       margin-top: 14px;
-      font: 700 10px/1.5 var(--mono);
+      font: 400 10px/1.5 var(--mono);
       letter-spacing: 0.18em;
       color: var(--ef-yellow);
       text-transform: uppercase;
@@ -564,8 +617,9 @@
       display: flex;
       align-items: center;
       gap: 14px;
+      font-family: var(--display);
       font-size: clamp(24px, 2vw, 36px);
-      font-weight: 900;
+      font-weight: 700;
       line-height: 1;
       letter-spacing: 0.02em;
       position: relative;
@@ -585,7 +639,7 @@
 
     .boot-slogan {
       margin-top: 18px;
-      font: 700 10px/2 var(--mono);
+      font: 400 10px/2 var(--mono);
       letter-spacing: 0.24em;
       text-transform: uppercase;
       color: var(--muted);
@@ -620,19 +674,19 @@
       display: flex;
       align-items: baseline;
       gap: 14px;
-      font: 700 12px/1.6 var(--mono);
+      font: 400 12px/1.6 var(--mono);
       color: var(--muted);
       white-space: nowrap;
     }
 
     .boot-status b {
       color: var(--ef-yellow);
-      font: 900 clamp(26px, 3vw, 40px)/1 var(--mono);
+      font: 400 clamp(26px, 3vw, 40px)/1 var(--bender);
       letter-spacing: 0.02em;
     }
 
     .boot-status #boot-state {
-      font: 700 12px/1.6 var(--mono);
+      font: 400 12px/1.6 var(--mono);
       letter-spacing: 0.18em;
       color: var(--muted);
     }
@@ -668,7 +722,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      font: 700 11px/1.4 var(--mono);
+      font: 400 11px/1.4 var(--mono);
       letter-spacing: 0.28em;
       text-transform: uppercase;
       color: var(--ef-yellow);
@@ -683,8 +737,9 @@
     }
 
     .hero h1 {
+      font-family: var(--display);
       font-size: clamp(46px, 8vw, 104px);
-      font-weight: 900;
+      font-weight: 700;
       line-height: 0.94;
       letter-spacing: -0.045em;
     }
@@ -711,7 +766,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font: 700 11px/1.4 var(--mono);
+      font: 400 11px/1.4 var(--mono);
       letter-spacing: 0.18em;
       color: var(--muted);
     }
@@ -749,19 +804,20 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      font-family: var(--title);
       font-size: 16px;
-      font-weight: 900;
+      font-weight: 700;
       letter-spacing: 0.08em;
     }
 
     .series-name .no {
-      font: 700 12px var(--mono);
+      font: 400 12px var(--bender);
       color: var(--ef-yellow);
       letter-spacing: 0.1em;
     }
 
     .series-count {
-      font: 700 10px var(--mono);
+      font: 400 10px var(--bender);
       letter-spacing: 0.16em;
       color: var(--muted);
       white-space: nowrap;
@@ -803,15 +859,16 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      font: 700 10px/1.4 var(--mono);
+      font: 500 10px/1.4 var(--sans-cn);
       letter-spacing: 0.22em;
       color: var(--ef-yellow);
       text-transform: uppercase;
     }
 
     .card-title {
+      font-family: var(--title);
       font-size: 22px;
-      font-weight: 900;
+      font-weight: 700;
       letter-spacing: -0.01em;
       line-height: 1.2;
       overflow-wrap: anywhere;
@@ -855,7 +912,7 @@
 
     /* 下载卡片里的归属模块行：重名文件靠这一行确定来源 */
     .card-source {
-      font: 700 10px/1.5 var(--mono);
+      font: 500 10px/1.5 var(--sans-cn);
       letter-spacing: 0.04em;
       color: var(--muted);
       opacity: 0.85;
@@ -886,7 +943,7 @@
       border: 1px solid var(--line);
       background: transparent;
       color: var(--muted);
-      font: 700 10px/1 var(--mono);
+      font: 500 10px/1 var(--sans-cn);
       letter-spacing: 0.08em;
       cursor: pointer;
       transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
@@ -931,7 +988,7 @@
       border-radius: 0;
       background: var(--surface);
       color: var(--text);
-      font: 600 12px/1 var(--mono);
+      font: 500 12px/1 var(--sans-cn);
     }
 
     .download-search::placeholder { color: var(--muted); }
@@ -939,7 +996,7 @@
     .download-result-count {
       flex: 0 0 100%;
       color: var(--muted);
-      font: 700 10px/1.4 var(--mono);
+      font: 400 10px/1.4 var(--bender);
       letter-spacing: 0.12em;
       text-transform: uppercase;
     }
@@ -961,7 +1018,7 @@
       background: transparent;
       color: var(--muted);
       cursor: pointer;
-      font: 700 16px/1 var(--mono);
+      font: 400 16px/1 var(--bender);
       transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
     }
 
@@ -983,7 +1040,7 @@
 
     .download-page-status {
       color: var(--muted);
-      font: 700 10px/1.4 var(--mono);
+      font: 400 10px/1.4 var(--bender);
       letter-spacing: 0.14em;
       text-transform: uppercase;
     }
@@ -1014,7 +1071,7 @@
       padding: 36px 20px;
       border: 1px dashed var(--line);
       color: var(--muted);
-      font: 700 11px/1.6 var(--mono);
+      font: 400 11px/1.6 var(--mono);
       letter-spacing: 0.12em;
       text-align: center;
       text-transform: uppercase;
@@ -1039,7 +1096,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font: 700 10px/1 var(--mono);
+      font: 400 10px/1 var(--bender);
       letter-spacing: 0.18em;
       color: var(--muted);
       text-transform: uppercase;
@@ -1057,7 +1114,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 18px;
-      font: 700 10px/1.5 var(--mono);
+      font: 500 10px/1.5 var(--sans-cn);
       letter-spacing: 0.14em;
       color: var(--muted);
     }
@@ -1950,6 +2007,8 @@
       return;
     }
     const PRELOAD_FILES = [
+      'fonts/novecento-wide-bold.woff2', 'fonts/bender.woff2',
+      'fonts/source-han-sans-cn-medium.woff2', 'fonts/source-han-serif-cn-heavy.woff2',
       'crimson-background.webp',
       'wiki/v1/index.html', 'wiki/v1/style.css', 'wiki/v1/app.js', 'wiki/v1/content.js',
       'wiki/v2/index.html', 'wiki/v2/style.css', 'wiki/v2/app.js', 'wiki/v2/content.js',
