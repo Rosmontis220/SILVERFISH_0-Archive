@@ -9,6 +9,13 @@ SILVERFISH_0-Archive/
 │
 ├── index.html          # 主页面（版本选择）
 ├── README.md           # 说明文档
+├── avatar_silverfish.jpg            # 站点头像（首页 logo 与 favicon）
+├── call-of-iberia.mp3               # 暗色主题背景音乐
+├── CONFRONT.mp3                     # 亮色主题背景音乐
+├── Mayors-the-Yearning-Flotsam.mp3  # 黑红主题背景音乐
+├── crimson-background.webp          # 黑红主题背景图
+│
+├── sfx/                # 界面音效（点击 / 翻页 / 进入档案库）
 │
 ├── wiki/               # 调查维基（断联前后）
 │   ├── v1/             # 断联前 v1（20篇原始版本）
@@ -97,7 +104,7 @@ SILVERFISH_0-Archive/
 ```
 
 注意容器查询只能命中容器的后代，`.entry-card` 自身的内边距改不了，所以收紧的是标题和底栏。
-`文件下载` 模块额外挂一个 `.card-grid--clamp2`，把描述限制在两行。
+`文件下载` 模块额外挂一个 `.card-grid--clamp2`，把卡片描述限制在 4 行（文件大小 1 行 + 归属模块 1 行 + 文件说明最多 2 行）。
 
 主题切换时背景音乐同步更换，全站共用单个 `<audio id="archive-music">`，只换 `src` 不重建元素：
 
@@ -235,7 +242,25 @@ v2 依赖 `crypto.subtle`，只在**安全上下文**（HTTPS 或 localhost）�
 ### 文件下载 (downloads)
 
 首页第六个模块，把散落在各目录里的随档文件集中成下载入口。`wiki/v1/` 与 `wiki/v2/` 的
-`密码.txt`、`readme.zip` 哈希完全一致，所以只放一份。桌面宽度下是四列两行，见下方网格说明。
+`密码.txt`、`readme.zip` 哈希完全一致，所以只放一份。共 14 个文件，模块上方是分类筛选
+（全部 / 文本 / 音频 / 图像 / 压缩包）与关键词搜索，下面按每页 4 个分页；筛选和搜索作用于
+全部 14 个文件，分页只对筛选后的结果集切页，翻页时卡片按方向从左右滑入。
+
+每张下载卡片的描述里，「文件大小」那行下方是归属模块行（`.card-source`，等宽小字），再下面是
+文件说明。归属标明这份文件来自首页哪个模块，重名文件靠这一行区分；文件在仓库里的具体位置见
+下表。模块上方的搜索框会同时匹配文件名、说明文字、预设关键词和归属模块。
+
+重名或同内容的对应关系：
+
+| 卡片 | 其他位置 |
+| --- | --- |
+| `密码.txt` | `wiki/v1/` 与 `wiki/v2/` 各一份且字节相同，卡片只列 v1 |
+| `readme.zip` | 同上，卡片只列 v1 |
+| `README.md` | `number-of-motion/` 与根目录各一份，卡片指向 `number-of-motion/` |
+| `first-stamp.png`、`starrev-stamp.png`、`life-flow.mp3`、`night-route-signal.m4a`、`return-portrait.jpg` | `postal-terminal/v2/` 的 `.bin` 解密后就是这些明文，两者内容一致 |
+
+根目录的 `call-of-iberia.mp3`、`CONFRONT.mp3`、`Mayors-the-Yearning-Flotsam.mp3`、
+`crimson-background.webp` 与 `sfx/` 下的音效是首页主题与交互资源，未列入下载模块。
 
 | 文件 | 实际位置 | 说明 |
 | --- | --- | --- |
@@ -243,13 +268,16 @@ v2 依赖 `crypto.subtle`，只在**安全上下文**（HTTPS 或 localhost）�
 | `readme.zip` | `wiki/v1/` | 508 B，原始加密文件 |
 | `local-continuity-probe-0.1.0.jar` | `number-of-motion/files/` | 9.8 KB，本地连续性探针 |
 | `CHECKSUMS.txt` | `number-of-motion/files/` | 658 B，探针三个文件的 SHA-256 与使用须知 |
+| `README.md` | `number-of-motion/` | 452 B，运动之数发布方随附说明 |
 | `god.m4a` | `wiki/v3/` | 3.4 MB，Somniomancer [null set]，调查维基 v3（GOD SAYS）音频 |
+| `background.png` | `wiki/v3/` | 2.5 MB，调查维基 v3（GOD SAYS）背景图 |
 | `GDF-ALERT-LEVEL-III.mp3` | `forecast/v2/` | 9.2 MB，脑叶公司三级警报，大黄昏预测 v2 警报音频 |
 | `first-stamp.png` | `postal-terminal/v1/` | 2.9 MB，雨前首封，邮路终端 v1 首枚邮票 |
 | `life-flow.mp3` | `postal-terminal/v1/` | 7.5 MB，邮路终端 v1 背景音乐 |
 | `starrev-stamp.png` | `postal-terminal/v2/` | 2.9 MB，星幻_StarRev，邮路终端 v2 第二枚邮票 |
 | `night-route-signal.m4a` | `postal-terminal/v2/` | 3.5 MB，夜航邮路信号，ID 模式专属 |
 | `return-portrait.jpg` | `postal-terminal/v2/` | 51 KB，返程头像，ID 模式专属 |
+| `avatar_silverfish.jpg` | 根目录 | 9.3 KB，站点头像与图标原图 |
 
 ### 杂项 (MISC)
 

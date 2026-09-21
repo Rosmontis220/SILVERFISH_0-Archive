@@ -843,15 +843,25 @@
       }
     }
 
-    /* 文件下载：描述最多两行 */
+    /* 文件下载：大小 1 行 + 归属 1 行 + 说明最多 2 行 */
     .card-grid--clamp2 .card-desc {
       display: -webkit-box;
       -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 4;
       overflow: hidden;
       font-size: 12px;
       line-height: 1.6;
     }
+
+    /* 下载卡片里的归属模块行：重名文件靠这一行确定来源 */
+    .card-source {
+      font: 700 10px/1.5 var(--mono);
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      opacity: 0.85;
+    }
+
+    .entry-card:hover .card-source { color: var(--ef-yellow); opacity: 1; }
 
     .download-tools {
       display: flex;
@@ -1611,7 +1621,7 @@
     <div class="module-main">
       <div class="series-head">
         <h2 class="series-name"><span class="no">06</span>文件下载 / DOWNLOADS</h2>
-        <span class="series-count">11 FILES</span>
+        <span class="series-count">14 FILES</span>
       </div>
       <div class="download-tools" role="search" aria-label="文件下载筛选">
         <div class="download-filters" role="group" aria-label="按文件类型筛选">
@@ -1628,11 +1638,11 @@
           </svg>
           <input class="download-search" id="download-search" type="search" aria-label="搜索下载文件" placeholder="搜索文件名、格式或说明" autocomplete="off" spellcheck="false">
         </label>
-        <span class="download-result-count" id="download-result-count" aria-live="polite">显示 11 / 11 个文件</span>
+        <span class="download-result-count" id="download-result-count" aria-live="polite">显示 14 / 14 个文件</span>
       </div>
       <div class="download-pager" aria-label="文件分页">
         <button class="download-page-button" id="download-prev" type="button" aria-label="上一页">←</button>
-        <span class="download-page-status" id="download-page-status" aria-live="polite">第 1 / 3 页</span>
+        <span class="download-page-status" id="download-page-status" aria-live="polite">第 1 / 4 页</span>
         <button class="download-page-button" id="download-next" type="button" aria-label="下一页">→</button>
       </div>
       <div class="card-grid card-grid--clamp2" id="download-grid">
@@ -1641,6 +1651,7 @@
           <h3 class="card-title">密码.txt</h3>
           <p class="card-desc">
             64 B · 纯文本<br>
+            <span class="card-source">归属：调查维基 v1</span><br>
             解密密码 · 维基 v1 与 v2 相同
           </p>
           <div class="card-enter">Download <span>↓</span></div>
@@ -1651,6 +1662,7 @@
           <h3 class="card-title">readme.zip</h3>
           <p class="card-desc">
             508 B · zip<br>
+            <span class="card-source">归属：调查维基 v1</span><br>
             原始加密文件 · v1 与 v2 相同
           </p>
           <div class="card-enter">Download <span>↓</span></div>
@@ -1661,6 +1673,7 @@
           <h3 class="card-title">local-continuity-probe-0.1.0.jar</h3>
           <p class="card-desc">
             9.8 KB · jar<br>
+            <span class="card-source">归属：运动之数</span><br>
             本地连续性探针 · MC 1.20.1
           </p>
           <div class="card-enter">Download <span>↓</span></div>
@@ -1671,7 +1684,19 @@
           <h3 class="card-title">CHECKSUMS.txt</h3>
           <p class="card-desc">
             658 B · 纯文本<br>
+            <span class="card-source">归属：运动之数</span><br>
             探针三文件的 SHA-256 与须知
+          </p>
+          <div class="card-enter">Download <span>↓</span></div>
+        </a>
+
+        <a href="number-of-motion/README.md" class="entry-card download-card" data-download-type="text" data-download-search="README.md md markdown 纯文本 运动之数 发布方 说明 NOM" download>
+          <div class="card-kicker">FILE // NOM README</div>
+          <h3 class="card-title">README.md</h3>
+          <p class="card-desc">
+            452 B · markdown<br>
+            <span class="card-source">归属：运动之数</span><br>
+            运动之数发布方随附说明
           </p>
           <div class="card-enter">Download <span>↓</span></div>
         </a>
@@ -1681,7 +1706,19 @@
           <h3 class="card-title">god.m4a</h3>
           <p class="card-desc">
             3.4 MB · m4a · Somniomancer<br>
+            <span class="card-source">归属：调查维基 v3</span><br>
             调查维基 v3（GOD SAYS）音频
+          </p>
+          <div class="card-enter">Download <span>↓</span></div>
+        </a>
+
+        <a href="wiki/v3/background.png" class="entry-card download-card" data-download-type="image" data-download-search="background.png png 图像 调查维基 v3 GOD SAYS 背景图" download>
+          <div class="card-kicker">IMAGE // GOD SAYS BG</div>
+          <h3 class="card-title">background.png</h3>
+          <p class="card-desc">
+            2.5 MB · png<br>
+            <span class="card-source">归属：调查维基 v3</span><br>
+            调查维基 v3（GOD SAYS）背景图
           </p>
           <div class="card-enter">Download <span>↓</span></div>
         </a>
@@ -1691,6 +1728,7 @@
           <h3 class="card-title">GDF-ALERT-LEVEL-III.mp3</h3>
           <p class="card-desc">
             9.2 MB · mp3 · 脑叶公司三级警报<br>
+            <span class="card-source">归属：大黄昏预测 v2</span><br>
             大黄昏预测 v2 警报音频
           </p>
           <div class="card-enter">Download <span>↓</span></div>
@@ -1701,6 +1739,7 @@
           <h3 class="card-title">first-stamp.png</h3>
           <p class="card-desc">
             2.9 MB · png · 雨前首封<br>
+            <span class="card-source">归属：邮路终端 v1</span><br>
             邮路终端首枚邮票
           </p>
           <div class="card-enter">Download <span>↓</span></div>
@@ -1711,6 +1750,7 @@
           <h3 class="card-title">life-flow.mp3</h3>
           <p class="card-desc">
             7.5 MB · mp3<br>
+            <span class="card-source">归属：邮路终端 v1</span><br>
             邮路终端背景音乐
           </p>
           <div class="card-enter">Download <span>↓</span></div>
@@ -1721,6 +1761,7 @@
           <h3 class="card-title">starrev-stamp.png</h3>
           <p class="card-desc">
             2.9 MB · png · 星幻_StarRev<br>
+            <span class="card-source">归属：邮路终端 v2</span><br>
             邮路终端 v2 第二枚邮票
           </p>
           <div class="card-enter">Download <span>↓</span></div>
@@ -1731,6 +1772,7 @@
           <h3 class="card-title">night-route-signal.m4a</h3>
           <p class="card-desc">
             3.5 MB · m4a<br>
+            <span class="card-source">归属：邮路终端 v2</span><br>
             夜航邮路信号 · ID 模式专属
           </p>
           <div class="card-enter">Download <span>↓</span></div>
@@ -1741,7 +1783,18 @@
           <h3 class="card-title">return-portrait.jpg</h3>
           <p class="card-desc">
             51 KB · jpg<br>
+            <span class="card-source">归属：邮路终端 v2</span><br>
             返程头像 · ID 模式专属
+          </p>
+          <div class="card-enter">Download <span>↓</span></div>
+        </a>
+        <a href="avatar_silverfish.jpg" class="entry-card download-card" data-download-type="image" data-download-search="avatar_silverfish.jpg jpg jpeg 图像 头像 站点图标 logo SILVERFISH_0" download>
+          <div class="card-kicker">IMAGE // AVATAR</div>
+          <h3 class="card-title">avatar_silverfish.jpg</h3>
+          <p class="card-desc">
+            9.3 KB · jpg<br>
+            <span class="card-source">归属：档案首页</span><br>
+            SILVERFISH_0 头像 · 站点图标
           </p>
           <div class="card-enter">Download <span>↓</span></div>
         </a>
@@ -2348,7 +2401,8 @@
       const query = search.value.trim().toLocaleLowerCase();
       const matches = cards.filter((card) => {
         const typeMatch = activeType === 'all' || card.dataset.downloadType === activeType;
-        const text = (card.dataset.downloadSearch || card.textContent).toLocaleLowerCase();
+        /* 关键词与可见文字一起匹配，这样按归属模块名也能搜到 */
+        const text = ((card.dataset.downloadSearch || '') + ' ' + card.textContent).toLocaleLowerCase();
         return typeMatch && (!query || text.includes(query));
       });
       const totalPages = Math.max(1, Math.ceil(matches.length / pageSize));
