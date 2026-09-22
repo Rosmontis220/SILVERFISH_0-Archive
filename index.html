@@ -2030,6 +2030,23 @@
       window.dispatchEvent(new Event('archive:ready'));
       return;
     }
+
+    /* 收场只留这一个出口：摘遮罩、摘幕布、发 archive:ready。
+       进度是靠 rAF 推进的，而浏览器在后台标签页、被完全遮挡的窗口等情况下会不给帧，
+       那样百分比会永远停在 99% 以下，遮罩连同「进入档案库」按钮一起盖住——
+       整页就再也点不动了。所以到点无条件撤掉，不等动画。
+       正常路径最慢是「预载兜底 9 秒 + 收场 1.7 秒」，12 秒不会误伤。
+       这里刻意不发 auto-unlock：那是「本次会话已进入过」的自动解锁旁路，
+       而兜底只是把遮罩撤掉，页面仍应停在入口，等用户自己点「进入档案库」。 */
+    let done = false;
+    const teardown = () => {
+      if (done) return;
+      done = true;
+      if (boot.parentNode) boot.remove();
+      if (curtain.parentNode) curtain.remove();
+      window.dispatchEvent(new Event('archive:ready'));
+    };
+    window.setTimeout(teardown, 12000);
     const PRELOAD_FILES = [
       'fonts/novecento-wide-bold.woff2', 'fonts/bender.woff2',
       'fonts/source-han-sans-cn-medium.woff2', 'fonts/source-han-serif-cn-heavy.woff2',
@@ -2100,10 +2117,7 @@
           window.setTimeout(() => {
             boot.remove();
           }, 620);
-          window.setTimeout(() => {
-            curtain.remove();
-            window.dispatchEvent(new Event('archive:ready'));
-          }, 1450);
+          window.setTimeout(teardown, 1450);
         }, 260);
       }
     };
