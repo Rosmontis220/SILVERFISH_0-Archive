@@ -78,8 +78,8 @@ SILVERFISH_0-Archive/
 │   └── v3/             # 上游 8559e6f（第三版）
 │       ├── index.html  # 三档身份 + 常驻信号 + 3 枚邮票
 │       ├── 404.html    # 与 index.html 字节相同
-│       ├── r0.bin / r1.bin / r2.bin             # 沿用 v2 的三个密文
-│       ├── night-route-signal.bin / return-portrait.bin  # 沿用 v2
+│       ├── 页面从 ../v2/ 读取 5 个未改动的密文（r0/r1/r2、
+│       │   night-route-signal、return-portrait），本目录不再重复存放
 │       ├── unposted-gate.bin      # AES-GCM 密文，解出为第三枚邮票
 │       ├── route-echo-cinder.bin  # AES-GCM 密文，解出为信号 CONFRONT
 │       ├── route-echo-lotus.bin   # AES-GCM 密文，解出为信号 Iron Lotus
@@ -323,9 +323,20 @@ v3 资源解密结果（密钥内嵌于载荷，本存档已实测全部解出�
 | `route-echo-lotus.bin` | M4A | 3,874,105 B | 信号 `Iron Lotus` |
 | `courier-record.bin` | JPEG | 20,322 B | 邮递员头像（`profileCourierAvatar`） |
 
-前五个密文与 v2 目录里的同名文件经 `git hash-object` 比对**完全一致**，属沿用而非重发；
-因此 v3 目录只额外保留这四个新资源解密后的明文，v1/v2 已收入的明文不再重复。
-`unposted-gate.png` 与 `courier-record.jpg` 暂无下载卡片，下载模块维持 15 个文件。
+这 9 个密文里，前 5 个与 v2 目录的同名文件经 `git hash-object` 比对**完全一致**，属沿用而非重发，
+所以 v3 目录**不再重复存放这 5 个文件**，只保留新增的 4 个密文与其明文。
+
+为了让 v3 页面去读 v2 的那 5 个密文，本存档对镜像页做了一次**可验证的重打包**：
+解出载荷（FNV 校验值 `2415988254` 通过）→ 把资源表里这 5 条的 `u` 由 `r0.bin` 一类改成 `../v2/r0.bin`
+→ 按原样（同一密钥、同一 32 字节异或、同样 1282 字符分片倒序）重新封装 → 重算校验值为 `3362751648` 并写回页内。
+除这 5 条路径与那个校验数字外，载荷与上游逐字符相同；页面行为不变，实测评测：
+浏览器实际发出 9 个密文请求（5 个来自 `../v2/`、4 个来自 `v3/`）全部 200，30 个槽位正常，
+无 `asset-failed`、无控制台报错。
+
+明文副本只在资源首次出现的版本里保留：v1 的 `first-stamp.png` / `life-flow.mp3`、
+v2 的 `starrev-stamp.png` / `night-route-signal.m4a` / `return-portrait.jpg`，
+以及 v3 新增的 `unposted-gate.png` / `route-echo-cinder.m4a` / `route-echo-lotus.m4a` / `courier-record.jpg`。
+v3 的这 4 个明文暂无下载卡片，下载模块维持 15 个文件。
 
 ### 文件下载 (downloads)
 
