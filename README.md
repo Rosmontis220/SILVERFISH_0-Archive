@@ -58,23 +58,36 @@ SILVERFISH_0-Archive/
 │       ├── local-copy.html
 │       └── local-continuity-probe-0.1.0.jar
 │
-├── postal-terminal/    # 邮路终端（作者换号后发布，两代并存）
+├── postal-terminal/    # 邮路终端（作者换号后发布，三代并存）
 │   ├── v1/             # 上游旧历史 b65f684
 │   │   ├── index.html  # 30 个邮票槽位，单页应用
 │   │   ├── 404.html    # 与 index.html 字节相同
 │   │   ├── first-stamp.png # 2.9 MB，雨前首封
 │   │   └── life-flow.mp3   # 7.5 MB，背景音乐
-│   └── v2/             # 上游当前历史 0df8c37（重制版）
-│       ├── index.html  # 身份门 + 2 枚邮票 + AES 加密资源
+│   ├── v2/             # 上游 0df8c37（重制版）
+│   │   ├── index.html  # 身份门 + 2 枚邮票 + AES 加密资源
+│   │   ├── 404.html    # 与 index.html 字节相同
+│   │   ├── r0.bin      # AES-GCM 密文，解出为 first-stamp.png
+│   │   ├── r1.bin      # AES-GCM 密文，解出为第二枚邮票
+│   │   ├── r2.bin      # AES-GCM 密文，解出为 life-flow.mp3
+│   │   ├── night-route-signal.bin # AES-GCM 密文，ID 模式音频
+│   │   ├── return-portrait.bin    # AES-GCM 密文，ID 模式头像
+│   │   ├── starrev-stamp.png      # 解密后的第二枚邮票
+│   │   ├── night-route-signal.m4a # 解密后的音频
+│   │   └── return-portrait.jpg    # 解密后的头像
+│   └── v3/             # 上游 8559e6f（第三版）
+│       ├── index.html  # 三档身份 + 常驻信号 + 3 枚邮票
 │       ├── 404.html    # 与 index.html 字节相同
-│       ├── r0.bin      # AES-GCM 密文，解出为 first-stamp.png
-│       ├── r1.bin      # AES-GCM 密文，解出为第二枚邮票
-│       ├── r2.bin      # AES-GCM 密文，解出为 life-flow.mp3
-│       ├── night-route-signal.bin # AES-GCM 密文，ID 模式音频
-│       ├── return-portrait.bin    # AES-GCM 密文，ID 模式头像
-│       ├── starrev-stamp.png      # 解密后的第二枚邮票
-│       ├── night-route-signal.m4a # 解密后的音频
-│       └── return-portrait.jpg    # 解密后的头像
+│       ├── r0.bin / r1.bin / r2.bin             # 沿用 v2 的三个密文
+│       ├── night-route-signal.bin / return-portrait.bin  # 沿用 v2
+│       ├── unposted-gate.bin      # AES-GCM 密文，解出为第三枚邮票
+│       ├── route-echo-cinder.bin  # AES-GCM 密文，解出为信号 CONFRONT
+│       ├── route-echo-lotus.bin   # AES-GCM 密文，解出为信号 Iron Lotus
+│       ├── courier-record.bin     # AES-GCM 密文，解出为邮递员头像
+│       ├── unposted-gate.png      # 解密后的第三枚邮票
+│       ├── route-echo-cinder.m4a  # 解密后的信号
+│       ├── route-echo-lotus.m4a   # 解密后的信号
+│       └── courier-record.jpg     # 解密后的邮递员头像
 │
 └── localized/          # 汉化模块（英文页面中文版）
     ├── forecast-v1/    # 大黄昏预测 v1 汉化
@@ -184,7 +197,7 @@ pyftsubset SourceHanSansCN-Medium.otf --text-file=chars.txt \
 - `index.html` 为加密外壳，浏览器会自动解密并显示事件页
 - 附带 `GDF-ALERT-LEVEL-III.mp3`（Level III 警报音频，与事件页同目录）
 
-两版页面均未沿用 Ctrl+Q 快捷键，改用右下角可见的「返回存档索引」按钮返回本目录。
+各版页面均未沿用 Ctrl+Q 快捷键，改用右下角可见的「返回存档索引」按钮返回本目录。
 
 ### 汉化 (localized)
 
@@ -231,8 +244,9 @@ pyftsubset SourceHanSansCN-Medium.otf --text-file=chars.txt \
 
 来自仓库 `https://github.com/0-silverfish/postal-terminal`，作者称原账号 `Silverfish-0` 遭攻击后换号，新号即 `0-silverfish`。
 
-上游于 2026-09-20 强制重写历史，旧提交 `6b1ea71` / `b65f684` 被新提交 `710fb72` / `bad843c` / `0df8c37` 取代。
-因此本存档按版本分目录保留两代：`postal-terminal/v1/` 与 `postal-terminal/v2/`。
+上游于 2026-09-20 强制重写历史，旧提交 `6b1ea71` / `b65f684` 被新提交 `710fb72` / `bad843c` / `0df8c37` 取代；
+2026-09-25 又追加提交 `8559e6f`（`Add files via upload`），页面与资源大幅扩容。
+因此本存档按版本分目录保留三代：`postal-terminal/v1/`、`postal-terminal/v2/` 与 `postal-terminal/v3/`。
 
 #### v1（对应上游旧历史 `b65f684`）
 
@@ -272,12 +286,46 @@ v2 资源解密结果（密钥内嵌于载荷，本存档已实测全部解出�
 密文比明文各多 16 字节（GCM 认证标签）。解出的明文副本以规范扩展名另存于 `v2/`
 （`starrev-stamp.png`、`night-route-signal.m4a`、`return-portrait.jpg`），便于直接查看与下载。
 
-两代的 `index.html` 与 `404.html` 都在 `</body>` 前追加了返回按钮（与 forecast、wiki 各页同一套右下角样式），
+三代的 `index.html` 与 `404.html` 都在 `</body>` 前追加了返回按钮（与 forecast、wiki 各页同一套右下角样式），
 追加块本身不含换行符，另加一个 CRLF 接回原件。`v1` 与 `v2` 各自的两个文件在原件状态下字节完全相同。
 去掉返回按钮并归一化行尾后，`v1` 的两个文件与上游 `b65f684` 对应文件**逐字节一致**。
 
 v2 依赖 `crypto.subtle`，只在**安全上下文**（HTTPS 或 localhost）可用；
 直接用 `file://` 双击打开会因资源解密失败而空白。GitHub Pages 是 HTTPS，不受影响。
+
+#### v3（对应上游 `8559e6f`）
+
+第三版，`index.html` 由 93,938 字节扩到 **161,500 字节**，是最接近「新作」的一版：
+
+- 混淆同族、密钥照旧（32 字节数组 `[65,17,232,…]` 仍各自异或 167），
+  但载荷由 31,568 字节涨到 **51,767 字节**（明文 JS 50,247 字符），
+  FNV-1a 校验值变为 `2415988254`；分片方式由 27×1600 改为 54×1282
+- 素材表由 5 项扩到 **9 项**，仍是 AES-256-GCM，AAD 依旧是 `postal-route:a`…`postal-route:i`
+- 身份门由两档扩到 **三档**：游客 / 管理员（`星幻_StarRev`）/ 邮递员（显示 `无访问权限 / ACCESS DENIED`），
+  `LOGIN_KEY` 升为 `prt_identity_v3`
+- 新增**常驻信号选择**：除默认的「夜航邮路信号」外，可选 `CONFRONT` 与 `Iron Lotus`
+- 邮票由 2 枚变 **3 枚**：新增 `未寄之门 / THE UNPOSTED GATE`（`ROUTE ZERO / ACTIVATION TRACE`）
+- 页面末尾的 `<template data-postal-fragment="xinghuan">` 碎片由上游原作者自己保留，
+  本存档照原样收入；v3 的页面本身就带这段，不是本存档追加的
+- 行尾由上两代的 CRLF 改为 **LF**，所以本存档给 v3 追加返回按钮时接的是一个 LF
+
+v3 资源解密结果（密钥内嵌于载荷，本存档已实测全部解出）：
+
+| 密文 | 明文类型 | 大小 | 说明 |
+| --- | --- | --- | --- |
+| `r0.bin` | PNG | 3,041,794 B | 与 v1/v2 相同（`first-stamp.png`） |
+| `r1.bin` | PNG | 3,047,581 B | 与 v2 相同（`starrev-stamp.png`） |
+| `r2.bin` | MP3 | 7,843,330 B | 与 v1/v2 相同（`life-flow.mp3`） |
+| `night-route-signal.bin` | M4A | 3,618,616 B | 与 v2 相同 |
+| `return-portrait.bin` | JPEG | 52,643 B | 与 v2 相同 |
+| `unposted-gate.bin` | PNG | 3,215,158 B | 第三枚邮票，1536×1024 |
+| `route-echo-cinder.bin` | M4A | 4,091,422 B | 信号 `CONFRONT` |
+| `route-echo-lotus.bin` | M4A | 3,874,105 B | 信号 `Iron Lotus` |
+| `courier-record.bin` | JPEG | 20,322 B | 邮递员头像（`profileCourierAvatar`） |
+
+前五个密文与 v2 目录里的同名文件经 `git hash-object` 比对**完全一致**，属沿用而非重发；
+因此 v3 目录只额外保留这四个新资源解密后的明文，v1/v2 已收入的明文不再重复。
+`unposted-gate.png` 与 `courier-record.jpg` 暂无下载卡片，下载模块维持 15 个文件。
 
 ### 文件下载 (downloads)
 
