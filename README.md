@@ -325,14 +325,15 @@ v3 资源解密结果（密钥内嵌于载荷，本存档已实测全部解出�
 
 前五个密文与 v2 目录里的同名文件经 `git hash-object` 比对**完全一致**，属沿用而非重发；
 因此 v3 目录只额外保留这四个新资源解密后的明文，v1/v2 已收入的明文不再重复。
-`unposted-gate.png` 与 `courier-record.jpg` 暂无下载卡片，下载模块维持 15 个文件。
+`unposted-gate.png`、`route-echo-cinder.m4a`、`route-echo-lotus.m4a` 与 `courier-record.jpg`
+已加入下载模块，下载文件数由 15 增至 19。
 
 ### 文件下载 (downloads)
 
 首页第六个模块，把散落在各目录里的随档文件集中成下载入口。`wiki/v1/` 与 `wiki/v2/` 的
-`密码.txt`、`readme.zip` 哈希完全一致，所以只放一份。共 15 个文件，模块上方是分类筛选
+`密码.txt`、`readme.zip` 哈希完全一致，所以只放一份。共 19 个文件，模块上方是分类筛选
 （全部 / 文本 / 音频 / 图像 / 压缩包）与关键词搜索，下面按每页 4 个分页；筛选和搜索作用于
-全部 15 个文件，分页只对筛选后的结果集切页，翻页时卡片按方向从左右滑入。
+全部 19 个文件，分页只对筛选后的结果集切页，翻页时卡片按方向从左右滑入。
 
 每张下载卡片的描述里，「文件大小」那行下方是归属模块行（`.card-source`，等宽小字），再下面是
 文件说明。归属标明这份文件来自首页哪个模块，重名文件靠这一行区分；文件在仓库里的具体位置见
@@ -370,6 +371,10 @@ v3 资源解密结果（密钥内嵌于载荷，本存档已实测全部解出�
 | `starrev-stamp.png` | `postal-terminal/v2/` | 2.9 MB，星幻_StarRev，邮路终端 v2 第二枚邮票 |
 | `night-route-signal.m4a` | `postal-terminal/v2/` | 3.5 MB，夜航邮路信号，ID 模式专属 |
 | `return-portrait.jpg` | `postal-terminal/v2/` | 51 KB，返程头像，ID 模式专属 |
+| `unposted-gate.png` | `postal-terminal/v3/` | 3.1 MB，未寄之门，邮路终端 v3 第三枚邮票 |
+| `route-echo-cinder.m4a` | `postal-terminal/v3/` | 3.9 MB，常驻信号 `CONFRONT` |
+| `route-echo-lotus.m4a` | `postal-terminal/v3/` | 3.7 MB，常驻信号 `Iron Lotus` |
+| `courier-record.jpg` | `postal-terminal/v3/` | 20 KB，邮递员头像 |
 | `avatar_silverfish.jpg` | 根目录 | 9.3 KB，站点头像与图标原图 |
 
 `LOCAL_COPY.txt` 原本只以 ZIP 形式内嵌在 `number-of-motion/files/local-copy.html` 里（该页是加密的
