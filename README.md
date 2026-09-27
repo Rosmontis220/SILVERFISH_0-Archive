@@ -245,8 +245,9 @@ pyftsubset SourceHanSansCN-Medium.otf --text-file=chars.txt \
 来自仓库 `https://github.com/0-silverfish/postal-terminal`，作者称原账号 `Silverfish-0` 遭攻击后换号，新号即 `0-silverfish`。
 
 上游于 2026-09-20 强制重写历史，旧提交 `6b1ea71` / `b65f684` 被新提交 `710fb72` / `bad843c` / `0df8c37` 取代；
-2026-09-25 又追加提交 `8559e6f`（`Add files via upload`），页面与资源大幅扩容。
-因此本存档按版本分目录保留三代：`postal-terminal/v1/`、`postal-terminal/v2/` 与 `postal-terminal/v3/`。
+2026-09-25 追加提交 `8559e6f`（`Add files via upload`），页面与资源大幅扩容；
+2026-09-26 再更新 `976cdaa`（`update`），新增第四枚邮票「未署名附件」与一个加密资源。
+因此本存档按版本分目录保留四代：`postal-terminal/v1/`、`postal-terminal/v2/`、`postal-terminal/v3/` 与 `postal-terminal/v4/`。
 
 #### v1（对应上游旧历史 `b65f684`）
 
@@ -327,6 +328,36 @@ v3 资源解密结果（密钥内嵌于载荷，本存档已实测全部解出�
 因此 v3 目录只额外保留这四个新资源解密后的明文，v1/v2 已收入的明文不再重复。
 `unposted-gate.png`、`route-echo-cinder.m4a`、`route-echo-lotus.m4a` 与 `courier-record.jpg`
 已加入下载模块，下载文件数由 15 增至 19。
+
+#### v4（对应上游 `976cdaa`）
+
+第四版，是 v3 的直接续作（身份门、坐标、`prt_identity_v3` 等沿用），`index.html` 由 161,500 字节扩到 **184,496 字节**：
+
+- 混淆结构不变（62 个反转 base64 串、32 字节密钥），载荷由 51,767 字节涨到约 57,000 字节，
+  FNV-1a 校验值变为 `1268373371`
+- 素材表由 9 项扩到 **10 项**（`postal-route:a`…`postal-route:j`），新增 `unattributed-attachment.bin`
+- 邮票由 3 枚变 **4 枚**：新增 `未署名附件 / The Unattributed Attachment`
+  （`POSTAL STAMP / FOURTH ISSUE`，第四槽位需输入附件序列号解锁，且带提示）；存储键新增 `prt_unattributed_attachment_v1`
+- 本次上游提交只改了两个页面并新增这一个加密附件，**没有改动任何旧 `.bin`**
+
+v4 资源解密（v4 目录 `index.html` 载荷内嵌密钥，本存档已实测解出全部 10 项）：
+
+| 密文 | 明文类型 | 大小 | 说明 |
+| --- | --- | --- | --- |
+| `r0.bin` | PNG | 3,041,794 B | 与 v1/v2 相同（`first-stamp.png`） |
+| `r1.bin` | PNG | 3,047,581 B | 与 v2 相同（`starrev-stamp.png`） |
+| `r2.bin` | MP3 | 7,843,330 B | 与 v1/v2 相同（`life-flow.mp3`） |
+| `night-route-signal.bin` | M4A | 3,618,616 B | 与 v2 相同 |
+| `return-portrait.bin` | JPEG | 52,643 B | 与 v2 相同 |
+| `unposted-gate.bin` | PNG | 3,215,158 B | 第三枚邮票 |
+| `route-echo-cinder.bin` | M4A | 4,091,422 B | 信号 `CONFRONT` |
+| `route-echo-lotus.bin` | M4A | 3,874,105 B | 信号 `Iron Lotus` |
+| `courier-record.bin` | JPEG | 20,322 B | 邮递员头像 |
+| `unattributed-attachment.bin` | PNG | 3,045,736 B | 第四枚邮票 `未署名附件` |
+
+前九项与 v3 目录里的同名 `.bin` 逐字节一致。v4 目录额外保留新资源解出的明文 `unattributed-attachment.png`；
+该明文仍在解谜阶段，**暂不加入下载模块**（下载模块仍为 19 个文件）。v4 的 `index.html` 与 `404.html`
+同样在 `</body>` 前追加了返回按钮。
 
 ### 文件下载 (downloads)
 
