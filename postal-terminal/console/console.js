@@ -11,6 +11,10 @@
   }[version];
   if (!config) return;
   const base = new URL('.', script.src);
+  const enabledKey = 'archive_postal_console_enabled';
+  let consoleEnabled = true;
+  try {consoleEnabled = localStorage.getItem(enabledKey) !== '0';} catch {}
+  if (!consoleEnabled) return;
   const prefKey = 'archive_postal_control_preferences';
   let prefs = {skip:false, closed:innerWidth<1000};
   try {prefs = {...prefs,...JSON.parse(localStorage.getItem(prefKey)||'{}')};} catch {}

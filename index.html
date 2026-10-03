@@ -1754,7 +1754,19 @@
       color: var(--muted);
       opacity: 0.55;
     }
+    .postal-card { position:relative; }
+    .postal-card-actions { display:block; margin-top:auto; }
+    .postal-card-actions .card-enter { width:100%; }
+    .postal-console-control { position:absolute; right:18px; top:50%; transform:translateY(-50%); display:flex; align-items:center; justify-content:flex-end; gap:9px; color:var(--muted); font:400 10px/1 var(--mono); letter-spacing:.08em; white-space:nowrap; }
+    .postal-console-switch { appearance:none; position:relative; width:42px; height:24px; flex:0 0 42px; padding:0; border:1px solid rgba(90,90,90,.42); border-radius:2px; background:linear-gradient(90deg, var(--ef-yellow) 0 50%, var(--bg-page) 50% 100%); box-shadow:0 1px 4px rgba(0,0,0,.16); overflow:hidden; cursor:pointer; transition:border-color .22s ease, filter .22s ease; }
+    .postal-console-switch span { position:absolute; left:0; top:0; width:50%; height:100%; border-radius:0; background:#fff; box-shadow:0 0 0 1px rgba(90,90,90,.30), 0 1px 3px rgba(0,0,0,.18); transition:transform .22s ease; }
+    .postal-console-switch:hover, .postal-console-switch:focus-visible { border-color:rgba(70,70,70,.68); filter:brightness(1.04); outline:none; }
+    .postal-console-switch span { transform:translateX(100%); }
+    .postal-console-switch[aria-checked="false"] span { transform:translateX(0); }
     .postal-card[data-state="empty"] .card-enter { opacity: 0.4; }
+    .postal-card[data-state="empty"] .postal-console-control > span { opacity:.55; }
+    .postal-console-switch span { opacity:1; background:#fff; }
+    @media (max-width: 520px) { .postal-console-control { right:14px; gap:6px; letter-spacing:.04em; } .postal-console-switch { width:38px; height:22px; flex-basis:38px; } }
   </style>
 </head>
 <body>
@@ -2151,7 +2163,13 @@
           <div class="card-kicker" id="postal-kicker">POSTAL // TERMINAL</div>
           <h3 class="card-title" id="postal-title">邮路终端 v<input class="postal-version" id="postal-version" type="text" inputmode="numeric" maxlength="2" value="" placeholder="1-4" autocomplete="off" spellcheck="false" aria-label="输入邮路终端版本，可填 1 至 4" title="可填 1 至 4"></h3>
           <p class="card-desc" id="postal-desc">POSTAL ROUTE TERMINAL<br>本地邮票收集界面<br>请在上方输入版本</p>
-          <div class="card-enter">Open Record <span>→</span></div>
+          <div class="postal-card-actions">
+            <div class="card-enter">Open Record <span>→</span></div>
+            <div class="postal-console-control">
+              <span>控制台</span>
+              <button class="postal-console-switch" id="postal-console-switch" type="button" role="switch" aria-checked="true" aria-label="控制台开关"><span aria-hidden="true"></span></button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -3237,7 +3255,16 @@
     const card = document.getElementById('postal-card');
     const kicker = document.getElementById('postal-kicker');
     const desc = document.getElementById('postal-desc');
-    if (!field || !card || !kicker || !desc) return;
+    const consoleSwitch = document.getElementById('postal-console-switch');
+    const consoleEnabledKey = 'archive_postal_console_enabled';
+    if (!field || !card || !kicker || !desc || !consoleSwitch) return;
+    let consoleEnabled = true;
+    try { consoleEnabled = localStorage.getItem(consoleEnabledKey) !== '0'; } catch (e) {}
+    const renderConsoleSwitch = () => {
+      consoleSwitch.setAttribute('aria-checked', String(consoleEnabled));
+      consoleSwitch.title = consoleEnabled ? '进入终端时加载控制台' : '进入终端时不加载控制台';
+    };
+    renderConsoleSwitch();
 
     let current = null;
     let target = null;
@@ -3299,14 +3326,21 @@
     });
     empty();
 
+    consoleSwitch.addEventListener('click', (e) => {
+      e.stopPropagation();
+      consoleEnabled = !consoleEnabled;
+      try { localStorage.setItem(consoleEnabledKey, consoleEnabled ? '1' : '0'); } catch (err) {}
+      renderConsoleSwitch();
+    });
+
     /* 整张卡片就是按钮：填了版本才进门，还没填就先聚焦输入框 */
     card.addEventListener('click', (e) => {
-      if (e.target === field) return;
+      if (e.target === field || e.target === consoleSwitch || consoleSwitch.contains(e.target)) return;
       if (!target) { field.focus(); return; }
       window.location.href = target;
     });
     card.addEventListener('keydown', (e) => {
-      if (e.target === field) return;
+      if (e.target === field || e.target === consoleSwitch || consoleSwitch.contains(e.target)) return;
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         if (!target) { field.focus(); return; }
