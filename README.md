@@ -355,16 +355,16 @@ v4 资源解密（v4 目录 `index.html` 载荷内嵌密钥，本存档已实测
 | `courier-record.bin` | JPEG | 20,322 B | 邮递员头像 |
 | `unattributed-attachment.bin` | PNG | 3,045,736 B | 第四枚邮票 `未署名附件` |
 
-前九项与 v3 目录里的同名 `.bin` 逐字节一致。v4 目录额外保留新资源解出的明文 `unattributed-attachment.png`；
-该明文仍在解谜阶段，**暂不加入下载模块**（下载模块仍为 19 个文件）。v4 的 `index.html` 与 `404.html`
+前九项与 v3 目录里的同名 `.bin` 逐字节一致。v4 目录额外保留新资源解出的明文 `unattributed-attachment.png`，
+已加入下载模块（下载文件数由 19 增至 20）。v4 的 `index.html` 与 `404.html`
 同样在 `</body>` 前追加了返回按钮。
 
 ### 文件下载 (downloads)
 
 首页第六个模块，把散落在各目录里的随档文件集中成下载入口。`wiki/v1/` 与 `wiki/v2/` 的
-`密码.txt`、`readme.zip` 哈希完全一致，所以只放一份。共 19 个文件，模块上方是分类筛选
+`密码.txt`、`readme.zip` 哈希完全一致，所以只放一份。共 20 个文件，模块上方是分类筛选
 （全部 / 文本 / 音频 / 图像 / 压缩包）与关键词搜索，下面按每页 4 个分页；筛选和搜索作用于
-全部 19 个文件，分页只对筛选后的结果集切页，翻页时卡片按方向从左右滑入。
+全部 20 个文件，分页只对筛选后的结果集切页，翻页时卡片按方向从左右滑入。
 
 每张下载卡片的描述里，「文件大小」那行下方是归属模块行（`.card-source`，等宽小字），再下面是
 文件说明。归属标明这份文件来自首页哪个模块，重名文件靠这一行区分；文件在仓库里的具体位置见
@@ -406,6 +406,7 @@ v4 资源解密（v4 目录 `index.html` 载荷内嵌密钥，本存档已实测
 | `route-echo-cinder.m4a` | `postal-terminal/v3/` | 3.9 MB，常驻信号 `CONFRONT` |
 | `route-echo-lotus.m4a` | `postal-terminal/v3/` | 3.7 MB，常驻信号 `Iron Lotus` |
 | `courier-record.jpg` | `postal-terminal/v3/` | 20 KB，邮递员头像 |
+| `unattributed-attachment.png` | `postal-terminal/v4/` | 3.0 MB，未署名附件，邮路终端 v4 第四枚邮票 |
 | `avatar_silverfish.jpg` | 根目录 | 9.3 KB，站点头像与图标原图 |
 
 `LOCAL_COPY.txt` 原本只以 ZIP 形式内嵌在 `number-of-motion/files/local-copy.html` 里（该页是加密的
@@ -420,6 +421,7 @@ LF 换行、无 BOM，SHA-256 `cc1fe65549b900f46fefa75c47481720114eb8460761e3884
 - B站 · XIKM HLQA ONYIEN：`https://space.bilibili.com/3493126603803061`
 - 抖音 · VHQ-4K/19：分享主页链接
 - 腾讯文档 · XIKM HLQA ONYIEN 解谜：`https://docs.qq.com/doc/DZURVVXJkS1NZWFNq`
+- 腾讯文档 · 邮路终端解谜：`https://docs.qq.com/sheet/DVWpFakpIVmFSZkV1`
 - B站 · Silverfish_0：`https://space.bilibili.com/1239867708`
 - 迷雾论坛：`https://www.mistarg.cn/`
 - QQ 群链接：`https://qm.qq.com/q/EICZzM2KTC`
