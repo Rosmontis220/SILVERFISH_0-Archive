@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SILVERFISH_0 // ARCHIVE</title>
+</head>
+<body>
+  <p id="message">正在查找存档页面…</p>
+  <script>
+    (() => {
+      const path = location.pathname.replace(/\\/g, '/');
+      const match = path.match(/^(.*?)(?:\/(?:wiki|forecast|number-of-motion|postal-terminal|localized)(?:\/|$))/i);
+      const prefix = match ? match[1] : path.replace(/\/[^/]*$/, '');
+      const routes = [
+        [/\/(?:wiki)\/v([1-3])\/(?:index|404)\.html$/i, 'archive/wiki/v$1/index.html'],
+        [/\/(?:forecast)\/v([1-2])\/(?:index|404)\.html$/i, 'archive/forecast/v$1/index.html'],
+        [/\/(?:localized)\/forecast-v([1-2])\/index\.html$/i, 'resources/localized/forecast-v$1/index.html'],
+        [/\/(?:number-of-motion)\/files\/(last-local-record|local-copy)\.html$/i, 'archive/number-of-motion/files/$1.html'],
+        [/\/(?:postal-terminal)\/v([1-5])\/(?:index|404)\.html$/i, 'archive/postal-terminal/v$1/index.html'],
+        [/\/(?:postal-terminal)\/(?:index|404)\.html$/i, 'archive/postal-terminal/v1/index.html']
+      ];
+      for (const [pattern, target] of routes) {
+        if (!pattern.test(path)) continue;
+        const resolved = target.replace(/\$([0-9]+)/g, (_, n) => path.match(pattern)[Number(n)]);
+        const base = prefix ? `${prefix}/` : '/';
+        location.replace(`${base}viewer.html?path=${encodeURIComponent(resolved)}`);
+        return;
+      }
+      const base = prefix ? `${prefix}/` : './';
+      location.replace(`${base}index.html`);
+    })();
+  </script>
+</body>
+</html>

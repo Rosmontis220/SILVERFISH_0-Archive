@@ -1,0 +1,13 @@
+# Preserve archived text files byte-for-byte across Git checkouts.
+archive/** -text
+resources/localized/** -text
+*.bin binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.mp3 binary
+*.m4a binary
+*.webp binary
+*.woff2 binary
+*.jar binary
+*.zip binary

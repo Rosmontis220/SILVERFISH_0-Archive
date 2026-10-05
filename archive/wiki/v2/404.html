@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SILVERFISH_0 的个人调查草稿。内容未经归档系统认可。">
+  <title>雾后札记</title>
+  <script>
+    if (location.protocol === "file:" && /\/site\/index\.html$/.test(location.pathname)) {
+      location.replace("../docs/index.html");
+    }
+  </script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#article">跳到正文</a>
+  <header class="topbar">
+    <button id="nav-toggle" class="nav-toggle" type="button" aria-label="打开目录" aria-expanded="false">目录</button>
+    <button id="home-link" class="brand" type="button">雾后札记</button>
+    <label class="search-wrap">
+      <span class="sr-only">搜索调查本</span>
+      <input id="search" type="search" placeholder="搜索人名、样本或我的判断" autocomplete="off">
+    </label>
+  </header>
+  <div class="layout">
+    <aside id="sidebar" class="sidebar" aria-label="调查本目录">
+      <nav id="navigation"></nav>
+    </aside>
+    <main id="article" class="article" tabindex="-1" aria-live="polite"></main>
+    <aside id="toc" class="toc" aria-label="本页目录"></aside>
+  </div>
+  <script src="content.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

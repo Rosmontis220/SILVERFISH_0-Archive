@@ -1,0 +1,14 @@
+{
+  "library": "SILVERFISH_0 interface sound library",
+  "source": {
+    "activeLibrary": "legacy/",
+    "note": "The homepage and console use the five historical local UI files imported in commit 3340f70944dd1a15ae4382e3a0531044e98ff72d. The PCS site was checked separately, but its current sound set is not used here."
+  },
+  "sounds": {
+    "click": "legacy/common_click.52e9d4.mp3",
+    "menu": "legacy/menu_click.d51e70.mp3",
+    "slide": "legacy/arrow_click.a72c10.mp3",
+    "enter": "legacy/home_enter.6aefd5.mp3",
+    "close": "legacy/close_click.fe1dc4.mp3"
+  }
+}

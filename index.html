@@ -4,25 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="SILVERFISH_0 完整存档：调查维基 v1-v3、大黄昏预测两版、失联后发布的本地连续性探针，以及随档文件的下载入口。">
-  <link rel="icon" type="image/jpeg" href="avatar_silverfish.jpg">
-  <link rel="preload" href="fonts/novecento-wide-bold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/bender.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/source-han-sans-cn-medium.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/source-han-serif-cn-heavy.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" type="image/jpeg" href="resources/images/avatar_silverfish.jpg">
+  <link rel="preload" href="resources/fonts/novecento-wide-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="resources/fonts/bender.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="resources/fonts/source-han-sans-cn-medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="resources/fonts/source-han-serif-cn-heavy.woff2" as="font" type="font/woff2" crossorigin>
   <title>SILVERFISH_0 // Archive</title>
-  <script>
-    (function () {
-      var stored = null;
-      try { stored = localStorage.getItem('theme'); } catch (e) { /* storage unavailable */ }
-      var theme = stored || 'dark'; // 默认暗色
-      if (theme === 'light') document.documentElement.classList.add('light');
-      else if (theme === 'crimson') document.documentElement.classList.add('crimson');
-    })();
-  </script>
+  <script src="resources/scripts/theme-init.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* 字体四份，全部是子集化 woff2（见 fonts/ 与 README）：
+    /* 字体四份，全部是子集化 woff2（见 resources/fonts/ 与 README）：
        Novecento Wide 拉丁展示（明日方舟主拉丁字体）
        Bender 编号与计数小字（明日方舟基建字体）
        思源黑体 CN Medium 中文正文（真 500）
@@ -31,7 +23,7 @@
        否则浏览器会算法加粗，得到假粗。 */
     @font-face {
       font-family: 'Novecento Wide';
-      src: url('fonts/novecento-wide-bold.woff2') format('woff2');
+      src: url('resources/fonts/novecento-wide-bold.woff2') format('woff2');
       font-weight: 700;
       font-style: normal;
       font-display: swap;
@@ -39,7 +31,7 @@
 
     @font-face {
       font-family: 'Bender';
-      src: url('fonts/bender.woff2') format('woff2');
+      src: url('resources/fonts/bender.woff2') format('woff2');
       font-weight: 400;
       font-style: normal;
       font-display: swap;
@@ -47,7 +39,7 @@
 
     @font-face {
       font-family: 'Source Han Sans CN';
-      src: url('fonts/source-han-sans-cn-medium.woff2') format('woff2');
+      src: url('resources/fonts/source-han-sans-cn-medium.woff2') format('woff2');
       font-weight: 500;
       font-style: normal;
       font-display: swap;
@@ -55,7 +47,7 @@
 
     @font-face {
       font-family: 'Source Han Serif CN';
-      src: url('fonts/source-han-serif-cn-heavy.woff2') format('woff2');
+      src: url('resources/fonts/source-han-serif-cn-heavy.woff2') format('woff2');
       font-weight: 900;
       font-style: normal;
       font-display: swap;
@@ -126,7 +118,7 @@
       pointer-events: none;
       background:
         linear-gradient(rgba(5, 0, 0, 0.58), rgba(5, 0, 0, 0.72)),
-        url("crimson-background.webp") center / cover no-repeat;
+        url("resources/images/crimson-background.webp") center / cover no-repeat;
       opacity: 0;
       transition: opacity 0.6s ease;
     }
@@ -1782,119 +1774,14 @@
 
 <nav class="ak-spine" id="ak-spine" aria-label="模块位置指示"></nav>
 
-<script>
-  
-  (function () {
-    var el = document.getElementById('ak-hud-clock');
-    if (!el) return;
-    function pad(n) { return String(n).padStart(2, '0'); }
-    function tick() {
-      var d = new Date();
-      el.textContent =
-        d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) +
-        '  ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
-    }
-    tick();
-    setInterval(tick, 1000);
-  })();
-</script>
+<script src="resources/scripts/hero-clock.js"></script>
 
-<script>
-  
-  (function () {
-    function init() {
-      const page = document.getElementById('page');
-      if (!page) return;
-      const mods = Array.from(page.querySelectorAll(':scope > .module'));
-      const spine = document.getElementById('ak-spine');
-
-      
-      mods.forEach(function (m, i) {
-        var n = i.toString().padStart(2, '0');
-        m.setAttribute('data-ak-idx', n);
-      });
-
-      
-      if (!spine) return;
-      var dots = [];
-      mods.forEach(function (m, i) {
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'ak-spine-dot';
-        var label = m.getAttribute('aria-label') || ('模块 ' + (i + 1));
-        btn.setAttribute('aria-label', label);
-        btn.setAttribute('title', label);
-        btn.addEventListener('click', function () {
-          
-          var mobileQ = window.matchMedia('(max-width: 860px)');
-          if (mobileQ.matches) {
-            var pt = parseInt(getComputedStyle(page).paddingTop, 10) || 64;
-            var top = m.getBoundingClientRect().top + page.scrollTop - page.getBoundingClientRect().top - pt;
-            page.scrollTo({ top: top, behavior: 'smooth' });
-          } else {
-            page.scrollTo({ top: i * page.clientHeight, behavior: 'smooth' });
-          }
-          if (window.__archiveSfx) window.__archiveSfx.slide();
-        });
-        spine.appendChild(btn);
-        dots.push(btn);
-      });
-
-      
-      function updateDots() {
-        var mobileQ = window.matchMedia('(max-width: 860px)');
-        var idx;
-        if (mobileQ.matches) {
-          var pageTop = page.getBoundingClientRect().top;
-          idx = 0;
-          mods.forEach(function (m, i) {
-            if (m.getBoundingClientRect().top - pageTop <= 80) idx = i;
-          });
-        } else {
-          idx = Math.round(page.scrollTop / page.clientHeight);
-          idx = Math.max(0, Math.min(mods.length - 1, idx));
-        }
-        dots.forEach(function (d, i) {
-          d.classList.toggle('is-current', i === idx);
-        });
-      }
-
-      page.addEventListener('scroll', updateDots, { passive: true });
-      updateDots();
-
-      
-      var hero = document.querySelector('.hero');
-      if (hero) {
-        var now = new Date();
-        var dateStr = now.getFullYear() + '-'
-          + String(now.getMonth() + 1).padStart(2, '0') + '-'
-          + String(now.getDate()).padStart(2, '0');
-        var col = document.createElement('div');
-        col.className = 'hero-tech-col';
-        col.setAttribute('aria-hidden', 'true');
-        col.innerHTML =
-          '<div class="htc-bar"></div>' +
-          '<div class="htc-row"><span class="htc-key">REF</span><span class="htc-val">SF-0-ARC</span></div>' +
-          '<div class="htc-row"><span class="htc-key">DATE</span><span class="htc-val">' + dateStr + '</span></div>' +
-          '<div class="htc-row"><span class="htc-key">MOD</span><span class="htc-val">08 / 08</span></div>' +
-          '<div class="htc-row"><span class="htc-key">STA</span><span class="htc-val">ACTIVE</span></div>';
-        hero.style.position = 'relative';
-        hero.appendChild(col);
-      }
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
-  })();
-</script>
+<script src="resources/scripts/hero-effects.js"></script>
 
 <div class="boot" id="boot" role="status" aria-label="档案载入中">
   <div class="boot-side">
     <p class="boot-logo"><span class="boot-mark" aria-hidden="true">◈</span>SILVERFISH_0</p>
-    <img class="boot-bgimg" id="boot-bgimg" src="avatar_silverfish.jpg" alt="" aria-hidden="true">
+    <img class="boot-bgimg" id="boot-bgimg" src="resources/images/avatar_silverfish.jpg" alt="" aria-hidden="true">
     <p class="boot-slogan">Complete Archive // 断联前后的完整记录</p>
   </div>
   <div class="boot-track-v" aria-hidden="true"><span id="boot-fill-v"></span></div>
@@ -1906,85 +1793,14 @@
 
 <div class="crimson-fx" aria-hidden="true"></div>
 
-<audio id="archive-music" src="call-of-iberia.mp3" loop preload="auto" style="position: fixed; width: 1px; height: 1px; opacity: 0; pointer-events: none;" aria-hidden="true"></audio>
+<audio id="archive-music" src="resources/music/call-of-iberia.mp3" loop preload="auto" style="position: fixed; width: 1px; height: 1px; opacity: 0; pointer-events: none;" aria-hidden="true"></audio>
 
-<script>
-  /* 点击与翻页音效 */
-  (function () {
-    const SOURCES = {
-      click: 'sfx/common_click.52e9d4.mp3',
-      menu: 'sfx/menu_click.d51e70.mp3',
-      page: 'sfx/arrow_click.a72c10.mp3',
-      enter: 'sfx/home_enter.6aefd5.mp3',
-      close: 'sfx/close_click.fe1dc4.mp3'
-    };
-    const VOLUME = 1;
-    const MUSIC_VOLUME = 1;
-    const MAX_VOICES = 4;
-    const pools = {};
-
-    const allowed = () => window.__archiveSoundAllowed !== false;
-
-    const music = document.getElementById('archive-music');
-    if (music) music.volume = MUSIC_VOLUME;
-
-    const slotFor = (key) => {
-      const src = SOURCES[key];
-      if (!src || typeof window.Audio !== 'function') return null;
-      if (!pools[key]) {
-        const base = new window.Audio(src);
-        base.preload = 'auto';
-        base.volume = VOLUME;
-        pools[key] = { base, voices: [] };
-      }
-      return pools[key];
-    };
-
-    const play = (key) => {
-      if (!allowed()) return;
-      const slot = slotFor(key);
-      if (!slot) return;
-      let voice = slot.voices.find((v) => v.paused || v.ended);
-      if (!voice) {
-        if (slot.voices.length >= MAX_VOICES) {
-          const oldest = slot.voices.shift();
-          try { oldest.pause(); } catch (e) { /* 忽略 */ }
-        }
-        voice = slot.base.cloneNode(true);
-        voice.volume = VOLUME;
-        slot.voices.push(voice);
-      }
-      try { voice.currentTime = 0; } catch (e) { /* 忽略 */ }
-      const attempt = voice.play();
-      if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
-    };
-
-    window.__archiveSfx = {
-      click: () => play('click'),
-      menu: () => play('menu'),
-      slide: () => play('page'),
-      enter: () => play('enter'),
-      close: () => play('close'),
-      preload: () => Object.keys(SOURCES).forEach(slotFor)
-    };
-
-    window.__archiveSfx.preload();
-
-    document.addEventListener('click', (event) => {
-      const target = event.target;
-      if (!target || !target.closest) return;
-      if (target.closest('#sound-toggle')) return;
-      if (target.closest('#module-up, #module-down')) return;
-      if (target.closest('.nav-toc-item')) { play('menu'); return; }
-      if (target.closest('a, button, .entry-card')) play('click');
-    }, true);
-  })();
-</script>
+<script src="resources/scripts/sfx-home.js"></script>
 
 <nav class="nav-system" aria-label="站点导航">
   <div class="nav-left">
     <span class="nav-logo" title="SILVERFISH_0">
-      <img src="avatar_silverfish.jpg" alt="SILVERFISH_0">
+      <img src="resources/images/avatar_silverfish.jpg" alt="SILVERFISH_0">
     </span>
     <span class="nav-wordmark">SILVERFISH_0 ARCHIVE</span>
   </div>
@@ -2021,7 +1837,7 @@
 
   <div class="nav-panel" id="nav-panel">
     <div class="nav-panel-head">
-      <span class="nav-panel-logo" aria-hidden="true"><img src="avatar_silverfish.jpg" alt=""></span>
+      <span class="nav-panel-logo" aria-hidden="true"><img src="resources/images/avatar_silverfish.jpg" alt=""></span>
       <span class="nav-wordmark">SILVERFISH_0 ARCHIVE</span>
     </div>
     <div class="nav-panel-slot" id="nav-panel-slot"></div>
@@ -2054,7 +1870,7 @@
       <span class="series-count">3 RECORDS</span>
     </div>
     <div class="card-grid">
-      <a href="wiki/v1/index.html" class="entry-card">
+      <a href="viewer.html?path=archive%2Fwiki%2Fv1%2Findex.html" class="entry-card">
         <div class="card-kicker">WIKI // V1</div>
         <h3 class="card-title">调查维基 v1</h3>
         <p class="card-desc">
@@ -2064,7 +1880,7 @@
         <div class="card-enter">Open Record <span>→</span></div>
       </a>
 
-      <a href="wiki/v2/index.html" class="entry-card">
+      <a href="viewer.html?path=archive%2Fwiki%2Fv2%2Findex.html" class="entry-card">
         <div class="card-kicker">WIKI // V2</div>
         <h3 class="card-title">调查维基 v2</h3>
         <p class="card-desc">
@@ -2074,7 +1890,7 @@
         <div class="card-enter">Open Record <span>→</span></div>
       </a>
 
-      <a href="wiki/v3/index.html" class="entry-card">
+      <a href="viewer.html?path=archive%2Fwiki%2Fv3%2Findex.html" class="entry-card">
         <div class="card-kicker">WIKI // V3</div>
         <h3 class="card-title">调查维基 v3</h3>
         <p class="card-desc">
@@ -2094,7 +1910,7 @@
       <span class="series-count">2 RECORDS</span>
     </div>
     <div class="card-grid">
-      <a href="forecast/v1/index.html" class="entry-card">
+      <a href="viewer.html?path=archive%2Fforecast%2Fv1%2Findex.html" class="entry-card">
         <div class="card-kicker">FORECAST // V1</div>
         <h3 class="card-title">大黄昏预测 v1</h3>
         <p class="card-desc">
@@ -2105,7 +1921,7 @@
         <div class="card-enter">Open Record <span>→</span></div>
       </a>
 
-      <a href="forecast/v2/index.html" class="entry-card">
+      <a href="viewer.html?path=archive%2Fforecast%2Fv2%2Findex.html" class="entry-card">
         <div class="card-kicker">FORECAST // V2</div>
         <h3 class="card-title">大黄昏预测 v2</h3>
         <p class="card-desc">
@@ -2126,7 +1942,7 @@
         <span class="series-count">2 RECORDS</span>
       </div>
       <div class="card-grid">
-        <a href="number-of-motion/files/last-local-record.html" class="entry-card">
+        <a href="archive/number-of-motion/files/last-local-record.html" class="entry-card">
           <div class="card-kicker">NOM // RECORD</div>
           <h3 class="card-title">本地记录</h3>
           <p class="card-desc">
@@ -2138,7 +1954,7 @@
           <div class="card-enter">Open Record <span>→</span></div>
         </a>
 
-        <a href="number-of-motion/files/local-copy.html" class="entry-card">
+        <a href="archive/number-of-motion/files/local-copy.html" class="entry-card">
           <div class="card-kicker">NOM // COPY</div>
           <h3 class="card-title">本地副本</h3>
           <p class="card-desc">
@@ -2156,12 +1972,12 @@
     <div class="module-main">
       <div class="series-head">
         <h2 class="series-name"><span class="no">04</span>邮路终端 / POSTAL ROUTE TERMINAL</h2>
-        <span class="series-count">4 RECORDS</span>
+        <span class="series-count">5 RECORDS</span>
       </div>
       <div class="card-grid">
         <div class="entry-card postal-card" id="postal-card" data-state="empty" role="link" tabindex="0" aria-label="进入邮路终端">
           <div class="card-kicker" id="postal-kicker">POSTAL // TERMINAL</div>
-          <h3 class="card-title" id="postal-title">邮路终端 v<input class="postal-version" id="postal-version" type="text" inputmode="numeric" maxlength="2" value="" placeholder="1-4" autocomplete="off" spellcheck="false" aria-label="输入邮路终端版本，可填 1 至 4" title="可填 1 至 4"></h3>
+          <h3 class="card-title" id="postal-title">邮路终端 v<input class="postal-version" id="postal-version" type="text" inputmode="numeric" maxlength="2" value="" placeholder="1-5" autocomplete="off" spellcheck="false" aria-label="输入邮路终端版本，可填 1 至 5" title="可填 1 至 5"></h3>
           <p class="card-desc" id="postal-desc">POSTAL ROUTE TERMINAL<br>本地邮票收集界面<br>请在上方输入版本</p>
           <div class="postal-card-actions">
             <div class="card-enter">Open Record <span>→</span></div>
@@ -2182,7 +1998,7 @@
         <span class="series-count">2 RECORDS</span>
       </div>
       <div class="card-grid">
-        <a href="localized/forecast-v1/index.html" class="entry-card">
+        <a href="viewer.html?path=resources%2Flocalized%2Fforecast-v1%2Findex.html" class="entry-card">
           <div class="card-kicker">LOCALIZED // V1</div>
           <h3 class="card-title">大黄昏预测 v1 · 汉化</h3>
           <p class="card-desc">
@@ -2192,7 +2008,7 @@
           <div class="card-enter">Open Record <span>→</span></div>
         </a>
 
-        <a href="localized/forecast-v2/index.html" class="entry-card">
+        <a href="viewer.html?path=resources%2Flocalized%2Fforecast-v2%2Findex.html" class="entry-card">
           <div class="card-kicker">LOCALIZED // V2</div>
           <h3 class="card-title">大黄昏预测 v2 · 汉化</h3>
           <p class="card-desc">
@@ -2218,6 +2034,7 @@
           <button class="download-filter" type="button" data-download-filter="audio" aria-pressed="false">音频</button>
           <button class="download-filter" type="button" data-download-filter="image" aria-pressed="false">图像</button>
           <button class="download-filter" type="button" data-download-filter="archive" aria-pressed="false">压缩包</button>
+          <button class="download-filter" type="button" data-download-filter="binary" aria-pressed="false">其他</button>
         </div>
         <label class="download-search-wrap">
           <svg class="download-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
@@ -2226,7 +2043,7 @@
           </svg>
           <input class="download-search" id="download-search" type="search" aria-label="搜索下载文件" placeholder="搜索文件名、格式或说明" autocomplete="off" spellcheck="false">
         </label>
-        <span class="download-result-count" id="download-result-count" aria-live="polite">显示 15 / 15 个文件</span>
+        <span class="download-result-count" id="download-result-count" aria-live="polite">显示 21 / 21 个文件</span>
       </div>
       <div class="download-pager" aria-label="文件分页">
         <button class="download-page-button" id="download-prev" type="button" aria-label="上一页">←</button>
@@ -2234,7 +2051,7 @@
         <button class="download-page-button" id="download-next" type="button" aria-label="下一页">→</button>
       </div>
       <div class="card-grid card-grid--clamp2" id="download-grid">
-        <a href="wiki/v1/密码.txt" class="entry-card download-card" data-download-type="text" data-download-search="密码.txt txt 纯文本 解密密码 维基 v1 v2" download>
+        <a href="archive/wiki/v1/密码.txt" class="entry-card download-card" data-download-type="text" data-download-search="密码.txt txt 纯文本 解密密码 维基 v1 v2" download>
           <div class="card-kicker">FILE // PASSCODE</div>
           <h3 class="card-title">密码.txt</h3>
           <p class="card-desc">
@@ -2245,7 +2062,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="wiki/v1/readme.zip" class="entry-card download-card" data-download-type="archive" data-download-search="readme.zip zip 压缩包 原始加密文件 v1 v2" download>
+        <a href="archive/wiki/v1/readme.zip" class="entry-card download-card" data-download-type="archive" data-download-search="readme.zip zip 压缩包 原始加密文件 v1 v2" download>
           <div class="card-kicker">FILE // README</div>
           <h3 class="card-title">readme.zip</h3>
           <p class="card-desc">
@@ -2256,7 +2073,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="number-of-motion/files/local-continuity-probe-0.1.0.jar" class="entry-card download-card" data-download-type="archive" data-download-search="local-continuity-probe-0.1.0.jar jar 压缩包 本地连续性探针 MC 1.20.1" download>
+        <a href="archive/number-of-motion/files/local-continuity-probe-0.1.0.jar" class="entry-card download-card" data-download-type="archive" data-download-search="local-continuity-probe-0.1.0.jar jar 压缩包 本地连续性探针 MC 1.20.1" download>
           <div class="card-kicker">FILE // PROBE</div>
           <h3 class="card-title">local-continuity-probe-0.1.0.jar</h3>
           <p class="card-desc">
@@ -2267,7 +2084,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="number-of-motion/files/CHECKSUMS.txt" class="entry-card download-card" data-download-type="text" data-download-search="CHECKSUMS.txt txt 纯文本 SHA-256 探针 须知" download>
+        <a href="archive/number-of-motion/files/CHECKSUMS.txt" class="entry-card download-card" data-download-type="text" data-download-search="CHECKSUMS.txt txt 纯文本 SHA-256 探针 须知" download>
           <div class="card-kicker">FILE // CHECKSUMS</div>
           <h3 class="card-title">CHECKSUMS.txt</h3>
           <p class="card-desc">
@@ -2278,7 +2095,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="number-of-motion/files/LOCAL_COPY.txt" class="entry-card download-card" data-download-type="text" data-download-search="LOCAL_COPY.txt txt 纯文本 运动之数 本地副本 锚 改口 local-copy.html 内嵌 zip 解出 4.6 KB" download>
+        <a href="archive/number-of-motion/files/LOCAL_COPY.txt" class="entry-card download-card" data-download-type="text" data-download-search="LOCAL_COPY.txt txt 纯文本 运动之数 本地副本 锚 改口 local-copy.html 内嵌 zip 解出 4.6 KB" download>
           <div class="card-kicker">FILE // LOCAL COPY</div>
           <h3 class="card-title">LOCAL_COPY.txt</h3>
           <p class="card-desc">
@@ -2289,7 +2106,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="number-of-motion/README.md" class="entry-card download-card" data-download-type="text" data-download-search="README.md md markdown 纯文本 运动之数 发布方 说明 NOM" download>
+        <a href="archive/number-of-motion/README.md" class="entry-card download-card" data-download-type="text" data-download-search="README.md md markdown 纯文本 运动之数 发布方 说明 NOM" download>
           <div class="card-kicker">FILE // NOM README</div>
           <h3 class="card-title">README.md</h3>
           <p class="card-desc">
@@ -2300,7 +2117,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="wiki/v3/god.m4a" class="entry-card download-card" data-download-type="audio" data-download-search="god.m4a m4a 音频 Somniomancer 调查维基 v3 GOD SAYS" download>
+        <a href="archive/wiki/v3/god.m4a" class="entry-card download-card" data-download-type="audio" data-download-search="god.m4a m4a 音频 Somniomancer 调查维基 v3 GOD SAYS" download>
           <div class="card-kicker">AUDIO // SOMNIOMANCER</div>
           <h3 class="card-title">god.m4a</h3>
           <p class="card-desc">
@@ -2311,7 +2128,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="wiki/v3/background.png" class="entry-card download-card" data-download-type="image" data-download-search="background.png png 图像 调查维基 v3 GOD SAYS 背景图" download>
+        <a href="archive/wiki/v3/background.png" class="entry-card download-card" data-download-type="image" data-download-search="background.png png 图像 调查维基 v3 GOD SAYS 背景图" download>
           <div class="card-kicker">IMAGE // GOD SAYS BG</div>
           <h3 class="card-title">background.png</h3>
           <p class="card-desc">
@@ -2322,7 +2139,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="forecast/v2/GDF-ALERT-LEVEL-III.mp3" class="entry-card download-card" data-download-type="audio" data-download-search="GDF-ALERT-LEVEL-III.mp3 mp3 音频 脑叶公司 三级警报 大黄昏预测 v2" download>
+        <a href="archive/forecast/v2/GDF-ALERT-LEVEL-III.mp3" class="entry-card download-card" data-download-type="audio" data-download-search="GDF-ALERT-LEVEL-III.mp3 mp3 音频 脑叶公司 三级警报 大黄昏预测 v2" download>
           <div class="card-kicker">AUDIO // LEVEL III</div>
           <h3 class="card-title">GDF-ALERT-LEVEL-III.mp3</h3>
           <p class="card-desc">
@@ -2333,7 +2150,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v1/first-stamp.png" class="entry-card download-card" data-download-type="image" data-download-search="first-stamp.png png 图像 雨前首封 邮路终端 首枚邮票" download>
+        <a href="archive/postal-terminal/v1/first-stamp.png" class="entry-card download-card" data-download-type="image" data-download-search="first-stamp.png png 图像 雨前首封 邮路终端 首枚邮票" download>
           <div class="card-kicker">IMAGE // FIRST STAMP</div>
           <h3 class="card-title">first-stamp.png</h3>
           <p class="card-desc">
@@ -2344,7 +2161,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v1/life-flow.mp3" class="entry-card download-card" data-download-type="audio" data-download-search="life-flow.mp3 mp3 音频 邮路终端 背景音乐" download>
+        <a href="archive/postal-terminal/v1/life-flow.mp3" class="entry-card download-card" data-download-type="audio" data-download-search="life-flow.mp3 mp3 音频 邮路终端 背景音乐" download>
           <div class="card-kicker">AUDIO // LIFE FLOW</div>
           <h3 class="card-title">life-flow.mp3</h3>
           <p class="card-desc">
@@ -2355,7 +2172,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v2/starrev-stamp.png" class="entry-card download-card" data-download-type="image" data-download-search="starrev-stamp.png png 图像 星幻 StarRev 邮路终端 v2 第二枚邮票" download>
+        <a href="resources/images/postal-terminal/starrev-stamp.png" class="entry-card download-card" data-download-type="image" data-download-search="starrev-stamp.png png 图像 星幻 StarRev 邮路终端 v2 第二枚邮票" download>
           <div class="card-kicker">IMAGE // SECOND STAMP</div>
           <h3 class="card-title">starrev-stamp.png</h3>
           <p class="card-desc">
@@ -2366,7 +2183,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v2/night-route-signal.m4a" class="entry-card download-card" data-download-type="audio" data-download-search="night-route-signal.m4a m4a 音频 夜航邮路信号 ID 模式" download>
+        <a href="resources/music/postal-terminal/night-route-signal.m4a" class="entry-card download-card" data-download-type="audio" data-download-search="night-route-signal.m4a m4a 音频 夜航邮路信号 ID 模式" download>
           <div class="card-kicker">AUDIO // NIGHT ROUTE</div>
           <h3 class="card-title">night-route-signal.m4a</h3>
           <p class="card-desc">
@@ -2377,7 +2194,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v2/return-portrait.jpg" class="entry-card download-card" data-download-type="image" data-download-search="return-portrait.jpg jpg jpeg 图像 返程头像 ID 模式" download>
+        <a href="resources/images/postal-terminal/return-portrait.jpg" class="entry-card download-card" data-download-type="image" data-download-search="return-portrait.jpg jpg jpeg 图像 返程头像 ID 模式" download>
           <div class="card-kicker">IMAGE // RETURN PORTRAIT</div>
           <h3 class="card-title">return-portrait.jpg</h3>
           <p class="card-desc">
@@ -2388,7 +2205,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v3/unposted-gate.png" class="entry-card download-card" data-download-type="image" data-download-search="unposted-gate.png png 图像 未寄之门 THE UNPOSTED GATE 邮路终端 v3 第三枚邮票" download>
+        <a href="resources/images/postal-terminal/unposted-gate.png" class="entry-card download-card" data-download-type="image" data-download-search="unposted-gate.png png 图像 未寄之门 THE UNPOSTED GATE 邮路终端 v3 第三枚邮票" download>
           <div class="card-kicker">IMAGE // THIRD STAMP</div>
           <h3 class="card-title">unposted-gate.png</h3>
           <p class="card-desc">
@@ -2399,7 +2216,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v3/route-echo-cinder.m4a" class="entry-card download-card" data-download-type="audio" data-download-search="route-echo-cinder.m4a m4a 音频 常驻信号 CONFRONT 邮路终端 v3" download>
+        <a href="resources/music/postal-terminal/route-echo-cinder.m4a" class="entry-card download-card" data-download-type="audio" data-download-search="route-echo-cinder.m4a m4a 音频 常驻信号 CONFRONT 邮路终端 v3" download>
           <div class="card-kicker">AUDIO // CONFRONT</div>
           <h3 class="card-title">route-echo-cinder.m4a</h3>
           <p class="card-desc">
@@ -2410,7 +2227,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v3/route-echo-lotus.m4a" class="entry-card download-card" data-download-type="audio" data-download-search="route-echo-lotus.m4a m4a 音频 常驻信号 Iron Lotus 邮路终端 v3" download>
+        <a href="resources/music/postal-terminal/route-echo-lotus.m4a" class="entry-card download-card" data-download-type="audio" data-download-search="route-echo-lotus.m4a m4a 音频 常驻信号 Iron Lotus 邮路终端 v3" download>
           <div class="card-kicker">AUDIO // IRON LOTUS</div>
           <h3 class="card-title">route-echo-lotus.m4a</h3>
           <p class="card-desc">
@@ -2421,7 +2238,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v3/courier-record.jpg" class="entry-card download-card" data-download-type="image" data-download-search="courier-record.jpg jpg jpeg 图像 邮递员头像 Silverfish_0 邮路终端 v3" download>
+        <a href="resources/images/postal-terminal/courier-record.jpg" class="entry-card download-card" data-download-type="image" data-download-search="courier-record.jpg jpg jpeg 图像 邮递员头像 Silverfish_0 邮路终端 v3" download>
           <div class="card-kicker">IMAGE // COURIER</div>
           <h3 class="card-title">courier-record.jpg</h3>
           <p class="card-desc">
@@ -2432,7 +2249,7 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="postal-terminal/v4/unattributed-attachment.png" class="entry-card download-card" data-download-type="image" data-download-search="unattributed-attachment.png png 图像 未署名附件 THE UNATTRIBUTED ATTACHMENT 邮路终端 v4 第四枚邮票" download>
+        <a href="resources/images/postal-terminal/unattributed-attachment.png" class="entry-card download-card" data-download-type="image" data-download-search="unattributed-attachment.png png 图像 未署名附件 THE UNATTRIBUTED ATTACHMENT 邮路终端 v4 第四枚邮票" download>
           <div class="card-kicker">IMAGE // FOURTH STAMP</div>
           <h3 class="card-title">unattributed-attachment.png</h3>
           <p class="card-desc">
@@ -2443,9 +2260,20 @@
           <div class="card-enter">Download <span>↓</span></div>
         </a>
 
-        <a href="avatar_silverfish.jpg" class="entry-card download-card" data-download-type="image" data-download-search="avatar_silverfish.jpg jpg jpeg 图像 头像 站点图标 logo SILVERFISH_0" download>
+        <a href="archive/postal-terminal/v5/joint-disposition.bin" class="entry-card download-card" data-download-type="binary" data-download-search="joint-disposition.bin bin 文件 联合处置决议 首席代理代表 邮路终端 v5 第五枚邮票" download>
+          <div class="card-kicker">BINARY // JOINT DISPOSITION</div>
+          <h3 class="card-title">joint-disposition.bin</h3>
+          <p class="card-desc">
+            2.0 MB · bin · 联合处置决议<br>
+            <span class="card-source">归属：邮路终端 v5</span><br>
+            邮路终端 v5 第五枚邮票的原始加密材料
+          </p>
+          <div class="card-enter">Download <span>↓</span></div>
+        </a>
+
+        <a href="resources/images/avatar_silverfish.jpg" class="entry-card download-card" data-download-type="image" data-download-search="resources/images/avatar_silverfish.jpg jpg jpeg 图像 头像 站点图标 logo SILVERFISH_0" download>
           <div class="card-kicker">IMAGE // AVATAR</div>
-          <h3 class="card-title">avatar_silverfish.jpg</h3>
+          <h3 class="card-title">resources/images/avatar_silverfish.jpg</h3>
           <p class="card-desc">
             9.3 KB · jpg<br>
             <span class="card-source">归属：档案首页</span><br>
@@ -2583,771 +2411,14 @@
   <button id="module-down" type="button" aria-label="下一个模块">↓</button>
 </div>
 
-<script>
-  (function () {
-    const boot = document.getElementById('boot');
-    const fill = document.getElementById('boot-fill');
-    const fillV = document.getElementById('boot-fill-v');
-    const pctEl = document.getElementById('boot-pct');
-    const stateEl = document.getElementById('boot-state');
-    const bgimg = document.getElementById('boot-bgimg');
-    const curtain = document.getElementById('curtain');
-    if (!boot || !fill || !fillV || !pctEl || !stateEl || !bgimg || !curtain) return;
-    let entered = false;
-    let fromHistory = false;
-    let returning = false;
-    try { entered = sessionStorage.getItem('sf-entry') === '1'; } catch (e) { /* storage unavailable */ }
-    try {
-      returning = sessionStorage.getItem('sf-return') === '1';
-      if (returning) sessionStorage.removeItem('sf-return');
-    } catch (e) { /* storage unavailable */ }
-    try {
-      const nav = performance.getEntriesByType && performance.getEntriesByType('navigation');
-      fromHistory = !!(nav && nav.length && nav[0].type === 'back_forward');
-    } catch (e) { /* navigation timing unavailable */ }
-    if (entered && (fromHistory || returning)) {
-      boot.remove();
-      document.documentElement.classList.add('auto-unlock');
-      window.dispatchEvent(new Event('archive:ready'));
-      return;
-    }
+<script src="resources/scripts/boot.js"></script>
 
-    /* 收场只留这一个出口：摘遮罩、摘幕布、发 archive:ready。
-       进度是靠 rAF 推进的，而浏览器在后台标签页、被完全遮挡的窗口等情况下会不给帧，
-       那样百分比会永远停在 99% 以下，遮罩连同「进入档案库」按钮一起盖住——
-       整页就再也点不动了。所以到点无条件撤掉，不等动画。
-       正常路径最慢是「预载兜底 9 秒 + 收场 1.7 秒」，12 秒不会误伤。
-       这里刻意不发 auto-unlock：那是「本次会话已进入过」的自动解锁旁路，
-       而兜底只是把遮罩撤掉，页面仍应停在入口，等用户自己点「进入档案库」。 */
-    let done = false;
-    const teardown = () => {
-      if (done) return;
-      done = true;
-      if (boot.parentNode) boot.remove();
-      if (curtain.parentNode) curtain.remove();
-      window.dispatchEvent(new Event('archive:ready'));
-    };
-    window.setTimeout(teardown, 12000);
-    const PRELOAD_FILES = [
-      'fonts/novecento-wide-bold.woff2', 'fonts/bender.woff2',
-      'fonts/source-han-sans-cn-medium.woff2', 'fonts/source-han-serif-cn-heavy.woff2',
-      'crimson-background.webp',
-      'wiki/v1/index.html', 'wiki/v1/style.css', 'wiki/v1/app.js', 'wiki/v1/content.js',
-      'wiki/v2/index.html', 'wiki/v2/style.css', 'wiki/v2/app.js', 'wiki/v2/content.js',
-      'wiki/v3/index.html', 'wiki/v3/style.css', 'wiki/v3/app.js',
-      'wiki/v3/background.png', 'wiki/v3/god.m4a',
-      'forecast/v1/index.html',
-      'forecast/v2/index.html', 'forecast/v2/GDF-ALERT-LEVEL-III.mp3',
-      'number-of-motion/files/last-local-record.html',
-      'number-of-motion/files/local-copy.html',
-      'localized/forecast-v1/index.html', 'localized/forecast-v2/index.html',
-      'postal-terminal/v1/index.html', 'postal-terminal/v2/index.html',
-      'postal-terminal/v3/index.html', 'postal-terminal/v4/index.html'
-    ];
-    const totalFiles = PRELOAD_FILES.length;
-    let doneFiles = 0;
-    let allDone = false;
-    PRELOAD_FILES.forEach((url) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
-      xhr.responseType = 'blob';
-      xhr.onloadend = () => { doneFiles += 1; };
-      xhr.onerror = () => { doneFiles += 1; };
-      xhr.send();
-    });
-    const finishPreload = () => { allDone = true; };
-    const waitFiles = window.setInterval(() => {
-      if (doneFiles >= totalFiles) {
-        window.clearInterval(waitFiles);
-        finishPreload();
-      }
-    }, 120);
-    window.setTimeout(finishPreload, 9000); // 网络异常时兜底，不让进度条卡死
-
-    const DURATION = 2200;
-    const started = performance.now();
-    const stages = [
-      [30, 'CONNECTING // 连接中'],
-      [65, 'DECRYPTING // 解密中'],
-      [92, 'RECONSTRUCTING // 重组中'],
-      [100, 'ARCHIVE READY // 档案就绪']
-    ];
-    const tick = (now) => {
-      const t = Math.min(1, (now - started) / DURATION);
-      const easedTime = 1 - Math.pow(1 - t, 3);
-      const fileRatio = totalFiles ? doneFiles / totalFiles : 0;
-      let pct = 0;
-      if (allDone && t >= 1) {
-        pct = 100;
-      } else {
-        pct = Math.min(99, Math.round(100 * (0.45 * fileRatio + 0.55 * easedTime)));
-      }
-      const progress = pct / 100;
-      pctEl.textContent = pct + '%';
-      fill.style.width = pct + '%';
-      fillV.style.transform = 'scaleY(' + progress + ')';
-      bgimg.style.filter = 'blur(' + Math.round((1 - progress) * 18) + 'px)';
-      bgimg.style.opacity = (0.55 + progress * 0.3).toFixed(3);
-      const stage = stages.find((s) => pct <= s[0]) || stages[stages.length - 1];
-      stateEl.textContent = stage[1];
-      if (pct < 100) {
-        window.requestAnimationFrame(tick);
-      } else {
-        stateEl.textContent = 'ARCHIVE READY // 档案就绪';
-        window.setTimeout(() => {
-          curtain.classList.add('active');
-          window.setTimeout(() => {
-            boot.remove();
-          }, 620);
-          window.setTimeout(teardown, 1450);
-        }, 260);
-      }
-    };
-    window.requestAnimationFrame(tick);
-  })();
-</script>
-
-<script>
-  (function () {
-    const THEMES = ['dark', 'light', 'crimson'];
-    const NAMES = { dark: '暗色', light: '亮色', crimson: '黑红' };
-    const ICONS = { dark: '🌙', light: '☀️', crimson: '🩸' };
-    const TRACKS = {
-      dark: 'call-of-iberia.mp3',
-      light: 'CONFRONT.mp3',
-      crimson: 'Mayors-the-Yearning-Flotsam.mp3'
-    };
-    const CARD_GOD = {
-      '调查维基 v1': '不需要阅读。',
-      '调查维基 v2': '不需要阅读。',
-      '调查维基 v3': '不需要阅读。',
-      '大黄昏预测 v1': '不需要预报。',
-      '大黄昏预测 v2': '不需要警报。',
-      '本地记录': '不需要打开。',
-      '本地副本': '不需要备份。',
-      '大黄昏预测 v1 · 汉化': '不需要翻译。',
-      '大黄昏预测 v2 · 汉化': '不需要查看。',
-      '密码.txt': '不需要密码。',
-      'readme.zip': '不需要原件。',
-      'local-continuity-probe-0.1.0.jar': '不需要探针。',
-      'CHECKSUMS.txt': '不需要校验。',
-      'LOCAL_COPY.txt': '不需要改口。',
-      'god.m4a': '不需要听。',
-      'GDF-ALERT-LEVEL-III.mp3': '不需要编号。',
-      'B站 · XIKM HLQA ONYIEN': '不需要关注。',
-      '抖音 · VHQ-4K/19': '不需要观看。',
-      'XIKM HLQA ONYIEN 解谜': '不需要解谜。',
-      '邮路终端解谜': '不需要解答。',
-      'B站 · Silverfish_0': '不需要记录。',
-      '迷雾论坛': '不需要讨论。',
-      'QQ 群链接': '不需要加入。',
-      '邮路终端 v1': '不需要投递。',
-      '邮路终端 v2': '不需要重发。',
-      '邮路终端 v3': '不需要开门。',
-      '邮路终端 v4': '不需要归档。',
-      'first-stamp.png': '不需要盖章。',
-      'unattributed-attachment.png': '不需要署名。',
-      'life-flow.mp3': '不需要循环。',
-      'starrev-stamp.png': '不需要点亮。',
-      'night-route-signal.m4a': '不需要收听。',
-      'return-portrait.jpg': '不需要回望。',
-      '0-silverfish': '不需要前往。',
-      'Silverfish-0': '不需要回访。',
-      'Rosmontis220': '不需要收藏。'
-    };
-    const root = document.documentElement;
-    const toggle = document.getElementById('theme-toggle');
-    const icon = document.getElementById('theme-icon');
-    const music = document.getElementById('archive-music');
-    let unlocked = false;
-    try { unlocked = localStorage.getItem('sf-unlocked') === '1'; } catch (e) { /* storage unavailable */ }
-
-    const available = () => (unlocked ? THEMES : THEMES.slice(0, 2));
-    const current = () => THEMES.find((t) => root.classList.contains(t)) || 'dark';
-
-    const applyTrack = (theme) => {
-      const file = TRACKS[theme] || TRACKS.dark;
-      if (!music || (music.getAttribute('src') || '').indexOf(file) !== -1) return;
-      const wasPlaying = !music.paused && !music.muted && window.__archiveSoundAllowed !== false;
-      music.setAttribute('src', file);
-      try { music.load(); } catch (e) { /* load unavailable */ }
-      if (wasPlaying) {
-        const attempt = music.play();
-        if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
-      }
-    };
-
-    const applyCardNotes = (theme) => {
-      const god = theme === 'crimson';
-      document.querySelectorAll('.entry-card').forEach((card) => {
-        const desc = card.querySelector('.card-desc');
-        const title = card.querySelector('.card-title');
-        if (!desc || !title) return;
-        if (!desc.dataset.plain) desc.dataset.plain = desc.innerHTML;
-        /* 邮路终端的标题里嵌着版本下拉，textContent 会把所有选项文字一起拼进来，
-           所以那张卡片自己给出查找用的键（cardKey），其余卡片仍按标题匹配 */
-        const note = CARD_GOD[(card.dataset.cardKey || title.textContent).trim()];
-        desc.innerHTML = god && note ? note : desc.dataset.plain;
-      });
-    };
-
-    /* 邮路终端切换版本后要重算这张卡片的描述，所以把入口暴露出来 */
-    window.__archiveApplyCardNotes = () => applyCardNotes(current());
-
-    const apply = (theme, persist) => {
-      THEMES.forEach((t) => root.classList.toggle(t, t === theme));
-      if (icon) icon.textContent = ICONS[theme] || ICONS.dark;
-      if (toggle) toggle.setAttribute('aria-label', '切换主题（当前：' + (NAMES[theme] || theme) + '）');
-      if (persist) {
-        try { localStorage.setItem('theme', theme); } catch (e) { /* storage unavailable */ }
-      }
-      applyTrack(theme);
-      applyCardNotes(theme);
-    };
-
-    apply(current(), false);
-
-    if (toggle) {
-      let count = 0;
-      toggle.addEventListener('click', () => {
-        count += 1;
-
-        /* 连点五次解锁 */
-        if (count >= 5) {
-          count = 0;
-          unlocked = true;
-          try { localStorage.setItem('sf-unlocked', '1'); } catch (e) { /* storage unavailable */ }
-          apply('crimson', true);
-          return;
-        }
-
-        const list = available();
-        const i = list.indexOf(current());
-        apply(list[(i + 1) % list.length], true);
-      });
-    }
-  })();
-</script>
-<script>
-  (function () {
-    const page = document.getElementById('page');
-    const mods = Array.from(page.querySelectorAll(':scope > .module'));
-    const up = document.getElementById('module-up');
-    const down = document.getElementById('module-down');
-    const countEl = document.getElementById('module-count');
-    const enter = document.getElementById('enter-archive');
-    const hint = document.getElementById('enter-hint');
-    const locked = () => page.classList.contains('locked');
-    const currentIndex = () => {
-      if (isMobile()) {
-        const pageTop = page.getBoundingClientRect().top;
-        let best = 0;
-        mods.forEach((m, idx) => {
-          if (m.getBoundingClientRect().top - pageTop <= 80) best = idx;
-        });
-        return best;
-      }
-      const idx = Math.round(page.scrollTop / page.clientHeight);
-      return Math.max(0, Math.min(mods.length - 1, idx));
-    };
-    let busy = false;
-    let touchY = null;
-    const mobileQuery = window.matchMedia('(max-width: 860px)');
-    const isMobile = () => mobileQuery.matches;
-
-    /* 侧边栏目录 */
-    const nav = document.querySelector('.nav-system');
-    const burger = document.getElementById('nav-burger');
-    const tocList = document.getElementById('nav-toc');
-    const panelSlot = document.getElementById('nav-panel-slot');
-    const navActions = nav ? nav.querySelector('.nav-actions') : null;
-    const soundBtn = document.getElementById('sound-toggle');
-    const themeBtn = document.getElementById('theme-toggle');
-    const repoLink = navActions ? navActions.querySelector('a.nav-action-item') : null;
-    const navModules = document.getElementById('nav-modules');
-    const navCenter = nav ? nav.querySelector('.nav-center') : null;
-    const TOC_ICONS = [
-      '<rect x="5.6" y="5.6" width="12.8" height="12.8" transform="rotate(45 12 12)"/><circle cx="12" cy="12" r="2"/>',
-      '<path d="M7 3.5h6.5L18 8v12.5H7z"/><path d="M13.5 3.5V8H18"/><path d="M9.8 12h5.4M9.8 15.5h5.4"/>',
-      '<path d="M3.5 17.5h17"/><circle cx="12" cy="11" r="4"/><path d="M12 3v2.2M5.6 5.9l1.6 1.6M18.4 5.9l-1.6 1.6"/>',
-      '<circle cx="12" cy="12" r="8"/><path d="M12 4v2.4M12 17.6V20M4 12h2.4M17.6 12H20"/><circle cx="12" cy="12" r="2.4"/>',
-      '<rect x="3.4" y="6.2" width="17.2" height="11.6" rx="1"/><path d="M3.9 6.9 12 12.4l8.1-5.5"/>',
-      '<circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><path d="M12 4c2.6 2.4 2.6 13.6 0 16M12 4c-2.6 2.4-2.6 13.6 0 16"/>',
-      '<path d="M12 3.8v9.4"/><path d="M8.2 9.4l3.8 3.8 3.8-3.8"/><path d="M4.8 19.2h14.4"/>',
-      '<path d="M10.2 13.8a3.6 3.6 0 0 1 0-5.1l2-2a3.6 3.6 0 0 1 5.1 5.1l-.9.9"/><path d="M13.8 10.2a3.6 3.6 0 0 1 0 5.1l-2 2a3.6 3.6 0 0 1-5.1-5.1l.9-.9"/>',
-      '<g transform="scale(1.5)"><path fill="currentColor" stroke="none" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></g>'
-    ];
-    const makeTocIcon = (idx) => {
-      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      svg.setAttribute('class', 'toc-icon');
-      svg.setAttribute('viewBox', '0 0 24 24');
-      svg.setAttribute('fill', 'none');
-      svg.setAttribute('stroke', 'currentColor');
-      svg.setAttribute('stroke-width', '1.6');
-      svg.setAttribute('stroke-linecap', 'round');
-      svg.setAttribute('stroke-linejoin', 'round');
-      svg.setAttribute('aria-hidden', 'true');
-      svg.innerHTML = TOC_ICONS[idx] || '';
-      return svg;
-    };
-    const tocItems = [];
-    if (tocList) {
-      mods.forEach((m, idx) => {
-        const name = m.getAttribute('aria-label') || ('模块 ' + (idx + 1));
-        const li = document.createElement('li');
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'nav-toc-item';
-        btn.title = name;
-        btn.setAttribute('aria-label', name);
-        btn.appendChild(makeTocIcon(idx));
-        const wrap = document.createElement('span');
-        wrap.className = 'toc-label';
-        const no = m.querySelector('.series-name .no');
-        if (no) {
-          const noEl = document.createElement('span');
-          noEl.className = 'toc-no';
-          noEl.textContent = no.textContent.trim();
-          wrap.appendChild(noEl);
-        }
-        const nameEl = document.createElement('span');
-        nameEl.textContent = name;
-        wrap.appendChild(nameEl);
-        btn.appendChild(wrap);
-        btn.addEventListener('click', () => jumpTo(idx));
-        li.appendChild(btn);
-        tocList.appendChild(li);
-        tocItems.push(btn);
-      });
-    }
-    const closeMenu = () => {
-      if (!nav || !nav.classList.contains('menu-open')) return;
-      nav.classList.remove('menu-open');
-      if (burger) burger.setAttribute('aria-expanded', 'false');
-    };
-    const jumpTo = (i) => {
-      if (i < 0 || i >= mods.length) return;
-      if (locked()) unlock(true);
-      go(i, true);
-      closeMenu();
-    };
-    const syncNavLayout = () => {
-      if (!nav || !panelSlot) return;
-      if (isMobile()) {
-        if (navModules) panelSlot.parentNode.insertBefore(navModules, panelSlot);
-        [repoLink, themeBtn].forEach((el) => { if (el) panelSlot.appendChild(el); });
-        if (soundBtn && burger) nav.insertBefore(soundBtn, burger);
-      } else {
-        if (navModules && navCenter) navCenter.appendChild(navModules);
-        if (navActions && soundBtn) navActions.appendChild(soundBtn);
-        if (navActions && repoLink) navActions.insertBefore(repoLink, soundBtn);
-        if (navActions && themeBtn) navActions.appendChild(themeBtn);
-        closeMenu();
-      }
-    };
-    if (burger) {
-      burger.addEventListener('click', () => {
-        const open = nav.classList.toggle('menu-open');
-        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (window.__archiveSfx) (open ? window.__archiveSfx.menu : window.__archiveSfx.close)();
-      });
-    }
-    document.addEventListener('click', (e) => {
-      if (!nav || !nav.classList.contains('menu-open')) return;
-      const t = e.target;
-      if (t && t.closest && t.closest('.nav-system')) return;
-      closeMenu();
-    });
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeMenu();
-    });
-    if (mobileQuery.addEventListener) mobileQuery.addEventListener('change', syncNavLayout);
-    else if (mobileQuery.addListener) mobileQuery.addListener(syncNavLayout);
-    syncNavLayout();
-
-    const setState = () => {
-      const i = currentIndex();
-      tocItems.forEach((el, idx) => el.classList.toggle('is-current', idx === i));
-      if (isMobile()) return;
-      const l = locked();
-      /* 计数与各模块标题里的编号对齐：首屏记 00，内容模块 01–08，总数按内容模块算 */
-      countEl.textContent = String(i).padStart(2, '0') + ' / ' + String(mods.length - 1).padStart(2, '0');
-      up.disabled = l || i === 0;
-      down.disabled = l || i === mods.length - 1;
-      mods.forEach((m, idx) => m.classList.toggle('is-active', idx === i));
-    };
-    const go = (i, silent) => {
-      if (locked()) return;
-      if (isMobile()) {
-        const target = mods[Math.max(0, Math.min(mods.length - 1, i))];
-        if (!silent && window.__archiveSfx) window.__archiveSfx.slide();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        return;
-      }
-      if (busy) return;
-      const target = Math.max(0, Math.min(mods.length - 1, i));
-      if (target === currentIndex()) return;
-      if (!silent && window.__archiveSfx) window.__archiveSfx.slide();
-      busy = true;
-      page.scrollTo({ top: target * page.clientHeight, behavior: 'smooth' });
-      window.setTimeout(() => { busy = false; }, 1050);
-    };
-    const shift = (dir) => go(currentIndex() + dir);
-    const unlock = (showHint = true) => {
-      if (!locked()) return;
-      page.classList.remove('locked');
-      enter.disabled = true;
-      enter.innerHTML = '已进入档案库 <span aria-hidden="true">✓</span>';
-      hint.hidden = !showHint;
-      try { sessionStorage.setItem('sf-entry', '1'); } catch (e) { /* storage unavailable */ }
-      setState();
-    };
-    page.addEventListener('wheel', (e) => {
-      if (e.ctrlKey || isMobile()) return; // 保留浏览器缩放 / 移动端自然滚动
-      e.preventDefault();
-      if (!locked() && !busy) shift(e.deltaY > 0 ? 1 : -1);
-    }, { passive: false });
-    page.addEventListener('touchstart', (e) => {
-      if (isMobile()) return;
-      touchY = e.touches[0].clientY;
-    }, { passive: true });
-    page.addEventListener('touchmove', (e) => {
-      if (!isMobile() && !locked()) e.preventDefault();
-    }, { passive: false });
-    page.addEventListener('touchend', (e) => {
-      if (isMobile()) return;
-      if (locked() || touchY === null) return;
-      const dy = e.changedTouches[0].clientY - touchY;
-      touchY = null;
-      if (Math.abs(dy) > 42) shift(dy < 0 ? 1 : -1);
-    }, { passive: true });
-    up.addEventListener('click', () => shift(-1));
-    down.addEventListener('click', () => shift(1));
-    document.addEventListener('click', (e) => {
-      const card = e.target && e.target.closest ? e.target.closest('.entry-card') : null;
-      if (!card) return;
-      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-      try { sessionStorage.setItem('sf-return', '1'); } catch (err) { /* storage unavailable */ }
-      try { sessionStorage.setItem('sf-module', String(currentIndex())); } catch (err) { /* storage unavailable */ }
-    }, true);
-    enter.addEventListener('click', () => {
-      if (window.__archiveSfx) window.__archiveSfx.enter();
-      unlock(true);
-      window.setTimeout(() => go(1, true), 550);
-    });
-    page.addEventListener('scroll', () => {
-      window.requestAnimationFrame(setState);
-    }, { passive: true });
-    if ('onscrollend' in window) {
-      page.addEventListener('scrollend', () => { busy = false; });
-    }
-    window.addEventListener('keydown', (e) => {
-      if (isMobile() || locked() || busy) return;
-      const tag = (e.target && e.target.tagName) || '';
-      if (/^(INPUT|TEXTAREA|SELECT)$/.test(tag)) return;
-      if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); shift(1); }
-      else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); shift(-1); }
-      else if (e.key === 'Home') { e.preventDefault(); go(0); }
-      else if (e.key === 'End') { e.preventDefault(); go(mods.length - 1); }
-    });
-    window.addEventListener('archive:ready', () => {
-      if (isMobile()) return;
-      mods.forEach((m) => m.classList.remove('is-active'));
-      window.requestAnimationFrame(() => {
-        mods[0].classList.add('is-active');
-      });
-    });
-    setState();
-    if (document.documentElement.classList.contains('auto-unlock')) {
-      unlock(false);
-      let origin = 1;
-      try {
-        const raw = sessionStorage.getItem('sf-module');
-        const parsed = raw === null ? NaN : parseInt(raw, 10);
-        if (!Number.isNaN(parsed)) origin = Math.max(0, Math.min(mods.length - 1, parsed));
-      } catch (e) { /* storage unavailable */ }
-      window.setTimeout(() => go(origin, true), 450);
-    }
-  })();
-</script>
-<script>
-  (function () {
-    const grid = document.getElementById('download-grid');
-    const search = document.getElementById('download-search');
-    const count = document.getElementById('download-result-count');
-    const empty = document.getElementById('download-empty');
-    const prev = document.getElementById('download-prev');
-    const next = document.getElementById('download-next');
-    const pageStatus = document.getElementById('download-page-status');
-    const filters = Array.from(document.querySelectorAll('[data-download-filter]'));
-    if (!grid || !search || !count || !empty || !prev || !next || !pageStatus || !filters.length) return;
-
-    const cards = Array.from(grid.querySelectorAll('.download-card'));
-    const pageSize = 4;
-    let activeType = 'all';
-    let currentPage = 0;
-
-    const apply = (direction) => {
-      const query = search.value.trim().toLocaleLowerCase();
-      const matches = cards.filter((card) => {
-        const typeMatch = activeType === 'all' || card.dataset.downloadType === activeType;
-        /* 关键词与可见文字一起匹配，这样按归属模块名也能搜到 */
-        const text = ((card.dataset.downloadSearch || '') + ' ' + card.textContent).toLocaleLowerCase();
-        return typeMatch && (!query || text.includes(query));
-      });
-      const totalPages = Math.max(1, Math.ceil(matches.length / pageSize));
-      currentPage = Math.min(currentPage, totalPages - 1);
-      const pageStart = currentPage * pageSize;
-      const pageCards = new Set(matches.slice(pageStart, pageStart + pageSize));
-
-      cards.forEach((card) => {
-        card.classList.toggle('is-filtered', !matches.includes(card));
-        card.classList.toggle('is-page-hidden', !pageCards.has(card));
-      });
-      grid.classList.remove('download-grid--next', 'download-grid--prev');
-      if (direction && matches.length > 0) {
-        void grid.offsetWidth;
-        grid.classList.add(direction === 'next' ? 'download-grid--next' : 'download-grid--prev');
-      }
-      count.textContent = '显示 ' + matches.length + ' / ' + cards.length + ' 个文件';
-      pageStatus.textContent = '第 ' + (currentPage + 1) + ' / ' + totalPages + ' 页';
-      prev.disabled = currentPage === 0 || matches.length === 0;
-      next.disabled = currentPage >= totalPages - 1 || matches.length === 0;
-      empty.classList.toggle('is-visible', matches.length === 0);
-    };
-
-    const resetPage = () => {
-      currentPage = 0;
-      apply();
-    };
-
-    filters.forEach((button) => {
-      button.addEventListener('click', () => {
-        activeType = button.dataset.downloadFilter || 'all';
-        filters.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
-        resetPage();
-      });
-    });
-    search.addEventListener('input', resetPage);
-    prev.addEventListener('click', () => {
-      if (currentPage === 0) return;
-      currentPage -= 1;
-      apply('prev');
-    });
-    next.addEventListener('click', () => {
-      currentPage += 1;
-      apply('next');
-    });
-    apply();
-  })();
-</script>
-<script>
-  (function () {
-    const btn = document.getElementById('sound-toggle');
-    const icon = document.getElementById('sound-icon');
-    const music = document.getElementById('archive-music');
-    if (!btn || !music) return;
-    let pref = 'on';
-    try { pref = localStorage.getItem('sf-sound') || 'on'; } catch (e) { /* storage unavailable */ }
-    let userMuted = pref === 'off';
-    let tempMuted = false;
-    window.__archiveSoundAllowed = !userMuted;
-    const update = () => {
-      const silent = music.paused || music.muted;
-      icon.textContent = silent ? '🔇' : '🔊';
-      btn.setAttribute('aria-label', silent ? '开启背景音乐' : '静音');
-      btn.title = silent ? '开启背景音乐' : '静音';
-    };
-    const setPref = (val) => {
-      try { localStorage.setItem('sf-sound', val); } catch (e) { /* storage unavailable */ }
-    };
-    btn.addEventListener('click', () => {
-      if (music.paused || music.muted) {
-        window.__archiveSoundAllowed = true;
-        userMuted = false;
-        setPref('on');
-        music.muted = false;
-        const attempt = music.play();
-        if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
-      } else {
-        window.__archiveSoundAllowed = false;
-        userMuted = true;
-        setPref('off');
-        music.pause();
-      }
-    });
-    if (userMuted) music.muted = true;
-    const suspendForBackground = () => {
-      if (!music.paused && !music.muted && !userMuted) {
-        tempMuted = true;
-        music.muted = true;
-      }
-    };
-    const resumeFromBackground = () => {
-      if (!tempMuted) return;
-      tempMuted = false;
-      music.muted = false;
-      if (!userMuted && music.paused) {
-        const attempt = music.play();
-        if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
-      }
-    };
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) suspendForBackground();
-      else resumeFromBackground();
-    });
-    window.addEventListener('blur', suspendForBackground);
-    window.addEventListener('focus', resumeFromBackground);
-    window.addEventListener('pagehide', suspendForBackground);
-    ['play', 'pause', 'volumechange'].forEach((ev) => music.addEventListener(ev, update));
-    update();
-  })();
-</script>
-<script>
-  (function () {
-    const music = document.getElementById('archive-music');
-    if (!music) return;
-    const play = () => {
-      if (window.__archiveSoundAllowed === false) return;
-      const attempt = music.play();
-      if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
-    };
-    window.addEventListener('pageshow', play);
-    window.addEventListener('pointerdown', play, { once: true });
-    window.addEventListener('keydown', play, { once: true });
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) play();
-    });
-    music.addEventListener('canplay', play, { once: true });
-    window.setTimeout(play, 80);
-  })();
-</script>
-<script>
-  (function () {
-    const DATA = {
-      v1: {
-        kicker: 'POSTAL // TERMINAL V1',
-        key: '邮路终端 v1',
-        href: 'postal-terminal/v1/index.html',
-        desc: 'POSTAL ROUTE TERMINAL<br>30 个邮票槽位，本地会话，无提示<br>首版 · 1 枚邮票 · 刷新即归零'
-      },
-      v2: {
-        kicker: 'POSTAL // TERMINAL V2',
-        key: '邮路终端 v2',
-        href: 'postal-terminal/v2/index.html',
-        desc: 'POSTAL ROUTE TERMINAL<br>身份门 · 访客 / ID 双身份<br>重制版 · 2 枚邮票 · AES 加密资源'
-      },
-      v3: {
-        kicker: 'POSTAL // TERMINAL V3',
-        key: '邮路终端 v3',
-        href: 'postal-terminal/v3/index.html',
-        desc: 'POSTAL ROUTE TERMINAL<br>三档身份 · 常驻信号可切换<br>第三版 · 9 个加密资源 · 新增一枚'
-      },
-      v4: {
-        kicker: 'POSTAL // TERMINAL V4',
-        key: '邮路终端 v4',
-        href: 'postal-terminal/v4/index.html',
-        desc: 'POSTAL ROUTE TERMINAL<br>序列门 · 第 4 枚邮票可解锁<br>第四版 · 10 个加密资源 · 新增未署名附件'
-      }
-    };
-
-    const field = document.getElementById('postal-version');
-    const card = document.getElementById('postal-card');
-    const kicker = document.getElementById('postal-kicker');
-    const desc = document.getElementById('postal-desc');
-    const consoleSwitch = document.getElementById('postal-console-switch');
-    const consoleEnabledKey = 'archive_postal_console_enabled';
-    if (!field || !card || !kicker || !desc || !consoleSwitch) return;
-    let consoleEnabled = true;
-    try { consoleEnabled = localStorage.getItem(consoleEnabledKey) !== '0'; } catch (e) {}
-    const renderConsoleSwitch = () => {
-      consoleSwitch.setAttribute('aria-checked', String(consoleEnabled));
-      consoleSwitch.title = consoleEnabled ? '进入终端时加载控制台' : '进入终端时不加载控制台';
-    };
-    renderConsoleSwitch();
-
-    let current = null;
-    let target = null;
-
-    const render = (v) => {
-      const d = DATA[v];
-      if (!d) return empty();
-      current = v;
-      kicker.textContent = d.kicker;
-      desc.innerHTML = d.desc;
-      target = d.href;
-      card.dataset.cardKey = d.key;
-      card.dataset.state = 'ready';
-      delete desc.dataset.plain;
-      /* 黑红主题会按卡片标题换上「不需要…」，换版后要重算一次 */
-      if (window.__archiveApplyCardNotes) window.__archiveApplyCardNotes();
-    };
-
-    /* 还没填版本时的状态：kicker 不带版本号，注释当引导，卡片暂时没有目标 */
-    const empty = () => {
-      current = null;
-      target = null;
-      kicker.textContent = 'POSTAL // TERMINAL';
-      desc.innerHTML = 'POSTAL ROUTE TERMINAL<br>本地邮票收集界面<br>请在上方输入版本';
-      delete card.dataset.cardKey;
-      card.dataset.state = 'empty';
-      delete desc.dataset.plain;
-      if (window.__archiveApplyCardNotes) window.__archiveApplyCardNotes();
-    };
-
-    const parse = (raw) => {
-      const digits = (raw.match(/\d/g) || []).join('');
-      return DATA['v' + digits] ? 'v' + digits : null;
-    };
-    const commit = () => {
-      const v = parse(field.value);
-      if (v) {
-        render(v);
-        field.value = v.slice(1);
-        return;
-      }
-      if (current) field.value = current.slice(1);   /* 填过版本又清空 → 退回该版本 */
-      else { empty(); field.value = ''; }            /* 从没填过 → 保持空白与引导 */
-    };
-
-    /* 点进去即清空，敲到有效数字立刻切；非法或空值在回车/失焦时回到上一个有效状态 */
-    field.addEventListener('focus', () => { field.value = ''; });
-    field.addEventListener('input', () => {
-      const v = parse(field.value);
-      if (v) render(v);
-    });
-    field.addEventListener('change', commit);
-    field.addEventListener('blur', commit);
-    field.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        commit();
-      }
-    });
-    empty();
-
-    consoleSwitch.addEventListener('click', (e) => {
-      e.stopPropagation();
-      consoleEnabled = !consoleEnabled;
-      try { localStorage.setItem(consoleEnabledKey, consoleEnabled ? '1' : '0'); } catch (err) {}
-      renderConsoleSwitch();
-    });
-
-    /* 整张卡片就是按钮：填了版本才进门，还没填就先聚焦输入框 */
-    card.addEventListener('click', (e) => {
-      if (e.target === field || e.target === consoleSwitch || consoleSwitch.contains(e.target)) return;
-      if (!target) { field.focus(); return; }
-      window.location.href = target;
-    });
-    card.addEventListener('keydown', (e) => {
-      if (e.target === field || e.target === consoleSwitch || consoleSwitch.contains(e.target)) return;
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        if (!target) { field.focus(); return; }
-        window.location.href = target;
-      }
-    });
-  })();
-</script>
+<script src="resources/scripts/theme.js"></script>
+<script src="resources/scripts/modules.js"></script>
+<script src="resources/scripts/downloads.js"></script>
+<script src="resources/scripts/sound-toggle.js"></script>
+<script src="resources/scripts/music-lifecycle.js"></script>
+<script src="resources/scripts/postal-picker.js"></script>
+  <script src="resources/scripts/home.js"></script>
 </body>
 </html>

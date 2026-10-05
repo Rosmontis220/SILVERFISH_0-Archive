@@ -1,0 +1,660 @@
+{
+  "generatedBy": "SILVERFISH_0 archive migration",
+  "pages": {
+    "viewer": "viewer.html",
+    "rawRoot": "archive/",
+    "localizedRoot": "resources/localized/"
+  },
+  "files": [
+    {
+      "path": "archive/forecast/v1/index.html",
+      "bytes": 8230,
+      "sha256": "5431fe02831523aad7fa3be43f1a9a6aad5a24a21fcd155bbdb5fdb658253b8b"
+    },
+    {
+      "path": "archive/forecast/v2/GDF-ALERT-LEVEL-III.mp3",
+      "bytes": 9651133,
+      "sha256": "7a1dddc4db04f7671752dea1ac318c84d602c6c5b18e186d3ae5a22d85089bcf"
+    },
+    {
+      "path": "archive/forecast/v2/index.html",
+      "bytes": 23748,
+      "sha256": "a3b13d7f9dfb9d28d2cd168ab4242e1d4b59f8396de86ea03df0420e3bd87769"
+    },
+    {
+      "path": "archive/number-of-motion/README.md",
+      "bytes": 452,
+      "sha256": "46aeaa87169d45315b3f68192d40f273eb69579eda48091d2747d34eeaf1388e"
+    },
+    {
+      "path": "archive/number-of-motion/files/CHECKSUMS.txt",
+      "bytes": 658,
+      "sha256": "233b7ff20532ee5ec167d9bff9faba345bcf7875505a526371f16c4aeb1facdb"
+    },
+    {
+      "path": "archive/number-of-motion/files/LOCAL_COPY.txt",
+      "bytes": 4695,
+      "sha256": "cc1fe65549b900f46fefa75c47481720114eb8460761e3884dc3757bc59def76"
+    },
+    {
+      "path": "archive/number-of-motion/files/last-local-record.html",
+      "bytes": 8584,
+      "sha256": "d525670114f1f084c36bcf60daad13b29293c099f3a06ad6f757d8ebe501c09f"
+    },
+    {
+      "path": "archive/number-of-motion/files/local-continuity-probe-0.1.0.jar",
+      "bytes": 10011,
+      "sha256": "2677eb597e433913103e23dc9b1a36bcb325704f9dcf6d7c454c6353f1f8fa04"
+    },
+    {
+      "path": "archive/number-of-motion/files/local-copy.html",
+      "bytes": 4656,
+      "sha256": "866d44866e9d30836bc75869b423fa7fa95c72af084b844521e1d7db938d7c3f"
+    },
+    {
+      "path": "archive/postal-terminal/v1/404.html",
+      "bytes": 69352,
+      "sha256": "d66eb5b9d74e81ddbd1a94d8f342368aba8db2e5b6cd2776c4a6794413e5f8db"
+    },
+    {
+      "path": "archive/postal-terminal/v1/first-stamp.png",
+      "bytes": 3041794,
+      "sha256": "447561c569ba553f1eb4533a722cf986191d928898c63400b512727ba0457cc3"
+    },
+    {
+      "path": "archive/postal-terminal/v1/index.html",
+      "bytes": 69352,
+      "sha256": "d66eb5b9d74e81ddbd1a94d8f342368aba8db2e5b6cd2776c4a6794413e5f8db"
+    },
+    {
+      "path": "archive/postal-terminal/v1/life-flow.mp3",
+      "bytes": 7843330,
+      "sha256": "b3c05c38a5d9c4b07e150d2b4fdbeabda0e674aac454cfc75766d7e10296e879"
+    },
+    {
+      "path": "archive/postal-terminal/v2/.nojekyll",
+      "bytes": 15,
+      "sha256": "5631b601d419cc03976f91dd8195d9b030340faf1fb6ee3d0d9824f5e7d113ff"
+    },
+    {
+      "path": "archive/postal-terminal/v2/404.html",
+      "bytes": 93422,
+      "sha256": "9ca9d7bbf282ab79b87e88dd4bbe921cab9df4021b95d364ceb933f571e39767"
+    },
+    {
+      "path": "archive/postal-terminal/v2/index.html",
+      "bytes": 93422,
+      "sha256": "9ca9d7bbf282ab79b87e88dd4bbe921cab9df4021b95d364ceb933f571e39767"
+    },
+    {
+      "path": "archive/postal-terminal/v2/night-route-signal.bin",
+      "bytes": 3618632,
+      "sha256": "4b0425c26570ad2d921cd2fd3d6cc4c8427fc9b0788aa0a5e07413a1ec3054e1"
+    },
+    {
+      "path": "archive/postal-terminal/v2/night-route-signal.m4a",
+      "bytes": 3618616,
+      "sha256": "8035bea9e8534b1eb4ed3bdcbd3a752fc0f25eac348bf9d133e408035c65c3c3"
+    },
+    {
+      "path": "archive/postal-terminal/v2/r0.bin",
+      "bytes": 3041810,
+      "sha256": "cfc44a3751227c131b45ae2a28c71916b921c7594cfd6f9764f2688c0dd67076"
+    },
+    {
+      "path": "archive/postal-terminal/v2/r1.bin",
+      "bytes": 3047597,
+      "sha256": "f74a6b199a4ebb4ffbcf59c3de28f390d2935075eb238f31acd5800c60067fdb"
+    },
+    {
+      "path": "archive/postal-terminal/v2/r2.bin",
+      "bytes": 7843346,
+      "sha256": "721b78a8521e7837988402a4460eaabeacc4234a7ae669d8f8f6d7d8b5e89290"
+    },
+    {
+      "path": "archive/postal-terminal/v2/return-portrait.bin",
+      "bytes": 52659,
+      "sha256": "ae985e7b818761b03a964b71bfea93f31268c584ab7038082d67301913ee64dc"
+    },
+    {
+      "path": "archive/postal-terminal/v2/return-portrait.jpg",
+      "bytes": 52643,
+      "sha256": "9bac6264ee6c32740c9ebd22070ed2c9668432f103a701f1189ad673cca5e540"
+    },
+    {
+      "path": "archive/postal-terminal/v2/starrev-stamp.png",
+      "bytes": 3047581,
+      "sha256": "a0780ccdda70cbe1df4c42a7533e0a56ab686d112ce164841e3753ae55bebb70"
+    },
+    {
+      "path": "archive/postal-terminal/v3/.nojekyll",
+      "bytes": 15,
+      "sha256": "5631b601d419cc03976f91dd8195d9b030340faf1fb6ee3d0d9824f5e7d113ff"
+    },
+    {
+      "path": "archive/postal-terminal/v3/404.html",
+      "bytes": 161501,
+      "sha256": "7495d33b4db4922e97f9e1877d440a33750fcf0f4a1eaac7b7829cea39bda3d0"
+    },
+    {
+      "path": "archive/postal-terminal/v3/courier-record.bin",
+      "bytes": 20338,
+      "sha256": "748225ff91699a85bce799fa5983ea90aed306d08cd8016542e1d24dec114b2c"
+    },
+    {
+      "path": "archive/postal-terminal/v3/courier-record.jpg",
+      "bytes": 20322,
+      "sha256": "e18f1a23f99aac25602531eb774b2ca8824d06d6e7f497b9189c99c5060e24b7"
+    },
+    {
+      "path": "archive/postal-terminal/v3/index.html",
+      "bytes": 161501,
+      "sha256": "7495d33b4db4922e97f9e1877d440a33750fcf0f4a1eaac7b7829cea39bda3d0"
+    },
+    {
+      "path": "archive/postal-terminal/v3/night-route-signal.bin",
+      "bytes": 3618632,
+      "sha256": "4b0425c26570ad2d921cd2fd3d6cc4c8427fc9b0788aa0a5e07413a1ec3054e1"
+    },
+    {
+      "path": "archive/postal-terminal/v3/r0.bin",
+      "bytes": 3041810,
+      "sha256": "cfc44a3751227c131b45ae2a28c71916b921c7594cfd6f9764f2688c0dd67076"
+    },
+    {
+      "path": "archive/postal-terminal/v3/r1.bin",
+      "bytes": 3047597,
+      "sha256": "f74a6b199a4ebb4ffbcf59c3de28f390d2935075eb238f31acd5800c60067fdb"
+    },
+    {
+      "path": "archive/postal-terminal/v3/r2.bin",
+      "bytes": 7843346,
+      "sha256": "721b78a8521e7837988402a4460eaabeacc4234a7ae669d8f8f6d7d8b5e89290"
+    },
+    {
+      "path": "archive/postal-terminal/v3/return-portrait.bin",
+      "bytes": 52659,
+      "sha256": "ae985e7b818761b03a964b71bfea93f31268c584ab7038082d67301913ee64dc"
+    },
+    {
+      "path": "archive/postal-terminal/v3/route-echo-cinder.bin",
+      "bytes": 4091438,
+      "sha256": "63978305446fc4804ff80cc8f91dc5b743a3b1b45f2abc2d693e68b2eb3f8aba"
+    },
+    {
+      "path": "archive/postal-terminal/v3/route-echo-cinder.m4a",
+      "bytes": 4091422,
+      "sha256": "430d4ecc04bfe2f1dbfd0f9ef8dd43bae82617c16df60502aeaa540cc81a1c22"
+    },
+    {
+      "path": "archive/postal-terminal/v3/route-echo-lotus.bin",
+      "bytes": 3874121,
+      "sha256": "a1fd0a0bdfe301ebf3a5de92e406e664dba76c5b083303fed478e3f96c222467"
+    },
+    {
+      "path": "archive/postal-terminal/v3/route-echo-lotus.m4a",
+      "bytes": 3874105,
+      "sha256": "e3c06413edb461b2b87a9c6a76591fb5ab540eb557dcfb54727b791ee873c285"
+    },
+    {
+      "path": "archive/postal-terminal/v3/unposted-gate.bin",
+      "bytes": 3215174,
+      "sha256": "86f9306f1afc3be4f6575bbe66c5dbfe4c9d6f4f8037f1608a574dee211c3ad9"
+    },
+    {
+      "path": "archive/postal-terminal/v3/unposted-gate.png",
+      "bytes": 3215158,
+      "sha256": "fb2b61f4cb6aef5fd2d9daf97d14da9d7f4b8b31cd843425f93020619eb2c1d4"
+    },
+    {
+      "path": "archive/postal-terminal/v4/.nojekyll",
+      "bytes": 14,
+      "sha256": "9af6f03d261c6e66841f857cb81762cc71046daef889140f06fefbfb99a2db12"
+    },
+    {
+      "path": "archive/postal-terminal/v4/404.html",
+      "bytes": 184497,
+      "sha256": "b55d8afb8053bb0fcc2b4337d86b243671704a73c64261740efa0c6b17bb98a1"
+    },
+    {
+      "path": "archive/postal-terminal/v4/courier-record.bin",
+      "bytes": 20338,
+      "sha256": "748225ff91699a85bce799fa5983ea90aed306d08cd8016542e1d24dec114b2c"
+    },
+    {
+      "path": "archive/postal-terminal/v4/index.html",
+      "bytes": 184497,
+      "sha256": "b55d8afb8053bb0fcc2b4337d86b243671704a73c64261740efa0c6b17bb98a1"
+    },
+    {
+      "path": "archive/postal-terminal/v4/night-route-signal.bin",
+      "bytes": 3618632,
+      "sha256": "4b0425c26570ad2d921cd2fd3d6cc4c8427fc9b0788aa0a5e07413a1ec3054e1"
+    },
+    {
+      "path": "archive/postal-terminal/v4/r0.bin",
+      "bytes": 3041810,
+      "sha256": "cfc44a3751227c131b45ae2a28c71916b921c7594cfd6f9764f2688c0dd67076"
+    },
+    {
+      "path": "archive/postal-terminal/v4/r1.bin",
+      "bytes": 3047597,
+      "sha256": "f74a6b199a4ebb4ffbcf59c3de28f390d2935075eb238f31acd5800c60067fdb"
+    },
+    {
+      "path": "archive/postal-terminal/v4/r2.bin",
+      "bytes": 7843346,
+      "sha256": "721b78a8521e7837988402a4460eaabeacc4234a7ae669d8f8f6d7d8b5e89290"
+    },
+    {
+      "path": "archive/postal-terminal/v4/return-portrait.bin",
+      "bytes": 52659,
+      "sha256": "ae985e7b818761b03a964b71bfea93f31268c584ab7038082d67301913ee64dc"
+    },
+    {
+      "path": "archive/postal-terminal/v4/route-echo-cinder.bin",
+      "bytes": 4091438,
+      "sha256": "63978305446fc4804ff80cc8f91dc5b743a3b1b45f2abc2d693e68b2eb3f8aba"
+    },
+    {
+      "path": "archive/postal-terminal/v4/route-echo-lotus.bin",
+      "bytes": 3874121,
+      "sha256": "a1fd0a0bdfe301ebf3a5de92e406e664dba76c5b083303fed478e3f96c222467"
+    },
+    {
+      "path": "archive/postal-terminal/v4/unattributed-attachment.bin",
+      "bytes": 3045752,
+      "sha256": "e838da287f3a64bd6825f10ffa8c9314152c1625e804155d358536726f2af26f"
+    },
+    {
+      "path": "archive/postal-terminal/v4/unattributed-attachment.png",
+      "bytes": 3045736,
+      "sha256": "938dbef0e306783c8717de3d9d395e76144ed06518eed09e706bf2bb45fe57a0"
+    },
+    {
+      "path": "archive/postal-terminal/v4/unposted-gate.bin",
+      "bytes": 3215174,
+      "sha256": "86f9306f1afc3be4f6575bbe66c5dbfe4c9d6f4f8037f1608a574dee211c3ad9"
+    },
+    {
+      "path": "archive/postal-terminal/v5/.nojekyll",
+      "bytes": 15,
+      "sha256": "5631b601d419cc03976f91dd8195d9b030340faf1fb6ee3d0d9824f5e7d113ff"
+    },
+    {
+      "path": "archive/postal-terminal/v5/404.html",
+      "bytes": 204537,
+      "sha256": "c66838e5bbcd85f3d4381a1f05a6c99df4256f833ecab9807b4918656827210a"
+    },
+    {
+      "path": "archive/postal-terminal/v5/courier-record.bin",
+      "bytes": 20338,
+      "sha256": "748225ff91699a85bce799fa5983ea90aed306d08cd8016542e1d24dec114b2c"
+    },
+    {
+      "path": "archive/postal-terminal/v5/index.html",
+      "bytes": 204537,
+      "sha256": "c66838e5bbcd85f3d4381a1f05a6c99df4256f833ecab9807b4918656827210a"
+    },
+    {
+      "path": "archive/postal-terminal/v5/joint-disposition.bin",
+      "bytes": 2075678,
+      "sha256": "f8fa99b00c08eed2b0de444d492d803fa2afa607b0b44174a7acd6b2cdf6d9c9"
+    },
+    {
+      "path": "archive/postal-terminal/v5/night-route-signal.bin",
+      "bytes": 3618632,
+      "sha256": "4b0425c26570ad2d921cd2fd3d6cc4c8427fc9b0788aa0a5e07413a1ec3054e1"
+    },
+    {
+      "path": "archive/postal-terminal/v5/r0.bin",
+      "bytes": 3041810,
+      "sha256": "cfc44a3751227c131b45ae2a28c71916b921c7594cfd6f9764f2688c0dd67076"
+    },
+    {
+      "path": "archive/postal-terminal/v5/r1.bin",
+      "bytes": 3047597,
+      "sha256": "f74a6b199a4ebb4ffbcf59c3de28f390d2935075eb238f31acd5800c60067fdb"
+    },
+    {
+      "path": "archive/postal-terminal/v5/r2.bin",
+      "bytes": 7843346,
+      "sha256": "721b78a8521e7837988402a4460eaabeacc4234a7ae669d8f8f6d7d8b5e89290"
+    },
+    {
+      "path": "archive/postal-terminal/v5/return-portrait.bin",
+      "bytes": 52659,
+      "sha256": "ae985e7b818761b03a964b71bfea93f31268c584ab7038082d67301913ee64dc"
+    },
+    {
+      "path": "archive/postal-terminal/v5/route-echo-cinder.bin",
+      "bytes": 4091438,
+      "sha256": "63978305446fc4804ff80cc8f91dc5b743a3b1b45f2abc2d693e68b2eb3f8aba"
+    },
+    {
+      "path": "archive/postal-terminal/v5/route-echo-lotus.bin",
+      "bytes": 3874121,
+      "sha256": "a1fd0a0bdfe301ebf3a5de92e406e664dba76c5b083303fed478e3f96c222467"
+    },
+    {
+      "path": "archive/postal-terminal/v5/unattributed-attachment.bin",
+      "bytes": 3045752,
+      "sha256": "e838da287f3a64bd6825f10ffa8c9314152c1625e804155d358536726f2af26f"
+    },
+    {
+      "path": "archive/postal-terminal/v5/unposted-gate.bin",
+      "bytes": 3215174,
+      "sha256": "86f9306f1afc3be4f6575bbe66c5dbfe4c9d6f4f8037f1608a574dee211c3ad9"
+    },
+    {
+      "path": "archive/wiki/v1/404.html",
+      "bytes": 1386,
+      "sha256": "78f3f5fe39d8349dfc97faf2e88e14056f59edd442cb5846261c38ddefc3be8e"
+    },
+    {
+      "path": "archive/wiki/v1/app.js",
+      "bytes": 5676,
+      "sha256": "516cadead6fb3a5f14e915b1bc03d0af6e03824159650779b87e055cc5ede07d"
+    },
+    {
+      "path": "archive/wiki/v1/content.js",
+      "bytes": 42834,
+      "sha256": "aef87396cf9d37c24ab34084de9d5b1f3934a72099b7346481d594d847e947e3"
+    },
+    {
+      "path": "archive/wiki/v1/index.html",
+      "bytes": 1631,
+      "sha256": "49a5a6e76de7557a98c96c4a1f3ff32b6fd7eeb2181227c3e3d68dae8bcef756"
+    },
+    {
+      "path": "archive/wiki/v1/readme.zip",
+      "bytes": 508,
+      "sha256": "60bb9ae1bc4e52e4dd455e837d715859294b68d9721a045f64ebdfd2b7ed6add"
+    },
+    {
+      "path": "archive/wiki/v1/style.css",
+      "bytes": 5806,
+      "sha256": "344b2158ffb5ada91eec7e0f65914b25bb74afb62a53a363602ce71eacdb3bbf"
+    },
+    {
+      "path": "archive/wiki/v1/密码.txt",
+      "bytes": 64,
+      "sha256": "ae9418cede1a724f145103bdb1cbcc1f966a9e7fafadf23b515e3ca7fe5c4736"
+    },
+    {
+      "path": "archive/wiki/v2/404.html",
+      "bytes": 1386,
+      "sha256": "78f3f5fe39d8349dfc97faf2e88e14056f59edd442cb5846261c38ddefc3be8e"
+    },
+    {
+      "path": "archive/wiki/v2/app.js",
+      "bytes": 5676,
+      "sha256": "516cadead6fb3a5f14e915b1bc03d0af6e03824159650779b87e055cc5ede07d"
+    },
+    {
+      "path": "archive/wiki/v2/content.js",
+      "bytes": 47583,
+      "sha256": "287420b2365ec03657abbc25a8e53831342c029ca05c0766f048b64b51933106"
+    },
+    {
+      "path": "archive/wiki/v2/index.html",
+      "bytes": 1631,
+      "sha256": "49a5a6e76de7557a98c96c4a1f3ff32b6fd7eeb2181227c3e3d68dae8bcef756"
+    },
+    {
+      "path": "archive/wiki/v2/readme.zip",
+      "bytes": 508,
+      "sha256": "60bb9ae1bc4e52e4dd455e837d715859294b68d9721a045f64ebdfd2b7ed6add"
+    },
+    {
+      "path": "archive/wiki/v2/style.css",
+      "bytes": 5806,
+      "sha256": "344b2158ffb5ada91eec7e0f65914b25bb74afb62a53a363602ce71eacdb3bbf"
+    },
+    {
+      "path": "archive/wiki/v2/密码.txt",
+      "bytes": 64,
+      "sha256": "ae9418cede1a724f145103bdb1cbcc1f966a9e7fafadf23b515e3ca7fe5c4736"
+    },
+    {
+      "path": "archive/wiki/v3/app.js",
+      "bytes": 28525,
+      "sha256": "40d42a7df1d2cb402e017bf2acc5ca9e2f4153f7645f2834354ccd23eb97c330"
+    },
+    {
+      "path": "archive/wiki/v3/background.png",
+      "bytes": 2585946,
+      "sha256": "9fdd5139ac7b856f87a6a036a53fbdeebde390923d53a15020b93f5140d35a07"
+    },
+    {
+      "path": "archive/wiki/v3/god.m4a",
+      "bytes": 3594197,
+      "sha256": "8ab516cca518ab5ce586ecbf178082e4e7030cdaac8e6fded8b4c98933865e91"
+    },
+    {
+      "path": "archive/wiki/v3/index.html",
+      "bytes": 2447,
+      "sha256": "f590a8d4c950d015c4ae7a7c3db24a1683810af776afac9fe1a222b96081d841"
+    },
+    {
+      "path": "archive/wiki/v3/style.css",
+      "bytes": 18425,
+      "sha256": "6feb2d9c5a328216f07b4b67cc5275455ca3ae854400fa7c8d8835806d000223"
+    },
+    {
+      "path": "resources/fonts/bender.woff2",
+      "bytes": 9252,
+      "sha256": "202ff560ee5334e7173fdd05e2cb087cf73511ce1566a692bfeb5e0d74f8752c"
+    },
+    {
+      "path": "resources/fonts/novecento-wide-bold.woff2",
+      "bytes": 7396,
+      "sha256": "a14edbb39a98f0a54293360b945723e3d97ceea6d10cfb01c725c4ee504baa06"
+    },
+    {
+      "path": "resources/fonts/source-han-sans-cn-medium.woff2",
+      "bytes": 178508,
+      "sha256": "0526a3107338def17361b81f1946f1b313e0f5bbaf0ffbbe2d0cb348ab23dea5"
+    },
+    {
+      "path": "resources/fonts/source-han-serif-cn-heavy.woff2",
+      "bytes": 225716,
+      "sha256": "37362b1e476046102824d98c1a64e51c158127f1f95b25b0d07701cf7363c7c0"
+    },
+    {
+      "path": "resources/images/avatar_silverfish.jpg",
+      "bytes": 9509,
+      "sha256": "2a7185bffa0bf9e0b7ebf69c3df5faca3e26f2de5a0cdc712c006f41010f618d"
+    },
+    {
+      "path": "resources/images/crimson-background.webp",
+      "bytes": 65374,
+      "sha256": "652f7fe6320b4389474cc65e570034105beb7e0fc6c15600aab0fcb1a218c395"
+    },
+    {
+      "path": "resources/images/postal-terminal/courier-record.jpg",
+      "bytes": 20322,
+      "sha256": "e18f1a23f99aac25602531eb774b2ca8824d06d6e7f497b9189c99c5060e24b7"
+    },
+    {
+      "path": "resources/images/postal-terminal/return-portrait.jpg",
+      "bytes": 52643,
+      "sha256": "9bac6264ee6c32740c9ebd22070ed2c9668432f103a701f1189ad673cca5e540"
+    },
+    {
+      "path": "resources/images/postal-terminal/starrev-stamp.png",
+      "bytes": 3047581,
+      "sha256": "a0780ccdda70cbe1df4c42a7533e0a56ab686d112ce164841e3753ae55bebb70"
+    },
+    {
+      "path": "resources/images/postal-terminal/unattributed-attachment.png",
+      "bytes": 3045736,
+      "sha256": "938dbef0e306783c8717de3d9d395e76144ed06518eed09e706bf2bb45fe57a0"
+    },
+    {
+      "path": "resources/images/postal-terminal/unposted-gate.png",
+      "bytes": 3215158,
+      "sha256": "fb2b61f4cb6aef5fd2d9daf97d14da9d7f4b8b31cd843425f93020619eb2c1d4"
+    },
+    {
+      "path": "resources/localized/forecast-v1/index.html",
+      "bytes": 7943,
+      "sha256": "4aa36eea2d5ab0f90918a50ccf56f911009b630772907589b9f138937962d321"
+    },
+    {
+      "path": "resources/localized/forecast-v2/index.html",
+      "bytes": 23469,
+      "sha256": "162ab8fa5996a5d8565c57ba3ad4951587b773890e931b615cef20415fa7538f"
+    },
+    {
+      "path": "resources/music/CONFRONT.mp3",
+      "bytes": 9937005,
+      "sha256": "03838e02a7fc8e42ae27b7baf03b704c4b919a8f561bd93d7c0c595d323e8bb5"
+    },
+    {
+      "path": "resources/music/Mayors-the-Yearning-Flotsam.mp3",
+      "bytes": 11946473,
+      "sha256": "7e398874af7682aeabd52acc1bd7e1cfb7c953dd990f4d87aab6a8330276c6b6"
+    },
+    {
+      "path": "resources/music/call-of-iberia.mp3",
+      "bytes": 9306485,
+      "sha256": "af5d6c4ccfd8aa7b664bdb027d795d46956e20a5f254b59663901ce1fe47e3e5"
+    },
+    {
+      "path": "resources/music/postal-terminal/night-route-signal.m4a",
+      "bytes": 3618616,
+      "sha256": "8035bea9e8534b1eb4ed3bdcbd3a752fc0f25eac348bf9d133e408035c65c3c3"
+    },
+    {
+      "path": "resources/music/postal-terminal/route-echo-cinder.m4a",
+      "bytes": 4091422,
+      "sha256": "430d4ecc04bfe2f1dbfd0f9ef8dd43bae82617c16df60502aeaa540cc81a1c22"
+    },
+    {
+      "path": "resources/music/postal-terminal/route-echo-lotus.m4a",
+      "bytes": 3874105,
+      "sha256": "e3c06413edb461b2b87a9c6a76591fb5ab540eb557dcfb54727b791ee873c285"
+    },
+    {
+      "path": "resources/scripts/archive-return.js",
+      "bytes": 1762,
+      "sha256": "b3a0bdc299d198f5002360db27f6358645d55de2af3b3d4acb7c0297d8bfde7e"
+    },
+    {
+      "path": "resources/scripts/boot.js",
+      "bytes": 6100,
+      "sha256": "328250e83bb823422de3251864e566890456d4df437b1ead2cbd0107a4da0bb5"
+    },
+    {
+      "path": "resources/scripts/downloads.js",
+      "bytes": 3126,
+      "sha256": "2a3c9b52fa7dae544bb9ffd200e881009987ccc3fc0f36de917cd86780124de2"
+    },
+    {
+      "path": "resources/scripts/hero-clock.js",
+      "bytes": 467,
+      "sha256": "15923f8c3b2c2b6c91094bbfdc7dfc5c753e6a076e0691c7c991dfbebd9075af"
+    },
+    {
+      "path": "resources/scripts/hero-effects.js",
+      "bytes": 3384,
+      "sha256": "1d3603595d0d58c071ac1407d901902a3a67c7fe0f84d44b09f9c582dfee0f71"
+    },
+    {
+      "path": "resources/scripts/home.js",
+      "bytes": 542,
+      "sha256": "fba9cc069262b66911b9a4c97d123a422c421074c56f2d19fa231819b5cbb6cd"
+    },
+    {
+      "path": "resources/scripts/modules.js",
+      "bytes": 11937,
+      "sha256": "164094bd7002fd1be52bc05e64e9805efaa25080b285d3ef2ed07b86dae188a8"
+    },
+    {
+      "path": "resources/scripts/music-lifecycle.js",
+      "bytes": 708,
+      "sha256": "25ff6ea479d8b126bfad815c0eb25abbe334b0902a67d88fef3b3e6cbcfb5315"
+    },
+    {
+      "path": "resources/scripts/postal-console/README.md",
+      "bytes": 971,
+      "sha256": "c12ca6c2ecd7dd329f352b9c83a74893da4b7cfab5468b3edd5e83c857279cea"
+    },
+    {
+      "path": "resources/scripts/postal-console/console.css",
+      "bytes": 4514,
+      "sha256": "69f5481890f8cb83bbedc4cc3019458aa0684fa8d9afb0218551ad28634cfbfd"
+    },
+    {
+      "path": "resources/scripts/postal-console/console.js",
+      "bytes": 13623,
+      "sha256": "d65661ba61e5e0e969003905b85134502566a4376240a66cb1177a7f45cf5e5f"
+    },
+    {
+      "path": "resources/scripts/postal-picker.js",
+      "bytes": 5550,
+      "sha256": "c458f57e2633e6b5d20b608195053abc6476bbcb035e441025adb7cac4c538f7"
+    },
+    {
+      "path": "resources/scripts/sfx-home.js",
+      "bytes": 2432,
+      "sha256": "918784ecbf939c1b26d91161b7ed7d708c198788f9ba1d00c39f5ea6672c0988"
+    },
+    {
+      "path": "resources/scripts/sfx.js",
+      "bytes": 1985,
+      "sha256": "75a2c8a1b7de3b974d81aa23d6f8fc4b3eaea03bfc6ee0dc2998e45f6a0c8531"
+    },
+    {
+      "path": "resources/scripts/sound-toggle.js",
+      "bytes": 2356,
+      "sha256": "adb91b68ea7ae8c6226238ad6cf9419bacfefa271169dddab631ec317c3de0c0"
+    },
+    {
+      "path": "resources/scripts/theme-init.js",
+      "bytes": 376,
+      "sha256": "3822eb75d3fa576e3cddd68bf3c5176f60f07a3d3a25861cb768e7e899bd418c"
+    },
+    {
+      "path": "resources/scripts/theme.js",
+      "bytes": 5342,
+      "sha256": "cf3c2839e8c61abc19624715ccac9076dd47b5d43ca561ad436a8b2159a99cae"
+    },
+    {
+      "path": "resources/scripts/viewer.js",
+      "bytes": 2652,
+      "sha256": "792a6e6155368da63ee7b223d936f63f6e087a32e15118a4ba2afd7b3501fe7c"
+    },
+    {
+      "path": "resources/sfx/legacy/arrow_click.a72c10.mp3",
+      "bytes": 11520,
+      "sha256": "8ad864535190ef537a437938b4c0688127eae96f963cf65e1c8e5cd7bf48f4b2"
+    },
+    {
+      "path": "resources/sfx/legacy/close_click.fe1dc4.mp3",
+      "bytes": 23426,
+      "sha256": "bf5b5e04b1381b7daba90d115218caeb9df4f071ac5bf800f11087639adcce39"
+    },
+    {
+      "path": "resources/sfx/legacy/common_click.52e9d4.mp3",
+      "bytes": 22466,
+      "sha256": "16e343c37eafde3f475285ddae3f36146e0a98ebeef5cb53aa94389113750740"
+    },
+    {
+      "path": "resources/sfx/legacy/home_enter.6aefd5.mp3",
+      "bytes": 80066,
+      "sha256": "0df397a4c8fe70921d4058295a39bd35a1f0bad9a12ef1648de6c6bef062ad68"
+    },
+    {
+      "path": "resources/sfx/legacy/menu_click.d51e70.mp3",
+      "bytes": 18240,
+      "sha256": "dda40265e69eb54259d388e93600553e5240758cf1d135afa8734b66c80c27bd"
+    },
+    {
+      "path": "resources/sfx/sources.json",
+      "bytes": 573,
+      "sha256": "e665637016430435a4f139ad83514b3bbedd333fd066ba0564389a18a956c086"
+    }
+  ]
+}

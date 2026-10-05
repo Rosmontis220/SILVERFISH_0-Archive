@@ -4,96 +4,26 @@
 
 ## 结构
 
-```
+当前仓库把原版网页与附加资源分开管理：`archive/` 保存原版网页和它们的原始依赖；`resources/` 保存首页素材、解密副本、公共脚本、字体、音效和汉化页面。首页通过 `viewer.html` 打开存档网页，并在外壳中注入统一返回入口与邮路控制台，因此 `archive/` 下的网页本身不包含本存档追加的按钮或脚本。首页脚本已拆到 `resources/scripts/`，首页与控制台共用 `resources/sfx/legacy/` 中的本地音效。
+
+```text
 SILVERFISH_0-Archive/
-│
-├── index.html          # 主页面（版本选择）
-├── README.md           # 说明文档
-├── avatar_silverfish.jpg            # 站点头像（首页 logo 与 favicon）
-├── call-of-iberia.mp3               # 暗色主题背景音乐
-├── CONFRONT.mp3                     # 亮色主题背景音乐
-├── Mayors-the-Yearning-Flotsam.mp3  # 黑红主题背景音乐
-├── crimson-background.webp          # 黑红主题背景图
-│
-├── sfx/                # 界面音效（点击 / 翻页 / 进入档案库）
-│
-├── fonts/              # 首页字体（子集化 woff2，四份）
-│
-├── wiki/               # 调查维基（断联前后）
-│   ├── v1/             # 断联前 v1（20篇原始版本）
-│   │   ├── index.html
-│   │   ├── app.js
-│   │   ├── style.css
-│   │   ├── content.js
-│   │   ├── 密码.txt
-│   │   ├── readme.zip
-│   │   └── 404.html
-│   ├── v2/             # 断联前 v2（21篇更新版本）
-│   │   ├── index.html
-│   │   ├── app.js
-│   │   ├── style.css
-│   │   ├── content.js
-│   │   ├── 密码.txt
-│   │   ├── readme.zip
-│   │   └── 404.html
-│   └── v3/             # 断联后（GOD SAYS）
-│       ├── index.html
-│       ├── app.js
-│       ├── style.css
-│       ├── god.m4a
-│       └── background.png
-│
-├── forecast/           # 大黄昏预测网页（补档）
-    ├── v1/             # commit 3344017 时的第一版
-    │   └── index.html
-    └── v2/             # 当前仓库 HEAD 的第二版
-        ├── index.html
-        └── GDF-ALERT-LEVEL-III.mp3
-│
-├── number-of-motion/   # 运动之数（失联后发布）
-│   ├── README.md       # 发布方随附说明
-│   └── files/          # 解压后的发布文件
-│       ├── CHECKSUMS.txt
-│       ├── last-local-record.html
-│       ├── local-copy.html
-│       └── local-continuity-probe-0.1.0.jar
-│
-├── postal-terminal/    # 邮路终端（作者换号后发布，三代并存）
-│   ├── v1/             # 上游旧历史 b65f684
-│   │   ├── index.html  # 30 个邮票槽位，单页应用
-│   │   ├── 404.html    # 与 index.html 字节相同
-│   │   ├── first-stamp.png # 2.9 MB，雨前首封
-│   │   └── life-flow.mp3   # 7.5 MB，背景音乐
-│   ├── v2/             # 上游 0df8c37（重制版）
-│   │   ├── index.html  # 身份门 + 2 枚邮票 + AES 加密资源
-│   │   ├── 404.html    # 与 index.html 字节相同
-│   │   ├── r0.bin      # AES-GCM 密文，解出为 first-stamp.png
-│   │   ├── r1.bin      # AES-GCM 密文，解出为第二枚邮票
-│   │   ├── r2.bin      # AES-GCM 密文，解出为 life-flow.mp3
-│   │   ├── night-route-signal.bin # AES-GCM 密文，ID 模式音频
-│   │   ├── return-portrait.bin    # AES-GCM 密文，ID 模式头像
-│   │   ├── starrev-stamp.png      # 解密后的第二枚邮票
-│   │   ├── night-route-signal.m4a # 解密后的音频
-│   │   └── return-portrait.jpg    # 解密后的头像
-│   └── v3/             # 上游 8559e6f（第三版）
-│       ├── index.html  # 三档身份 + 常驻信号 + 3 枚邮票
-│       ├── 404.html    # 与 index.html 字节相同
-│       ├── r0.bin / r1.bin / r2.bin             # 沿用 v2 的三个密文
-│       ├── night-route-signal.bin / return-portrait.bin  # 沿用 v2
-│       ├── unposted-gate.bin      # AES-GCM 密文，解出为第三枚邮票
-│       ├── route-echo-cinder.bin  # AES-GCM 密文，解出为信号 CONFRONT
-│       ├── route-echo-lotus.bin   # AES-GCM 密文，解出为信号 Iron Lotus
-│       ├── courier-record.bin     # AES-GCM 密文，解出为邮递员头像
-│       ├── unposted-gate.png      # 解密后的第三枚邮票
-│       ├── route-echo-cinder.m4a  # 解密后的信号
-│       ├── route-echo-lotus.m4a   # 解密后的信号
-│       └── courier-record.jpg     # 解密后的邮递员头像
-│
-└── localized/          # 汉化模块（英文页面中文版）
-    ├── forecast-v1/    # 大黄昏预测 v1 汉化
-    │   └── index.html
-    └── forecast-v2/    # 大黄昏预测 v2 汉化（加密页，音频引用原版）
-        └── index.html
+├── index.html                         # 首页
+├── viewer.html                        # 原版网页全屏浏览外壳
+├── CNAME
+├── README.md
+├── archive/                           # 原版网页与原始依赖
+│   ├── wiki/{v1,v2,v3}/
+│   ├── forecast/{v1,v2}/
+│   ├── number-of-motion/files/
+│   └── postal-terminal/{v1,v2,v3,v4,v5}/
+└── resources/                         # 本存档附加资源
+    ├── music/                         # 首页与控制台使用的音乐
+    ├── sfx/                           # UI 音效及 sources.json
+    ├── images/                        # 首页与解密副本图片
+    ├── scripts/                       # viewer、返回入口、音效、控制台
+    ├── fonts/                         # 首页字体
+    └── localized/                     # 汉化网页
 ```
 
 ## 首页网格
@@ -129,9 +59,13 @@ SILVERFISH_0-Archive/
 | `light` | `CONFRONT.mp3` | 9.5 MB |
 | `crimson`（隐藏，需解锁） | `Mayors-the-Yearning-Flotsam.mp3` | 11.4 MB |
 
+## 界面音效
+
+首页和邮路控制台使用 `resources/sfx/legacy/` 中保留的五段历史本地音效。映射和原始提交来源记录在 [`resources/sfx/sources.json`](resources/sfx/sources.json)；PCS 页面曾被检查过，但其当前音效不参与播放。
+
 ## 字体
 
-首页用四份字体，都放在 `fonts/`，全部是子集化后的 woff2，合计约 411 KB：
+首页用四份字体，都放在 `resources/fonts/`，全部是子集化后的 woff2，合计约 411 KB：
 
 | 字体 | 用途 | 文件 | 大小 |
 | --- | --- | --- | --- |
@@ -197,38 +131,34 @@ pyftsubset SourceHanSansCN-Medium.otf --text-file=chars.txt \
 - `index.html` 为加密外壳，浏览器会自动解密并显示事件页
 - 附带 `GDF-ALERT-LEVEL-III.mp3`（Level III 警报音频，与事件页同目录）
 
-各版页面均未沿用 Ctrl+Q 快捷键，改用右下角可见的「返回存档索引」按钮返回本目录。
+原版页面不包含本存档追加的返回按钮。通过首页卡片打开时，`viewer.html` 会在同源 iframe 中注入右下角「返回存档索引」入口；直接访问 `archive/` 下的原件则保持原版内容。
 
 ### 汉化 (localized)
 
 把原本全英文的两份大黄昏预测页面翻译成中文，原版页面保持不动：
 
-- `localized/forecast-v1/`：预测页中文版（版式、配色与交互与原版一致）
-- `localized/forecast-v2/`：事件页中文版，仍为加密壳，解密后为中文内容；保留手动警报门禁，音频引用原版 `forecast/v2/GDF-ALERT-LEVEL-III.mp3`
+- `resources/localized/forecast-v1/`：预测页中文版（版式、配色与交互与原版一致）
+- `resources/localized/forecast-v2/`：事件页中文版，仍为加密壳，解密后为中文内容；保留手动警报门禁，音频引用原版 `archive/forecast/v2/GDF-ALERT-LEVEL-III.mp3`
 
 ### 运动之数 (number-of-motion)
 
 来自仓库 `https://github.com/Silverfish-0/number-of-motion`，以及 2026-09-10 的 B 站动态《失联以后，这边还在走》。
 这是一个 Minecraft 侧的小模组谜题，不是网页存档，因此单独成一个模块：
 
-- `files/local-continuity-probe-0.1.0.jar`：Local Continuity Probe／本地连续性探针 v0.1.0，环境 Minecraft Java 1.20.1 + Forge 47.4.10
-- `files/last-local-record.html`：本地记录，加密外壳，需在浏览器内输入密钥解封
-- `files/local-copy.html`：本地副本，同为加密外壳
-- `files/CHECKSUMS.txt`：发布方自述的注意事项与三个文件的 SHA-256
+- `archive/number-of-motion/files/local-continuity-probe-0.1.0.jar`：Local Continuity Probe／本地连续性探针 v0.1.0，环境 Minecraft Java 1.20.1 + Forge 47.4.10
+- `archive/number-of-motion/files/last-local-record.html`：本地记录，加密外壳，需在浏览器内输入密钥解封
+- `archive/number-of-motion/files/local-copy.html`：本地副本，同为加密外壳
+- `archive/number-of-motion/files/CHECKSUMS.txt`：发布方自述的注意事项与三个文件的 SHA-256
 
 三个文件按发布时的原始字节保存，未做任何改动，SHA-256 与 `CHECKSUMS.txt` 完全一致。
 首页只收录两份记录网页，模组与说明按原样留在目录里，不进入首页模块。
 
-两份记录网页在文件末尾追加了一段返回入口（单行标记 `SF0-ARCHIVE-RETURN-BEGIN` … `SF0-ARCHIVE-RETURN-END`），
-这是全文唯一的改动：原有内容一个字节没动，追加块只负责往页面上注入右下角的返回按钮。
-追加块 1133 字节，紧接在原件之后，截断回 8584 字节（`last-local-record.html`）或 4656 字节（`local-copy.html`）
-即可还原原件、重新对上 `CHECKSUMS.txt`。追加块不含换行符，所以仓库里的字节与 GitHub Pages 提供的一致。
-`local-copy.html` 的追加块以一个 `</script>` 开头——它末尾原有内容没有闭合脚本标签，不补这一下，追加的代码不会被解析执行。
+两份记录网页以发布方原始字节保存；返回入口由 `viewer.html` 运行时注入，不写入页面文件。`CHECKSUMS.txt` 中的原件 SHA-256 可直接对照 `archive/number-of-motion/files/` 下对应文件。
 
-| 文件 | 原件 SHA-256 | 追加后 SHA-256 |
-| --- | --- | --- |
-| `last-local-record.html` | `d525670114f1f084c36bcf60daad13b29293c099f3a06ad6f757d8ebe501c09f` | `8aa4e8722380571ed97187aebf24738ae7de2e710860090b99f2b868bda4e45f` |
-| `local-copy.html` | `866d44866e9d30836bc75869b423fa7fa95c72af084b844521e1d7db938d7c3f` | `91fa0bbefd539696d4550898a438ea49fb19018263c6a3bd62b897a673bd9570` |
+| 文件 | 原件 SHA-256 |
+| --- | --- |
+| `archive/number-of-motion/files/last-local-record.html` | `d525670114f1f084c36bcf60daad13b29293c099f3a06ad6f757d8ebe501c09f` |
+| `archive/number-of-motion/files/local-copy.html` | `866d44866e9d30836bc75869b423fa7fa95c72af084b844521e1d7db938d7c3f` |
 
 发布方在说明里要求：不要上传到所谓在线解密站，也不要把这件事扩展成对任何现实人物的调查；模组不联网、不上传数据。
 
@@ -247,7 +177,7 @@ pyftsubset SourceHanSansCN-Medium.otf --text-file=chars.txt \
 上游于 2026-09-20 强制重写历史，旧提交 `6b1ea71` / `b65f684` 被新提交 `710fb72` / `bad843c` / `0df8c37` 取代；
 2026-09-25 追加提交 `8559e6f`（`Add files via upload`），页面与资源大幅扩容；
 2026-09-26 再更新 `976cdaa`（`update`），新增第四枚邮票「未署名附件」与一个加密资源。
-因此本存档按版本分目录保留四代：`postal-terminal/v1/`、`postal-terminal/v2/`、`postal-terminal/v3/` 与 `postal-terminal/v4/`。
+因此本存档按版本分目录保留五代：`archive/postal-terminal/v1/`、`archive/postal-terminal/v2/`、`archive/postal-terminal/v3/`、`archive/postal-terminal/v4/` 与 `archive/postal-terminal/v5/`。
 
 #### v1（对应上游旧历史 `b65f684`）
 
@@ -287,9 +217,7 @@ v2 资源解密结果（密钥内嵌于载荷，本存档已实测全部解出�
 密文比明文各多 16 字节（GCM 认证标签）。解出的明文副本以规范扩展名另存于 `v2/`
 （`starrev-stamp.png`、`night-route-signal.m4a`、`return-portrait.jpg`），便于直接查看与下载。
 
-三代的 `index.html` 与 `404.html` 都在 `</body>` 前追加了返回按钮（与 forecast、wiki 各页同一套右下角样式），
-追加块本身不含换行符，另加一个 CRLF 接回原件。`v1` 与 `v2` 各自的两个文件在原件状态下字节完全相同。
-去掉返回按钮并归一化行尾后，`v1` 的两个文件与上游 `b65f684` 对应文件**逐字节一致**。
+`index.html` 与 `404.html` 均以原版内容保存；通过 `viewer.html` 打开时才会运行时注入返回入口和控制台。`v1` 与 `v2` 各自的两个文件内容一致，`v3`、`v4` 保留上游页面与各自独立的加密资源。
 
 v2 依赖 `crypto.subtle`，只在**安全上下文**（HTTPS 或 localhost）可用；
 直接用 `file://` 双击打开会因资源解密失败而空白。GitHub Pages 是 HTTPS，不受影响。
@@ -356,15 +284,18 @@ v4 资源解密（v4 目录 `index.html` 载荷内嵌密钥，本存档已实测
 | `unattributed-attachment.bin` | PNG | 3,045,736 B | 第四枚邮票 `未署名附件` |
 
 前九项与 v3 目录里的同名 `.bin` 逐字节一致。v4 目录额外保留新资源解出的明文 `unattributed-attachment.png`，
-已加入下载模块（下载文件数由 19 增至 20）。v4 的 `index.html` 与 `404.html`
-同样在 `</body>` 前追加了返回按钮。
+已加入下载模块（下载文件数由 20 增至 21）。返回入口统一由 `viewer.html` 运行时注入。
+
+#### v5（对应上游 `80cb3ef`）
+
+第五版沿用 v4 的前十项加密资源，并新增 `joint-disposition.bin`，页面与资源已原样保存于 `archive/postal-terminal/v5/`。新增第五枚邮票「首席代理代表 / CHIEF DELEGATE」，使用存储键 `prt_chief_delegate_v1`。解锁入口位于完整终端的「联合处置」文件导入，控制台会自动生成符合原页面文件名校验的 `联合处置决议.txt` 并触发原页面流程。
 
 ### 文件下载 (downloads)
 
-首页第六个模块，把散落在各目录里的随档文件集中成下载入口。`wiki/v1/` 与 `wiki/v2/` 的
-`密码.txt`、`readme.zip` 哈希完全一致，所以只放一份。共 20 个文件，模块上方是分类筛选
+首页第六个模块，把散落在各目录里的随档文件集中成下载入口。`archive/wiki/v1/` 与 `archive/wiki/v2/` 的
+`密码.txt`、`readme.zip` 哈希完全一致，所以只放一份。共 21 个文件，模块上方是分类筛选
 （全部 / 文本 / 音频 / 图像 / 压缩包）与关键词搜索，下面按每页 4 个分页；筛选和搜索作用于
-全部 20 个文件，分页只对筛选后的结果集切页，翻页时卡片按方向从左右滑入。
+全部 21 个文件，分页只对筛选后的结果集切页，翻页时卡片按方向从左右滑入。
 
 每张下载卡片的描述里，「文件大小」那行下方是归属模块行（`.card-source`，等宽小字），再下面是
 文件说明。归属标明这份文件来自首页哪个模块，重名文件靠这一行区分；文件在仓库里的具体位置见
@@ -378,38 +309,39 @@ v4 资源解密（v4 目录 `index.html` 载荷内嵌密钥，本存档已实测
 
 | 卡片 | 其他位置 |
 | --- | --- |
-| `密码.txt` | `wiki/v1/` 与 `wiki/v2/` 各一份且字节相同，卡片只列 v1 |
+| `密码.txt` | `archive/wiki/v1/` 与 `archive/wiki/v2/` 各一份且字节相同，卡片只列 v1 |
 | `readme.zip` | 同上，卡片只列 v1 |
-| `README.md` | `number-of-motion/` 与根目录各一份，卡片指向 `number-of-motion/` |
-| `first-stamp.png`、`starrev-stamp.png`、`life-flow.mp3`、`night-route-signal.m4a`、`return-portrait.jpg` | `postal-terminal/v2/` 的 `.bin` 解密后就是这些明文，两者内容一致 |
+| `README.md` | `archive/number-of-motion/` 与根目录各一份，卡片指向 `archive/number-of-motion/` |
+| `first-stamp.png`、`starrev-stamp.png`、`life-flow.mp3`、`night-route-signal.m4a`、`return-portrait.jpg` | `archive/postal-terminal/v2/` 的 `.bin` 解密后就是这些明文，两者内容一致 |
 
-根目录的 `call-of-iberia.mp3`、`CONFRONT.mp3`、`Mayors-the-Yearning-Flotsam.mp3`、
-`crimson-background.webp` 与 `sfx/` 下的音效是首页主题与交互资源，未列入下载模块。
+`resources/music/` 下的 `call-of-iberia.mp3`、`CONFRONT.mp3`、`Mayors-the-Yearning-Flotsam.mp3`、
+`resources/images/crimson-background.webp` 与 `resources/sfx/legacy/` 下的界面音效是首页主题与交互资源，未列入下载模块。
 
 | 文件 | 实际位置 | 说明 |
 | --- | --- | --- |
-| `密码.txt` | `wiki/v1/` | 64 B，解密密码 |
-| `readme.zip` | `wiki/v1/` | 508 B，原始加密文件 |
-| `local-continuity-probe-0.1.0.jar` | `number-of-motion/files/` | 9.8 KB，本地连续性探针 |
-| `CHECKSUMS.txt` | `number-of-motion/files/` | 658 B，探针三个文件的 SHA-256 与使用须知 |
-| `LOCAL_COPY.txt` | `number-of-motion/files/` | 4.6 KB，本地副本内嵌文件（关于「锚」的几次改口） |
-| `README.md` | `number-of-motion/` | 452 B，运动之数发布方随附说明 |
-| `god.m4a` | `wiki/v3/` | 3.4 MB，Somniomancer [null set]，调查维基 v3（GOD SAYS）音频 |
-| `background.png` | `wiki/v3/` | 2.5 MB，调查维基 v3（GOD SAYS）背景图 |
-| `GDF-ALERT-LEVEL-III.mp3` | `forecast/v2/` | 9.2 MB，脑叶公司三级警报，大黄昏预测 v2 警报音频 |
-| `first-stamp.png` | `postal-terminal/v1/` | 2.9 MB，雨前首封，邮路终端 v1 首枚邮票 |
-| `life-flow.mp3` | `postal-terminal/v1/` | 7.5 MB，邮路终端 v1 背景音乐 |
-| `starrev-stamp.png` | `postal-terminal/v2/` | 2.9 MB，星幻_StarRev，邮路终端 v2 第二枚邮票 |
-| `night-route-signal.m4a` | `postal-terminal/v2/` | 3.5 MB，夜航邮路信号，ID 模式专属 |
-| `return-portrait.jpg` | `postal-terminal/v2/` | 51 KB，返程头像，ID 模式专属 |
-| `unposted-gate.png` | `postal-terminal/v3/` | 3.1 MB，未寄之门，邮路终端 v3 第三枚邮票 |
-| `route-echo-cinder.m4a` | `postal-terminal/v3/` | 3.9 MB，常驻信号 `CONFRONT` |
-| `route-echo-lotus.m4a` | `postal-terminal/v3/` | 3.7 MB，常驻信号 `Iron Lotus` |
-| `courier-record.jpg` | `postal-terminal/v3/` | 20 KB，邮递员头像 |
-| `unattributed-attachment.png` | `postal-terminal/v4/` | 3.0 MB，未署名附件，邮路终端 v4 第四枚邮票 |
+| `密码.txt` | `archive/wiki/v1/` | 64 B，解密密码 |
+| `readme.zip` | `archive/wiki/v1/` | 508 B，原始加密文件 |
+| `local-continuity-probe-0.1.0.jar` | `archive/number-of-motion/files/` | 9.8 KB，本地连续性探针 |
+| `CHECKSUMS.txt` | `archive/number-of-motion/files/` | 658 B，探针三个文件的 SHA-256 与使用须知 |
+| `LOCAL_COPY.txt` | `archive/number-of-motion/files/` | 4.6 KB，本地副本内嵌文件（关于「锚」的几次改口） |
+| `README.md` | `archive/number-of-motion/` | 452 B，运动之数发布方随附说明 |
+| `god.m4a` | `archive/wiki/v3/` | 3.4 MB，Somniomancer [null set]，调查维基 v3（GOD SAYS）音频 |
+| `background.png` | `archive/wiki/v3/` | 2.5 MB，调查维基 v3（GOD SAYS）背景图 |
+| `GDF-ALERT-LEVEL-III.mp3` | `archive/forecast/v2/` | 9.2 MB，脑叶公司三级警报，大黄昏预测 v2 警报音频 |
+| `first-stamp.png` | `archive/postal-terminal/v1/` | 2.9 MB，雨前首封，邮路终端 v1 首枚邮票 |
+| `life-flow.mp3` | `archive/postal-terminal/v1/` | 7.5 MB，邮路终端 v1 背景音乐 |
+| `starrev-stamp.png` | `archive/postal-terminal/v2/` | 2.9 MB，星幻_StarRev，邮路终端 v2 第二枚邮票 |
+| `night-route-signal.m4a` | `archive/postal-terminal/v2/` | 3.5 MB，夜航邮路信号，ID 模式专属 |
+| `return-portrait.jpg` | `archive/postal-terminal/v2/` | 51 KB，返程头像，ID 模式专属 |
+| `unposted-gate.png` | `archive/postal-terminal/v3/` | 3.1 MB，未寄之门，邮路终端 v3 第三枚邮票 |
+| `route-echo-cinder.m4a` | `archive/postal-terminal/v3/` | 3.9 MB，常驻信号 `CONFRONT` |
+| `route-echo-lotus.m4a` | `archive/postal-terminal/v3/` | 3.7 MB，常驻信号 `Iron Lotus` |
+| `courier-record.jpg` | `archive/postal-terminal/v3/` | 20 KB，邮递员头像 |
+| `unattributed-attachment.png` | `archive/postal-terminal/v4/` | 3.0 MB，未署名附件，邮路终端 v4 第四枚邮票 |
+| `joint-disposition.bin` | `archive/postal-terminal/v5/` | 2.0 MB，联合处置决议原始加密材料，邮路终端 v5 第五枚邮票 |
 | `avatar_silverfish.jpg` | 根目录 | 9.3 KB，站点头像与图标原图 |
 
-`LOCAL_COPY.txt` 原本只以 ZIP 形式内嵌在 `number-of-motion/files/local-copy.html` 里（该页是加密的
+`LOCAL_COPY.txt` 原本只以 ZIP 形式内嵌在 `archive/number-of-motion/files/local-copy.html` 里（该页是加密的
 单文件页，正文中段就是一段原始 ZIP 字节），下载模块里这份是按原字节解出的单独副本：4,695 B、
 LF 换行、无 BOM，SHA-256 `cc1fe65549b900f46fefa75c47481720114eb8460761e3884dc3757bc59def76`。
 解出时与原文件逐字节一致，归属标为「运动之数 · 本地副本」。`local-copy.html` 本身没有被改动。
@@ -436,7 +368,7 @@ LF 换行、无 BOM，SHA-256 `cc1fe65549b900f46fefa75c47481720114eb8460761e3884
 
 这三个链接原先放在页脚，现已独立成模块；页脚只保留标题文字。
 
-## 留档文件（在 wiki/v1/ 和 wiki/v2/ 中）
+## 留档文件（在 archive/wiki/v1/ 和 archive/wiki/v2/ 中）
 
 ### 密码.txt
 解密密码：`INSIGHTFUTURETHROUGHTHEFOG`
@@ -449,20 +381,20 @@ LF 换行、无 BOM，SHA-256 `cc1fe65549b900f46fefa75c47481720114eb8460761e3884
 ## 使用方法
 
 ### 本地浏览
-直接打开 `index.html`，点击对应版本。
+直接打开 `index.html`，点击对应版本；网页卡片会进入 `viewer.html`，由外壳挂载返回入口和 v1–v5 邮路控制台。首页邮路卡片输入 `5` 即可打开 v5。
 
 ### 独立访问
-- `wiki/v1/index.html` - 20篇原始版本
-- `wiki/v2/index.html` - 21篇更新版本
-- `wiki/v3/index.html` - GOD SAYS
-- `forecast/v1/index.html` - 大黄昏预测第一版
-- `forecast/v2/index.html` - 大黄昏预测第二版（加密页，需 WebCrypto 自动解密）
-- `number-of-motion/files/last-local-record.html` - 本地记录（加密）
-- `number-of-motion/files/local-copy.html` - 本地副本
-- `number-of-motion/files/local-continuity-probe-0.1.0.jar` - 本地连续性探针模组
-- `postal-terminal/index.html` - 邮路终端（30 个邮票槽位）
-- `localized/forecast-v1/index.html` - 大黄昏预测第一版汉化
-- `localized/forecast-v2/index.html` - 大黄昏预测第二版汉化
+- `viewer.html?path=archive%2Fwiki%2Fv1%2Findex.html` - 20篇原始版本
+- `viewer.html?path=archive%2Fwiki%2Fv2%2Findex.html` - 21篇更新版本
+- `viewer.html?path=archive%2Fwiki%2Fv3%2Findex.html` - GOD SAYS
+- `viewer.html?path=archive%2Fforecast%2Fv1%2Findex.html` - 大黄昏预测第一版
+- `viewer.html?path=archive%2Fforecast%2Fv2%2Findex.html` - 大黄昏预测第二版（加密页，需 WebCrypto 自动解密）
+- `viewer.html?path=archive%2Fnumber-of-motion%2Ffiles%2Flast-local-record.html` - 本地记录（加密）
+- `viewer.html?path=archive%2Fnumber-of-motion%2Ffiles%2Flocal-copy.html` - 本地副本
+- `archive/number-of-motion/files/local-continuity-probe-0.1.0.jar` - 本地连续性探针模组下载
+- `viewer.html?path=archive%2Fpostal-terminal%2Fv5%2Findex.html` - 邮路终端 v5（v1–v4 同理）
+- `viewer.html?path=resources%2Flocalized%2Fforecast-v1%2Findex.html` - 大黄昏预测第一版汉化
+- `viewer.html?path=resources%2Flocalized%2Fforecast-v2%2Findex.html` - 大黄昏预测第二版汉化
 
 ### GitHub Pages 部署
 
