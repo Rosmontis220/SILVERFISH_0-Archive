@@ -1433,6 +1433,54 @@
         transform: scale(1.25);
       }
 
+      /* 下载模块：筛选压成一行横向滚动，配合轮播把高度再压下来 */
+      .download-tools {
+        padding: 10px 0 12px;
+        gap: 10px;
+      }
+
+      .download-filters {
+        width: 100%;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 2px;
+        scrollbar-width: none;
+      }
+
+      .download-filters::-webkit-scrollbar { display: none; }
+
+      .download-filter {
+        flex: 0 0 auto;
+        min-height: 28px;
+        padding: 0 12px;
+        white-space: nowrap;
+      }
+
+      .download-search-wrap { width: 100%; max-width: none; min-width: 0; }
+
+      /* 移动端不分页，全部交给轮播 */
+      .download-pager { display: none; }
+
+      .carousel-dots[hidden],
+      .carousel-counter[hidden] { display: none; }
+
+      .carousel-counter {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 5px;
+        margin-top: 12px;
+        font: 400 11px/1 var(--bender);
+        letter-spacing: 0.12em;
+        color: var(--muted);
+      }
+
+      .carousel-counter b {
+        font: 400 16px/1 var(--bender);
+        font-weight: 400;
+        color: var(--ef-yellow);
+      }
+
       .boot-side {
         top: 24%;
         left: 0;
@@ -1474,8 +1522,6 @@
       .nav-actions { gap: 8px; }
       .series-head { flex-direction: column; align-items: flex-start; gap: 6px; }
       .download-tools { align-items: stretch; }
-      .download-filters { width: 100%; }
-      .download-filter { flex: 1 1 calc(50% - 6px); }
       .download-search-wrap { max-width: none; }
       .card-grid { grid-template-columns: 1fr; }
       .archive-footer { flex-direction: column; align-items: flex-start; }
@@ -2596,18 +2642,18 @@
 </div>
 
 <script src="resources/scripts/vendor/lenis.min.js"></script>
-<script src="resources/scripts/scroll-engine.js"></script>
+<script src="resources/scripts/scroll-engine.js?v=2"></script>
 
-<script src="resources/scripts/boot.js"></script>
+<script src="resources/scripts/boot.js?v=2"></script>
 
 <script src="resources/scripts/theme.js"></script>
-<script src="resources/scripts/modules.js"></script>
-<script src="resources/scripts/downloads.js"></script>
+<script src="resources/scripts/modules.js?v=2"></script>
+<script src="resources/scripts/downloads.js?v=2"></script>
 <script src="resources/scripts/sound-toggle.js"></script>
 <script src="resources/scripts/music-lifecycle.js"></script>
 <script src="resources/scripts/postal-picker.js"></script>
-   <script src="resources/scripts/decrypt-text.js"></script>
-   <script src="resources/scripts/mobile-carousel.js"></script>
+   <script src="resources/scripts/decrypt-text.js?v=2"></script>
+   <script src="resources/scripts/mobile-carousel.js?v=2"></script>
   <script src="resources/scripts/home.js"></script>
 </body>
 </html>

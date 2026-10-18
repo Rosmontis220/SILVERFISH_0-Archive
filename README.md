@@ -41,7 +41,9 @@ SILVERFISH_0-Archive/
 - 模块标题（`.series-title`）做成滚动联动：标题从视口底部走到半屏高度期间，从右侧画面外虚化滑入并逐渐对焦落位
   （横向路程 40vw，速度约 1.3 倍滚动）；序号 `.no` 不参与位移，始终钉在标题行左侧
 - 移动端（≤860px）卡片改为横向吸附轮播（`resources/scripts/mobile-carousel.js`）：一屏只占一张卡的高度，
-  居中卡片高亮、两侧卡片缩小变暗，底部圆点可点选；下载模块保留自己的分页器不参与轮播
+  居中卡片高亮、两侧卡片缩小变暗。文件下载固定用 `01 / 21` 计数、不放圆点；移动端不分页，
+  由轮播的 `archive:carousel-state` 事件接管分页策略，所有匹配项放在同一个轮播里，分页器隐藏；
+  其余模块超过 8 张时也会自动改用计数。筛选 / 桌面翻页通过 `archive:downloads-update` 重建指示器
 - 首屏 `SILVERFISH_0` / `ARCHIVE` 用 Decrypted Text 效果（原生实现，见 `resources/scripts/decrypt-text.js`）：
   未解出的字符每帧换成随机字形并压暗，从左到右逐字解开，在幕布揭开时触发
 - 入场渐显用独立的 `translate` 属性，和视差用的 `transform` 分开，互不覆盖

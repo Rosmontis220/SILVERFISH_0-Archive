@@ -553,8 +553,8 @@
     },
     {
       "path": "resources/scripts/downloads.js",
-      "bytes": 3126,
-      "sha256": "2a3c9b52fa7dae544bb9ffd200e881009987ccc3fc0f36de917cd86780124de2"
+      "bytes": 3777,
+      "sha256": "0eaacca599a3dfb8cce26450692d55fc69555c4a3b66d61804813f6dee026583"
     },
     {
       "path": "resources/scripts/hero-clock.js",
@@ -573,8 +573,8 @@
     },
     {
       "path": "resources/scripts/mobile-carousel.js",
-      "bytes": 3730,
-      "sha256": "bd5114c979c5247e2094651f633a8a7ceb92dc447bd79f70faedb547780f665b"
+      "bytes": 6744,
+      "sha256": "93368ef65d455322cdbeae5366a805011717a5bce95439136c4f014b53d6ce08"
     },
     {
       "path": "resources/scripts/modules.js",
