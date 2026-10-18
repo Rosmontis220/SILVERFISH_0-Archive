@@ -1,28 +1,11 @@
   (function () {
     const page = document.getElementById('page');
+    if (!page) return;
     const mods = Array.from(page.querySelectorAll(':scope > .module'));
-    const up = document.getElementById('module-up');
-    const down = document.getElementById('module-down');
-    const countEl = document.getElementById('module-count');
-    const enter = document.getElementById('enter-archive');
-    const hint = document.getElementById('enter-hint');
-    const locked = () => page.classList.contains('locked');
-    const currentIndex = () => {
-      if (isMobile()) {
-        const pageTop = page.getBoundingClientRect().top;
-        let best = 0;
-        mods.forEach((m, idx) => {
-          if (m.getBoundingClientRect().top - pageTop <= 80) best = idx;
-        });
-        return best;
-      }
-      const idx = Math.round(page.scrollTop / page.clientHeight);
-      return Math.max(0, Math.min(mods.length - 1, idx));
-    };
-    let busy = false;
-    let touchY = null;
-    const mobileQuery = window.matchMedia('(max-width: 860px)');
-    const isMobile = () => mobileQuery.matches;
+    const body = document.body;
+    const root = document.documentElement;
+    const scroller = () => window.__archiveScroll;
+    const locked = () => !body.classList.contains('is-entered');
 
     /* 侧边栏目录 */
     const nav = document.querySelector('.nav-system');
@@ -35,6 +18,9 @@
     const repoLink = navActions ? navActions.querySelector('a.nav-action-item') : null;
     const navModules = document.getElementById('nav-modules');
     const navCenter = nav ? nav.querySelector('.nav-center') : null;
+    const mobileQuery = window.matchMedia('(max-width: 860px)');
+    const isMobile = () => mobileQuery.matches;
+
     const TOC_ICONS = [
       '<rect x="5.6" y="5.6" width="12.8" height="12.8" transform="rotate(45 12 12)"/><circle cx="12" cy="12" r="2"/>',
       '<path d="M7 3.5h6.5L18 8v12.5H7z"/><path d="M13.5 3.5V8H18"/><path d="M9.8 12h5.4M9.8 15.5h5.4"/>',
@@ -59,6 +45,22 @@
       svg.innerHTML = TOC_ICONS[idx] || '';
       return svg;
     };
+
+    const go = (index, silent) => {
+      const scroller = window.__archiveScroll;
+      if (!scroller) return;
+      const target = Math.max(0, Math.min(mods.length - 1, index));
+      if (target === scroller.index) return;
+      if (!silent && window.__archiveSfx) window.__archiveSfx.slide();
+      scroller.scrollToIndex(target);
+    };
+
+    const closeMenu = () => {
+      if (!nav || !nav.classList.contains('menu-open')) return;
+      nav.classList.remove('menu-open');
+      if (burger) burger.setAttribute('aria-expanded', 'false');
+    };
+
     const tocItems = [];
     if (tocList) {
       mods.forEach((m, idx) => {
@@ -89,17 +91,7 @@
         tocItems.push(btn);
       });
     }
-    const closeMenu = () => {
-      if (!nav || !nav.classList.contains('menu-open')) return;
-      nav.classList.remove('menu-open');
-      if (burger) burger.setAttribute('aria-expanded', 'false');
-    };
-    const jumpTo = (i) => {
-      if (i < 0 || i >= mods.length) return;
-      if (locked()) unlock(true);
-      go(i, true);
-      closeMenu();
-    };
+
     const syncNavLayout = () => {
       if (!nav || !panelSlot) return;
       if (isMobile()) {
@@ -114,6 +106,7 @@
         closeMenu();
       }
     };
+
     if (burger) {
       burger.addEventListener('click', () => {
         const open = nav.classList.toggle('menu-open');
@@ -134,108 +127,68 @@
     else if (mobileQuery.addListener) mobileQuery.addListener(syncNavLayout);
     syncNavLayout();
 
-    const setState = () => {
-      const i = currentIndex();
-      tocItems.forEach((el, idx) => el.classList.toggle('is-current', idx === i));
-      if (isMobile()) return;
-      const l = locked();
-      /* 计数与各模块标题里的编号对齐：首屏记 00，内容模块 01–08，总数按内容模块算 */
-      countEl.textContent = String(i).padStart(2, '0') + ' / ' + String(mods.length - 1).padStart(2, '0');
-      up.disabled = l || i === 0;
-      down.disabled = l || i === mods.length - 1;
-      mods.forEach((m, idx) => m.classList.toggle('is-active', idx === i));
-    };
-    const go = (i, silent) => {
-      if (locked()) return;
-      if (isMobile()) {
-        const target = mods[Math.max(0, Math.min(mods.length - 1, i))];
-        if (!silent && window.__archiveSfx) window.__archiveSfx.slide();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        return;
-      }
-      if (busy) return;
-      const target = Math.max(0, Math.min(mods.length - 1, i));
-      if (target === currentIndex()) return;
-      if (!silent && window.__archiveSfx) window.__archiveSfx.slide();
-      busy = true;
-      page.scrollTo({ top: target * page.clientHeight, behavior: 'smooth' });
-      window.setTimeout(() => { busy = false; }, 1050);
-    };
-    const shift = (dir) => go(currentIndex() + dir);
-    const unlock = (showHint = true) => {
+    /* 进入档案库：解锁后停在首屏，不自动跳到第一个内容模块 */
+    const unlock = () => {
       if (!locked()) return;
-      page.classList.remove('locked');
-      enter.disabled = true;
-      enter.innerHTML = '已进入档案库 <span aria-hidden="true">✓</span>';
-      hint.hidden = !showHint;
       try { sessionStorage.setItem('sf-entry', '1'); } catch (e) { /* storage unavailable */ }
-      setState();
+      const scroller = window.__archiveScroll;
+      if (scroller) scroller.unlock();
+      else {
+        root.classList.remove('scroll-locked');
+        page.classList.remove('locked');
+        body.classList.add('is-entered');
+      }
     };
-    page.addEventListener('wheel', (e) => {
-      if (e.ctrlKey || isMobile()) return; // 保留浏览器缩放 / 移动端自然滚动
-      e.preventDefault();
-      if (!locked() && !busy) shift(e.deltaY > 0 ? 1 : -1);
-    }, { passive: false });
-    page.addEventListener('touchstart', (e) => {
-      if (isMobile()) return;
-      touchY = e.touches[0].clientY;
-    }, { passive: true });
-    page.addEventListener('touchmove', (e) => {
-      if (!isMobile() && !locked()) e.preventDefault();
-    }, { passive: false });
-    page.addEventListener('touchend', (e) => {
-      if (isMobile()) return;
-      if (locked() || touchY === null) return;
-      const dy = e.changedTouches[0].clientY - touchY;
-      touchY = null;
-      if (Math.abs(dy) > 42) shift(dy < 0 ? 1 : -1);
-    }, { passive: true });
-    up.addEventListener('click', () => shift(-1));
-    down.addEventListener('click', () => shift(1));
+
+    const jumpTo = (i) => {
+      if (locked()) unlock();
+      go(i);
+      closeMenu();
+    };
+
+    const shift = (dir) => go((window.__archiveScroll?.index ?? 0) + dir);
+
+    /* 加载页点击后，boot 播完幕布并发 archive:ready，这里解锁并停在首屏 */
+    window.addEventListener('archive:ready', () => {
+      if (locked()) unlock();
+    });
+
+    window.addEventListener('archive:module-change', (event) => {
+      const index = event.detail ? event.detail.index : 0;
+      tocItems.forEach((el, idx) => el.classList.toggle('is-current', idx === index));
+    });
+
     document.addEventListener('click', (e) => {
       const card = e.target && e.target.closest ? e.target.closest('.entry-card') : null;
       if (!card) return;
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       try { sessionStorage.setItem('sf-return', '1'); } catch (err) { /* storage unavailable */ }
-      try { sessionStorage.setItem('sf-module', String(currentIndex())); } catch (err) { /* storage unavailable */ }
+      try { sessionStorage.setItem('sf-module', String(window.__archiveScroll?.index ?? 0)); } catch (err) { /* storage unavailable */ }
     }, true);
-    enter.addEventListener('click', () => {
-      if (window.__archiveSfx) window.__archiveSfx.enter();
-      unlock(true);
-      window.setTimeout(() => go(1, true), 550);
-    });
-    page.addEventListener('scroll', () => {
-      window.requestAnimationFrame(setState);
-    }, { passive: true });
-    if ('onscrollend' in window) {
-      page.addEventListener('scrollend', () => { busy = false; });
-    }
+
     window.addEventListener('keydown', (e) => {
-      if (isMobile() || locked() || busy) return;
+      if (locked()) return;
       const tag = (e.target && e.target.tagName) || '';
       if (/^(INPUT|TEXTAREA|SELECT)$/.test(tag)) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); shift(1); }
       else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); shift(-1); }
       else if (e.key === 'Home') { e.preventDefault(); go(0); }
       else if (e.key === 'End') { e.preventDefault(); go(mods.length - 1); }
     });
-    window.addEventListener('archive:ready', () => {
-      if (isMobile()) return;
-      mods.forEach((m) => m.classList.remove('is-active'));
-      window.requestAnimationFrame(() => {
-        mods[0].classList.add('is-active');
-      });
-    });
-    setState();
-    if (document.documentElement.classList.contains('auto-unlock')) {
-      unlock(false);
+
+    /* 本次会话已进入过：boot.js 会直接跳过遮罩，这里补上解锁与滚动位置 */
+    if (root.classList.contains('auto-unlock')) {
+      unlock();
       let origin = 1;
       try {
         const raw = sessionStorage.getItem('sf-module');
         const parsed = raw === null ? NaN : parseInt(raw, 10);
         if (!Number.isNaN(parsed)) origin = Math.max(0, Math.min(mods.length - 1, parsed));
       } catch (e) { /* storage unavailable */ }
-      window.setTimeout(() => go(origin, true), 450);
+      window.setTimeout(() => {
+        const scroller = window.__archiveScroll;
+        if (scroller) scroller.scrollToIndex(origin, true);
+      }, 60);
     }
   })();
-

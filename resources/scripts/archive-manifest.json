@@ -543,8 +543,13 @@
     },
     {
       "path": "resources/scripts/boot.js",
-      "bytes": 6100,
-      "sha256": "328250e83bb823422de3251864e566890456d4df437b1ead2cbd0107a4da0bb5"
+      "bytes": 7125,
+      "sha256": "60aeaa0d5e87cec3880fdc2a056c48c87ed5cf050e80d1e661911f783ee48815"
+    },
+    {
+      "path": "resources/scripts/decrypt-text.js",
+      "bytes": 2829,
+      "sha256": "7eac9ea5cc7b0e625a5a4958727ea976a4efed8e9bcd0d827a7a7aa06da28da6"
     },
     {
       "path": "resources/scripts/downloads.js",
@@ -558,8 +563,8 @@
     },
     {
       "path": "resources/scripts/hero-effects.js",
-      "bytes": 3384,
-      "sha256": "1d3603595d0d58c071ac1407d901902a3a67c7fe0f84d44b09f9c582dfee0f71"
+      "bytes": 2254,
+      "sha256": "9c749de79864a8081270bd80cf61a2f8d00856cc51b27b4830a4bf55c07bf5f0"
     },
     {
       "path": "resources/scripts/home.js",
@@ -567,9 +572,14 @@
       "sha256": "fba9cc069262b66911b9a4c97d123a422c421074c56f2d19fa231819b5cbb6cd"
     },
     {
+      "path": "resources/scripts/mobile-carousel.js",
+      "bytes": 3730,
+      "sha256": "bd5114c979c5247e2094651f633a8a7ceb92dc447bd79f70faedb547780f665b"
+    },
+    {
       "path": "resources/scripts/modules.js",
-      "bytes": 11937,
-      "sha256": "164094bd7002fd1be52bc05e64e9805efaa25080b285d3ef2ed07b86dae188a8"
+      "bytes": 9315,
+      "sha256": "b24b31fa51c2aa0d51af00fe9e125573fb4dc0a85285260d34931a4d12611fdd"
     },
     {
       "path": "resources/scripts/music-lifecycle.js",
@@ -597,9 +607,14 @@
       "sha256": "c458f57e2633e6b5d20b608195053abc6476bbcb035e441025adb7cac4c538f7"
     },
     {
+      "path": "resources/scripts/scroll-engine.js",
+      "bytes": 9269,
+      "sha256": "0ad76e22972fbb74b9061f406f16b037a5803e2508cd5deb150ecc8ed868e65e"
+    },
+    {
       "path": "resources/scripts/sfx-home.js",
-      "bytes": 2432,
-      "sha256": "918784ecbf939c1b26d91161b7ed7d708c198788f9ba1d00c39f5ea6672c0988"
+      "bytes": 2434,
+      "sha256": "f9ffb31f0154b46da9f4b02739dfdf0ab3a2b0cf9ba6e757ae01ca88f9d816f8"
     },
     {
       "path": "resources/scripts/sfx.js",
@@ -620,6 +635,16 @@
       "path": "resources/scripts/theme.js",
       "bytes": 5342,
       "sha256": "cf3c2839e8c61abc19624715ccac9076dd47b5d43ca561ad436a8b2159a99cae"
+    },
+    {
+      "path": "resources/scripts/vendor/README.md",
+      "bytes": 371,
+      "sha256": "e6c12941094ce9b05dba4d0278c2d91cfd47ad63d3c8ba971cfe358b74567069"
+    },
+    {
+      "path": "resources/scripts/vendor/lenis.min.js",
+      "bytes": 14242,
+      "sha256": "978450a5e7638047c692941acdac7bc25e507289069d033f485569c42c4c7be3"
     },
     {
       "path": "resources/scripts/viewer.js",

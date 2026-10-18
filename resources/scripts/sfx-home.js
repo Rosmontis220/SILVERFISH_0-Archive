@@ -63,7 +63,7 @@
       const target = event.target;
       if (!target || !target.closest) return;
       if (target.closest('#sound-toggle')) return;
-      if (target.closest('#module-up, #module-down')) return;
+      if (target.closest('.module-hud, .ak-spine-dot')) return;
       if (target.closest('.nav-toc-item')) { play('menu'); return; }
       if (target.closest('a, button, .entry-card')) play('click');
     }, true);

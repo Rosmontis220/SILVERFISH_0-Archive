@@ -26,22 +26,66 @@
       return;
     }
 
-    /* 收场只留这一个出口：摘遮罩、摘幕布、发 archive:ready。
-       进度是靠 rAF 推进的，而浏览器在后台标签页、被完全遮挡的窗口等情况下会不给帧，
-       那样百分比会永远停在 99% 以下，遮罩连同「进入档案库」按钮一起盖住——
-       整页就再也点不动了。所以到点无条件撤掉，不等动画。
-       正常路径最慢是「预载兜底 9 秒 + 收场 1.7 秒」，12 秒不会误伤。
-       这里刻意不发 auto-unlock：那是「本次会话已进入过」的自动解锁旁路，
-       而兜底只是把遮罩撤掉，页面仍应停在入口，等用户自己点「进入档案库」。 */
+    /* 流程：进度跑完 → 停在加载页等点击 → 点击后才播幕布动画进入首页。
+       没有点击就绝不自动跳转；进度靠 rAF 推进，后台标签页可能不给帧，
+       所以 12 秒兜底只把进度补满并放开按钮，仍然等用户点。 */
+    let finished = false;
+    let exiting = false;
     let done = false;
-    const teardown = () => {
-      if (done) return;
-      done = true;
-      if (boot.parentNode) boot.remove();
-      if (curtain.parentNode) curtain.remove();
-      window.dispatchEvent(new Event('archive:ready'));
+
+    const removeNode = (node) => {
+      if (node && node.parentNode) node.remove();
     };
-    window.setTimeout(teardown, 12000);
+
+    /* 进度完成：进度条补满、开始接收整页点击/触屏，停在原地等用户进入 */
+    function markReady() {
+      if (finished) return;
+      finished = true;
+      pctEl.textContent = '100%';
+      fill.style.width = '100%';
+      fillV.style.transform = 'scaleY(1)';
+      stateEl.textContent = 'CLICK ANYWHERE // 点击任意位置进入';
+      boot.classList.add('is-ready');
+      armEntry();
+    }
+
+    /* 点击后：幕布盖住 → 摘遮罩 → 发 archive:ready（首页入场）→ 拉开幕布 */
+    function exitToArchive() {
+      if (exiting) return;
+      exiting = true;
+      boot.removeEventListener('pointerdown', activate);
+      window.removeEventListener('keydown', onKeyDown);
+      curtain.classList.add('active');
+      window.setTimeout(() => removeNode(boot), 560);
+      window.setTimeout(() => {
+        if (done) return;
+        done = true;
+        window.dispatchEvent(new Event('archive:ready'));
+      }, 640);
+      window.setTimeout(() => removeNode(curtain), 1200);
+    }
+
+    function activate(event) {
+      if (!finished || exiting) return;
+      /* 只认主键/触屏，右键与中键不触发 */
+      if (event && event.type === 'pointerdown' && event.pointerType === 'mouse' && event.button !== 0) return;
+      if (window.__archiveSfx) window.__archiveSfx.enter();
+      exitToArchive();
+    }
+
+    function onKeyDown(event) {
+      if (!finished || exiting) return;
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      activate();
+    }
+
+    function armEntry() {
+      boot.addEventListener('pointerdown', activate);
+      window.addEventListener('keydown', onKeyDown);
+    }
+
+    window.setTimeout(markReady, 12000); /* 只兜底进度，不代替点击 */
     const PRELOAD_FILES = [
       'resources/fonts/novecento-wide-bold.woff2', 'resources/fonts/bender.woff2',
       'resources/fonts/source-han-sans-cn-medium.woff2', 'resources/fonts/source-han-serif-cn-heavy.woff2',
@@ -83,8 +127,7 @@
     const stages = [
       [30, 'CONNECTING // 连接中'],
       [65, 'DECRYPTING // 解密中'],
-      [92, 'RECONSTRUCTING // 重组中'],
-      [100, 'ARCHIVE READY // 档案就绪']
+      [92, 'RECONSTRUCTING // 重组中']
     ];
     const tick = (now) => {
       const t = Math.min(1, (now - started) / DURATION);
@@ -107,14 +150,7 @@
       if (pct < 100) {
         window.requestAnimationFrame(tick);
       } else {
-        stateEl.textContent = 'ARCHIVE READY // 档案就绪';
-        window.setTimeout(() => {
-          curtain.classList.add('active');
-          window.setTimeout(() => {
-            boot.remove();
-          }, 620);
-          window.setTimeout(teardown, 1450);
-        }, 260);
+        markReady(); /* 跑完就停在加载页，等按钮点击 */
       }
     };
     window.requestAnimationFrame(tick);

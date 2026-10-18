@@ -6,61 +6,28 @@
       const mods = Array.from(page.querySelectorAll(':scope > .module'));
       const spine = document.getElementById('ak-spine');
 
-      
       mods.forEach(function (m, i) {
         var n = i.toString().padStart(2, '0');
         m.setAttribute('data-ak-idx', n);
       });
 
-      
-      if (!spine) return;
-      var dots = [];
-      mods.forEach(function (m, i) {
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'ak-spine-dot';
-        var label = m.getAttribute('aria-label') || ('模块 ' + (i + 1));
-        btn.setAttribute('aria-label', label);
-        btn.setAttribute('title', label);
-        btn.addEventListener('click', function () {
-          
-          var mobileQ = window.matchMedia('(max-width: 860px)');
-          if (mobileQ.matches) {
-            var pt = parseInt(getComputedStyle(page).paddingTop, 10) || 64;
-            var top = m.getBoundingClientRect().top + page.scrollTop - page.getBoundingClientRect().top - pt;
-            page.scrollTo({ top: top, behavior: 'smooth' });
-          } else {
-            page.scrollTo({ top: i * page.clientHeight, behavior: 'smooth' });
-          }
-          if (window.__archiveSfx) window.__archiveSfx.slide();
-        });
-        spine.appendChild(btn);
-        dots.push(btn);
-      });
-
-      
-      function updateDots() {
-        var mobileQ = window.matchMedia('(max-width: 860px)');
-        var idx;
-        if (mobileQ.matches) {
-          var pageTop = page.getBoundingClientRect().top;
-          idx = 0;
-          mods.forEach(function (m, i) {
-            if (m.getBoundingClientRect().top - pageTop <= 80) idx = i;
+      /* 右侧菱形定位点：点击交给滚动引擎，选中态也由引擎统一维护 */
+      if (spine) {
+        mods.forEach(function (m, i) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'ak-spine-dot';
+          var label = m.getAttribute('aria-label') || ('模块 ' + (i + 1));
+          btn.setAttribute('aria-label', label);
+          btn.setAttribute('title', label);
+          btn.addEventListener('click', function () {
+            if (window.__archiveScroll) window.__archiveScroll.scrollToIndex(i);
+            if (window.__archiveSfx) window.__archiveSfx.slide();
           });
-        } else {
-          idx = Math.round(page.scrollTop / page.clientHeight);
-          idx = Math.max(0, Math.min(mods.length - 1, idx));
-        }
-        dots.forEach(function (d, i) {
-          d.classList.toggle('is-current', i === idx);
+          spine.appendChild(btn);
         });
       }
 
-      page.addEventListener('scroll', updateDots, { passive: true });
-      updateDots();
-
-      
       var hero = document.querySelector('.hero');
       if (hero) {
         var now = new Date();
@@ -87,4 +54,3 @@
       init();
     }
   })();
-
