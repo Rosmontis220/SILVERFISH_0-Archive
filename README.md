@@ -380,6 +380,7 @@ LF 换行、无 BOM，SHA-256 `cc1fe65549b900f46fefa75c47481720114eb8460761e3884
 - B站 · Silverfish_0：`https://space.bilibili.com/1239867708`
 - 迷雾论坛：`https://www.mistarg.cn/`
 - QQ 群链接：`https://qm.qq.com/q/EICZzM2KTC`
+- 档案文明留档处（友链）：`https://archivist.rosmontis220.top/`，卡片用 `.entry-card--friend` 常亮底栏区分
 
 ### GitHub 主页 (github)
 

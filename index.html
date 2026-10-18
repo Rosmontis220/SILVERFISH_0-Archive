@@ -1206,6 +1206,16 @@
     .entry-card:hover .card-enter { color: var(--ef-yellow); }
     .entry-card:hover .card-enter span { transform: translateX(4px); }
 
+    /* 友链卡片：底栏常亮，和普通外链区分开 */
+    .entry-card--friend .card-enter {
+      color: var(--ef-yellow);
+      font-weight: 700;
+    }
+
+    .entry-card--friend {
+      border-color: color-mix(in srgb, var(--ef-yellow) 34%, var(--line));
+    }
+
     .archive-footer {
       margin-top: auto;
       padding-top: 20px;
@@ -2514,7 +2524,7 @@
     <div class="module-main">
       <div class="series-head">
         <h2 class="series-name"><span class="no">07</span><span class="series-title">杂项 / MISC</span></h2>
-        <span class="series-count">7 LINKS</span>
+        <span class="series-count">8 LINKS</span>
       </div>
       <div class="card-grid">
         <a href="https://space.bilibili.com/3493126603803061" class="entry-card" target="_blank" rel="noopener">
@@ -2564,6 +2574,13 @@
           <h3 class="card-title">QQ 群链接</h3>
           <p class="card-desc">qm.qq.com/q/EICZzM2KTC</p>
           <div class="card-enter">Open Link <span>↗</span></div>
+        </a>
+
+        <a href="https://archivist.rosmontis220.top/" class="entry-card entry-card--friend" target="_blank" rel="noopener">
+          <div class="card-kicker">FRIEND LINK // ARCHIVIST-REPOSITORY</div>
+          <h3 class="card-title">档案文明留档处</h3>
+          <p class="card-desc">archivist.rosmontis220.top · 友链</p>
+          <div class="card-enter">FRIEND LINK <span>↗</span></div>
         </a>
       </div>
     </div>
