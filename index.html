@@ -968,15 +968,16 @@
       color: var(--muted);
     }
 
-    /* 卡片自己作为查询容器：列数由网格自适应决定，卡片窄到放不下常规字号时
-       内部字号自动收紧，所以无论排几列都不需要再加断点。
-       注意容器查询只能命中容器的后代，.entry-card 自身的内边距改不了，
-       要收紧的是标题与底栏这些后代元素。 */
-    .card-grid > .entry-card {
-      container-type: inline-size;
-    }
-
-    @container (max-width: 330px) {
+    /* 卡片窄到放不下常规字号时收紧内部字号。
+       这里原本是 container-type: inline-size + @container (max-width: 330px)，
+       但 Chromium 138（Electron 37，应用内置浏览器就是这一版）有个 bug：
+       卡片自己既是列向 flex 容器、又是尺寸查询容器时，容器内的行盒会被算成
+       0 高，标题、角标、底栏整块塌掉不渲染；而且任何一处强制重排又会恢复正常，
+       所以表现为「部分卡片和文字不显示」，越滚动越玄学。
+       卡片只在 ≤860px 的横向轮播里才会窄于 330px（宽度 min(76vw, 300px)），
+       桌面网格最窄也有 330px 出头，所以直接拿这个断点替代，效果等价，
+       还顺手去掉了每张卡片一份 containment。 */
+    @media (max-width: 860px) {
       .card-title {
         font-size: 17px;
       }
@@ -1564,16 +1565,23 @@
       overflow: hidden;
     }
 
-    /* 等高线底板：整页铺一张地形图，作为最「慢」的背景层托住所有内容。
+    /* 等高线底板：一整张地形图铺在内容后面，作为最「慢」的一层（不动，全靠内容飘）。
        线画在一张纯白的 contour-lines.svg 里当遮罩用，本身不带颜色，
        最后由 --ak-contour 按主题上色，所以切主题不用换图。
        SVG 内部已经把计曲线（每 5 条一根）画实、首曲线画虚，层级在图层里就分好了。
-       必须挂在 .page 上而不是每个 .module：瓦片各自按模块原点平铺的话，
-       模块交界处等高线会错位断开，一眼就能看出接缝。 */
+       两个关键约束：
+       1) 必须挂在 .page 上而不是每个 .module——瓦片各自按模块原点平铺的话，
+          模块交界处等高线会错位断开，一眼就看出接缝。
+       2) 用 fixed 铺满视口而不是 absolute 铺满整页——整页高的蒙版层在部分浏览器里
+          要分配一张上万像素的合成层，截图和滚动都会卡。视口大小足够，重复平铺本来
+          就看不出来。 */
     .page::before {
       content: "";
-      position: absolute;
-      inset: 0;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 84px;
       background: var(--ak-contour);
       -webkit-mask-image: url("resources/images/contour-lines.svg");
       mask-image: url("resources/images/contour-lines.svg");
@@ -1585,9 +1593,11 @@
       z-index: 0;
     }
 
-    /* 窄屏把瓦片一起缩小，否则一屏只剩几条线，等高线就散了 */
+    /* 窄屏让出顶部固定导航，瓦片也一起缩小，否则一屏只剩几条线，等高线就散了 */
     @media (max-width: 860px) {
       .page::before {
+        top: 64px;
+        left: 0;
         -webkit-mask-size: 780px 780px;
         mask-size: 780px 780px;
       }

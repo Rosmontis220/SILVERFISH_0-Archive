@@ -32,7 +32,7 @@ SILVERFISH_0-Archive/
 
 - 滚动由本地 `resources/scripts/vendor/lenis.min.js` 平滑接管（同样支持原生键盘、触控板与滚动条回退）
 - `resources/scripts/scroll-engine.js` 每帧给每个模块写入 `--p`（相对视口中心的进度）与首屏 `--hp`，
-  CSS 再用 `transform` 分层位移：等高线底板整页铺底不参与位移、标题最轻、卡片更重、巨型编号最快
+  CSS 再用 `transform` 分层位移：等高线底板固定在视口不参与位移、标题最轻、卡片更重、巨型编号最快
 - 首屏 `.module:first-child` 占满一屏；后续模块高度随内容走，只保留上下留白
 - 原右下角 ↑ / ↓ 翻页按钮已移除，换成右下角里程表式计数器：两位数字按模块索引上下滚动，
   旁边显示当前模块名与整页滚动进度
@@ -64,14 +64,19 @@ SILVERFISH_0-Archive/
 变窄时自动降到三列、两列、一列，全程没有任何 `@media` 断点，以后加卡片也不用再调列数。
 实测列数变化：1600px 起四列 → 1200px 三列 → 1000px 两列 → 520px 一列。
 
-卡片内部用容器查询跟着列宽缩放，同样不需要断点：
+卡片内部的字号原来靠容器查询跟着卡片自身宽度缩放（`container-type: inline-size` + `@container (max-width: 330px)`），
+现在已经改回 860px 媒体查询：
 
 ```css
-.card-grid > .entry-card { container-type: inline-size; }
-@container (max-width: 330px) { .card-title { font-size: 17px; } }
+@media (max-width: 860px) { .card-title { font-size: 17px; } }
 ```
 
-注意容器查询只能命中容器的后代，`.entry-card` 自身的内边距改不了，所以收紧的是标题和底栏。
+原因不是取舍，是 bug：卡片自己既是列向 flex 容器、又是尺寸查询容器时，Chromium 138（Electron 37，
+应用内置浏览器就是这个版本）会把容器内文字的行盒算成 0 高，标题、角标、底栏整块塌掉不渲染，
+而任何一次强制重排又会恢复正常——表现为「部分卡片和文字不显示」，滚动一会儿又时好时坏，极难复现。
+卡片只在 ≤860px 的横向轮播里才窄于 330px（宽度 `min(76vw, 300px)`），桌面网格最窄也有 330px 出头，
+所以这个断点和原来的容器查询完全等价，顺带还省掉了每张卡片一份 containment。
+
 `文件下载` 模块额外挂一个 `.card-grid--clamp2`，把卡片描述限制在 4 行（文件大小 1 行 + 归属模块 1 行 + 文件说明最多 2 行）。
 
 主题切换时背景音乐同步更换，全站共用单个 `<audio id="archive-music">`，只换 `src` 不重建元素：
