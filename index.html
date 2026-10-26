@@ -1564,22 +1564,36 @@
       overflow: hidden;
     }
 
-    /* 网格底板：比内容慢半拍，形成纵深 */
-    .module::before {
+    /* 等高线底板：整页铺一张地形图，作为最「慢」的背景层托住所有内容。
+       线画在一张纯白的 contour-lines.svg 里当遮罩用，本身不带颜色，
+       最后由 --ak-contour 按主题上色，所以切主题不用换图。
+       SVG 内部已经把计曲线（每 5 条一根）画实、首曲线画虚，层级在图层里就分好了。
+       必须挂在 .page 上而不是每个 .module：瓦片各自按模块原点平铺的话，
+       模块交界处等高线会错位断开，一眼就能看出接缝。 */
+    .page::before {
       content: "";
       position: absolute;
-      inset: -90px 0;
-      background-image:
-        linear-gradient(var(--ak-grid) 1px, transparent 1px),
-        linear-gradient(90deg, var(--ak-grid) 1px, transparent 1px);
-      background-size: 48px 48px;
+      inset: 0;
+      background: var(--ak-contour);
+      -webkit-mask-image: url("resources/images/contour-lines.svg");
+      mask-image: url("resources/images/contour-lines.svg");
+      -webkit-mask-size: 1180px 1180px;
+      mask-size: 1180px 1180px;
+      -webkit-mask-repeat: repeat;
+      mask-repeat: repeat;
       pointer-events: none;
       z-index: 0;
-      transform: translate3d(0, calc(var(--p) * -28px), 0);
-      will-change: transform;
     }
 
-    /* 首屏内容整体随滚动上移并淡出，背景层走得更慢 */
+    /* 窄屏把瓦片一起缩小，否则一屏只剩几条线，等高线就散了 */
+    @media (max-width: 860px) {
+      .page::before {
+        -webkit-mask-size: 780px 780px;
+        mask-size: 780px 780px;
+      }
+    }
+
+    /* 首屏内容整体随滚动上移并淡出，底板留在原地 */
     .module:first-child .hero {
       opacity: calc(1 - var(--hp) * 1.15);
     }
@@ -1609,7 +1623,6 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .module::before,
       .module:first-child .hero > *,
       .module .series-head,
       .module .card-grid,
@@ -1622,14 +1635,15 @@
     .module > * { position: relative; z-index: 1; }
 
     html {
-      --ak-grid: rgba(250, 204, 21, 0.048);
+      /* 等高线上色：这个不透明度按「计曲线」算，首曲线在 SVG 里已经打了折扣 */
+      --ak-contour: rgba(250, 204, 21, 0.085);
       --ak-corner: var(--ef-yellow);
     }
     html.light {
-      --ak-grid: rgba(0, 122, 255, 0.052);
+      --ak-contour: rgba(0, 122, 255, 0.085);
     }
     html.crimson {
-      --ak-grid: rgba(255, 27, 19, 0.065);
+      --ak-contour: rgba(255, 27, 19, 0.095);
     }
 
     

@@ -32,7 +32,7 @@ SILVERFISH_0-Archive/
 
 - 滚动由本地 `resources/scripts/vendor/lenis.min.js` 平滑接管（同样支持原生键盘、触控板与滚动条回退）
 - `resources/scripts/scroll-engine.js` 每帧给每个模块写入 `--p`（相对视口中心的进度）与首屏 `--hp`，
-  CSS 再用 `transform` 分层位移：网格底板最慢、标题次之、卡片更快、巨型编号最快
+  CSS 再用 `transform` 分层位移：等高线底板整页铺底不参与位移、标题最轻、卡片更重、巨型编号最快
 - 首屏 `.module:first-child` 占满一屏；后续模块高度随内容走，只保留上下留白
 - 原右下角 ↑ / ↓ 翻页按钮已移除，换成右下角里程表式计数器：两位数字按模块索引上下滚动，
   旁边显示当前模块名与整页滚动进度
