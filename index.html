@@ -1566,15 +1566,18 @@
     }
 
     /* 等高线底板：一整张地形图铺在内容后面，作为最「慢」的一层（不动，全靠内容飘）。
-       线画在一张纯白的 contour-lines.svg 里当遮罩用，本身不带颜色，
-       最后由 --ak-contour 按主题上色，所以切主题不用换图。
+       素材是两张同构的 SVG：contour-lines.svg（白线，给深色底用）和
+       contour-lines-dark.svg（深灰线，给浅色底用），靠 background 平铺，不做遮罩。
        SVG 内部已经把计曲线（每 5 条一根）画实、首曲线画虚，层级在图层里就分好了。
-       两个关键约束：
+       三个关键约束：
        1) 必须挂在 .page 上而不是每个 .module——瓦片各自按模块原点平铺的话，
           模块交界处等高线会错位断开，一眼就看出接缝。
-       2) 用 fixed 铺满视口而不是 absolute 铺满整页——整页高的蒙版层在部分浏览器里
+       2) 用 fixed 铺满视口而不是 absolute 铺满整页——整页高的图层在部分浏览器里
           要分配一张上万像素的合成层，截图和滚动都会卡。视口大小足够，重复平铺本来
-          就看不出来。 */
+          就看不出来。
+       3) 这里原本用 mask-image + background 颜色上色，但 file:// 协议下 Chromium 会
+          拒绝把外部 SVG 当遮罩（整层被遮成透明，本地预览完全看不见等高线）。
+          改成 background-image 直接平铺素材，线上线下一致。 */
     .page::before {
       content: "";
       position: fixed;
@@ -1582,15 +1585,17 @@
       right: 0;
       bottom: 0;
       left: 84px;
-      background: var(--ak-contour);
-      -webkit-mask-image: url("resources/images/contour-lines.svg");
-      mask-image: url("resources/images/contour-lines.svg");
-      -webkit-mask-size: 1180px 1180px;
-      mask-size: 1180px 1180px;
-      -webkit-mask-repeat: repeat;
-      mask-repeat: repeat;
+      background-image: url("resources/images/contour-lines.svg");
+      background-size: 1180px 1180px;
+      background-repeat: repeat;
+      opacity: var(--ak-contour);
       pointer-events: none;
       z-index: 0;
+    }
+
+    /* 浅色主题换成深灰线素材，否则白线压在浅底上等于没有 */
+    html.light .page::before {
+      background-image: url("resources/images/contour-lines-dark.svg");
     }
 
     /* 窄屏让出顶部固定导航，瓦片也一起缩小，否则一屏只剩几条线，等高线就散了 */
@@ -1598,8 +1603,7 @@
       .page::before {
         top: 64px;
         left: 0;
-        -webkit-mask-size: 780px 780px;
-        mask-size: 780px 780px;
+        background-size: 780px 780px;
       }
     }
 
@@ -1645,15 +1649,21 @@
     .module > * { position: relative; z-index: 1; }
 
     html {
-      /* 等高线上色：这个不透明度按「计曲线」算，首曲线在 SVG 里已经打了折扣 */
-      --ak-contour: rgba(250, 204, 21, 0.085);
+      /* 等高线底纹：三套主题统一走中性灰，不跟主题色。
+         之前跟随主题色（黄 / 蓝 / 红）时，等高线会跟画面抢注意力，
+         反而把「档案」的冷静感压掉了；灰线只做底纹，存在感最低。
+         这里是不透明度（不是颜色）——素材本身已按深浅两版备好：
+         深色底用白线素材，浅色底换成深灰线素材。 */
+      --ak-contour: 0.09;
       --ak-corner: var(--ef-yellow);
     }
     html.light {
-      --ak-contour: rgba(0, 122, 255, 0.085);
+      /* 浅色底上白线等于没有，换深灰素材后需要压得更实一点才看得见 */
+      --ak-contour: 0.17;
     }
     html.crimson {
-      --ak-contour: rgba(255, 27, 19, 0.095);
+      /* 黑红主题背景本身是亮红色火焰纹，白线压在亮部会被吃掉，得压得更实 */
+      --ak-contour: 0.13;
     }
 
     

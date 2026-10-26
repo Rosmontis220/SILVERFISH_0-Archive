@@ -49,6 +49,29 @@ SILVERFISH_0-Archive/
 - 入场渐显用独立的 `translate` 属性，和视差用的 `transform` 分开，互不覆盖
 - `prefers-reduced-motion` 下自动关闭平滑滚动与视差位移
 
+## 页面底纹：等高线
+
+首页整页铺一层等高线（地形图）底纹，作为所有模块共用的背景：
+
+- 素材是两张同构的 SVG：`resources/images/contour-lines.svg`（白线，深色底用）与
+  `resources/images/contour-lines-dark.svg`（深灰线，浅色底用），靠 `background-image` 平铺
+- **三套主题统一用中性灰**，不再跟随主题色（曾经是黄 / 蓝 / 红）：
+  彩色的等高线会跟页面里的高亮元素抢注意力，把「档案」的冷静感压掉了，灰线只做底纹。
+  `--ak-contour` 现在控制的是**不透明度**（不是颜色），素材本身已按深浅两版备好
+  ```css
+  html          { --ak-contour: 0.09; }  /* 深色底 #0a0a0a + 白线素材 */
+  html.light    { --ak-contour: 0.17; }  /* 浅色底 #eaebed + 深灰线素材 */
+  html.crimson  { --ak-contour: 0.13; }  /* 黑红底 #050000 + 白线素材 */
+  ```
+- **这里原本用 `mask-image` + `background` 颜色上色，但 `file://` 协议下 Chromium 会拒绝
+  把外部 SVG 当遮罩**——整层被遮成透明，本地预览完全看不见等高线。
+  改成 `background-image` 直接平铺素材后线上线下一致（已用红色对照法实测确认：
+  同一个 SVG，`mask-image` 下 0 个红像素，`background-image` 下 369840 个）。
+- 底板用 `position: fixed` 铺满视口（不是整页 `absolute`），桌面让出左侧 84px 导航、
+  移动端让出顶部 64px；瓦片 1180px（窄屏 780px）平铺
+- 必须挂在 `.page` 上而不是每个 `.module`——按模块平铺会让各模块的瓦片原点不同，
+  交界处等高线会错位断开
+
 ## 首页网格
 
 `index.html` 里所有模块共用一条卡片网格规则，列数完全跟着可用宽度走：
