@@ -7,6 +7,7 @@
     const bgimg = document.getElementById('boot-bgimg');
     const curtain = document.getElementById('curtain');
     if (!boot || !fill || !fillV || !pctEl || !stateEl || !bgimg || !curtain) return;
+
     let entered = false;
     let fromHistory = false;
     let returning = false;
@@ -26,6 +27,24 @@
       return;
     }
 
+    /* 进度文字走打字机：每换一个阶段就退格重打，
+       正在打一半时直接停手转退格，不把过期的那段补完。
+       打字机不可用时（脚本没加载上）退回普通赋值，功能不受影响。 */
+    let typeMachine = null;
+    if (window.createTextType) {
+      typeMachine = window.createTextType(stateEl, {
+        typingSpeed: 10,
+        deletingSpeed: 5,
+        variableSpeed: { min: 5, max: 12 },
+        mistakes: 0.25,
+        typeEffect: 'fade'
+      });
+    }
+    const setState = (text) => {
+      if (typeMachine) typeMachine.setText(text);
+      else stateEl.textContent = text;
+    };
+
     /* 流程：进度跑完 → 停在加载页等点击 → 点击后才播幕布动画进入首页。
        没有点击就绝不自动跳转；进度靠 rAF 推进，后台标签页可能不给帧，
        所以 12 秒兜底只把进度补满并放开按钮，仍然等用户点。 */
@@ -44,7 +63,7 @@
       pctEl.textContent = '100%';
       fill.style.width = '100%';
       fillV.style.transform = 'scaleY(1)';
-      stateEl.textContent = 'CLICK ANYWHERE // 点击任意位置进入';
+      setState('CLICK ANYWHERE // 点击任意位置进入');
       boot.classList.add('is-ready');
       armEntry();
     }
@@ -129,6 +148,16 @@
       [65, 'DECRYPTING // 解密中'],
       [92, 'RECONSTRUCTING // 重组中']
     ];
+    /* 阶段文案要一段一段打出来，所以推进节奏得跟上打字机：
+       pct = 0.45*fileRatio + 0.55*easedTime，预加载一完成 fileRatio 直接到 1，
+       pct 会瞬间越过 30 和 65，DECRYPTING 就从来没出现过。
+       这里改成「一次只进一格 + 每格至少停留 MIN_DWELL」，
+       保证三段文案都露过面，而不是一帧跳到最后一格。
+       注意不额外要求「上一段打完」：按需求，打字到一半就该打断换新，
+       打字机自己会退格重打。 */
+    const MIN_DWELL = 460;
+    let stageIndex = 0;
+    let stageSince = started;
     const tick = (now) => {
       const t = Math.min(1, (now - started) / DURATION);
       const easedTime = 1 - Math.pow(1 - t, 3);
@@ -145,8 +174,17 @@
       fillV.style.transform = 'scaleY(' + progress + ')';
       bgimg.style.filter = 'blur(' + Math.round((1 - progress) * 18) + 'px)';
       bgimg.style.opacity = (0.55 + progress * 0.3).toFixed(3);
-      const stage = stages.find((s) => pct <= s[0]) || stages[stages.length - 1];
-      stateEl.textContent = stage[1];
+
+      /* 百分比跨到哪一格，就至少要走到那一格；但一次只走一格 */
+      const hit = stages.findIndex((s) => pct <= s[0]);
+      const wanted = hit === -1 ? stages.length - 1 : hit;
+      if (wanted > stageIndex && now - stageSince >= MIN_DWELL) {
+        stageIndex += 1;
+        stageSince = now;
+      }
+      /* 同一段文案会被打字机忽略，所以每帧调用是安全的 */
+      if (!finished) setState(stages[stageIndex][1]);
+
       if (pct < 100) {
         window.requestAnimationFrame(tick);
       } else {

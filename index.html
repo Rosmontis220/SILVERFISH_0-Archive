@@ -579,6 +579,10 @@
 
     .boot.is-ready .boot-status #boot-state {
       color: var(--ef-yellow);
+    }
+
+    /* 就绪后光标呼吸，正文保持稳定可读，不再整体闪 */
+    .boot.is-ready .text-type__cursor {
       animation: ready-pulse 1.7s ease-in-out infinite;
     }
 
@@ -723,6 +727,54 @@
       font: 400 12px/1.6 var(--mono);
       letter-spacing: 0.18em;
       color: var(--muted);
+    }
+
+    /* TextType 打字机：进度文字逐字打出，换阶段就退格重打。
+       完整文本另存一份给读屏朗读，视觉层整体 aria-hidden，
+       否则逐字刷新会被读屏当成流水播报。 */
+    .text-type {
+      display: inline;
+    }
+
+    .text-type__sr {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .text-type__content {
+      display: inline;
+    }
+
+    .text-type__char {
+      display: inline-block;
+    }
+
+    /* 打错的字先染成强调色，自我纠正后立刻消失 */
+    .text-type__char--typo {
+      color: var(--ef-yellow);
+      opacity: 0.8;
+    }
+
+    .text-type__cursor {
+      display: inline-block;
+      width: 0.5ch;
+      height: 1.05em;
+      margin-left: 0.1em;
+      vertical-align: -0.16em;
+      background: currentColor;
+      animation: text-type-blink 1.05s ease-in-out infinite;
+    }
+
+    @keyframes text-type-blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
     }
 
     .boot-track-h {
@@ -2701,6 +2753,7 @@
 <script src="resources/scripts/vendor/lenis.min.js"></script>
 <script src="resources/scripts/scroll-engine.js?v=2"></script>
 
+<script src="resources/scripts/text-type.js?v=1"></script>
 <script src="resources/scripts/boot.js?v=2"></script>
 
 <script src="resources/scripts/theme.js"></script>
