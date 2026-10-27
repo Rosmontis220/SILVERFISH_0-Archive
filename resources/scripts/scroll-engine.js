@@ -142,9 +142,16 @@
       /* 标题进度：标题从视口底部走到半屏高度完成落位，0 → 1。
          区间保持半屏，靠缩短横向路程来降速 */
       const titleTop = rect.top + headOffsets[i];
-      const t = Math.max(0, Math.min(1, (vh - titleTop) / (vh * 0.5)));
+      let t = Math.max(0, Math.min(1, (vh - titleTop) / (vh * 0.5)));
+      /* 落位锁定：标题滑到最终位置（顶到左侧）之后就钉住，
+         向上回滚时不再退回右侧、也不再重新虚化。
+         还没滑到位的标题仍按滚动位置实时计算，行为不变。 */
+      if (t >= 1) mods[i].__tLocked = true;
+      if (mods[i].__tLocked) t = 1;
       const prevT = mods[i].__t;
-      if (prevT === undefined || Math.abs(prevT - t) > 0.004) {
+      /* 锁定瞬间强制写一次：贴着阈值的旧值差值可能落在容差内，
+         否则标题会停在差几个像素的位置上不再归位 */
+      if (prevT === undefined || Math.abs(prevT - t) > 0.004 || (t === 1 && prevT !== 1)) {
         mods[i].__t = t;
         mods[i].style.setProperty('--t', t.toFixed(4));
       }

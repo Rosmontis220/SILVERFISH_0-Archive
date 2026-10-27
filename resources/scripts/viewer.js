@@ -16,6 +16,26 @@
   const consoleScript = new URL('postal-console/console.js', scriptsRoot);
   const sound = key => window.__archiveSfx?.play(key);
   let injected = false;
+
+  /* 加载指示器：iframe 加载归档网页期间覆盖在上面的像素指示层 */
+  const loadingEl = document.getElementById('viewer-loading');
+  let loadingHidden = false;
+  let loadingShownAt = 0;
+  /* 最小可见时长：本地文件几十毫秒就加载完，指示器一闪而过反而像闪烁。
+     至少停留 MIN_VISIBLE 才撤下，让它读起来是「加载过」而不是「闪了一下」。 */
+  const MIN_VISIBLE = 420;
+  const hideLoading = () => {
+    if (loadingHidden || !loadingEl) return;
+    loadingHidden = true;
+    const elapsed = performance.now() - loadingShownAt;
+    const wait = Math.max(0, MIN_VISIBLE - elapsed);
+    window.setTimeout(() => {
+      loadingEl.classList.add('is-hidden');
+      /* 淡出结束后彻底移出，避免挡住 iframe 的点击 */
+      window.setTimeout(() => { if (loadingEl && loadingEl.parentNode) loadingEl.parentNode.removeChild(loadingEl); }, 320);
+    }, wait);
+  };
+  if (loadingEl) loadingShownAt = performance.now();
   const addScript = (doc, src, attrs = {}) => {
     const script = doc.createElement('script');
     script.src = src;
@@ -35,7 +55,12 @@
     }, true);
     injected = true;
   };
-  frame.addEventListener('load', () => { injected = false; window.setTimeout(inject, 0); });
+  frame.addEventListener('load', () => {
+    injected = false;
+    /* 归档网页已载入，撤下加载指示器 */
+    hideLoading();
+    window.setTimeout(inject, 0);
+  });
   const reinjectTimer = window.setInterval(() => { if (frame.contentDocument && !frame.contentDocument.documentElement?.dataset.archiveEnhanced) inject(); }, 250);
   window.addEventListener('beforeunload', () => window.clearInterval(reinjectTimer));
   window.addEventListener('message', event => {

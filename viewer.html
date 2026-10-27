@@ -7,11 +7,56 @@
   <style>
     html,body{width:100%;height:100%;margin:0;background:#08090b;overflow:hidden}
     #archive-frame{display:block;width:100%;height:100%;border:0;background:#08090b}
+
+    /* 像素风加载指示器（8bitcn diamond 变体）：
+       8 个 4x4 方块沿菱形排布，淡入淡出依次错开 0.1s，形成旋转点阵。
+       挂在 iframe 之上：iframe 加载归档网页期间是真实异步等待，
+       之前这里只有一块纯黑屏。 */
+    .viewer-loading{
+      position:fixed;inset:0;z-index:2;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+      background:#08090b;
+      color:#FFFA00;
+      font:400 11px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      letter-spacing:.18em;
+      transition:opacity .28s ease;
+    }
+    .viewer-loading.is-hidden{opacity:0;pointer-events:none}
+
+    .pixel-spinner{
+      width:28px;height:28px;display:block;color:currentColor;
+    }
+    .pixel-spinner__px{fill:currentColor;opacity:0;animation:pixel-spinner-blink .8s ease-in-out infinite}
+    .pixel-spinner__px--1{animation-delay:0s}
+    .pixel-spinner__px--2{animation-delay:.1s}
+    .pixel-spinner__px--3{animation-delay:.2s}
+    .pixel-spinner__px--4{animation-delay:.3s}
+    .pixel-spinner__px--5{animation-delay:.4s}
+    .pixel-spinner__px--6{animation-delay:.5s}
+    .pixel-spinner__px--7{animation-delay:.6s}
+    .pixel-spinner__px--8{animation-delay:.7s}
+
+    @keyframes pixel-spinner-blink{
+      0%{opacity:0}
+      1%{opacity:1}
+      100%{opacity:0}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      /* 降级：不做闪烁，常显一个像素，保持「正在载入」的语义 */
+      .pixel-spinner__px{animation:none;opacity:.25}
+      .pixel-spinner__px--1{opacity:1}
+    }
   </style>
 </head>
 <body>
   <iframe id="archive-frame" title="存档网页"></iframe>
+  <div class="viewer-loading" id="viewer-loading" role="status" aria-label="正在载入存档网页">
+    <span data-pixel-spinner aria-hidden="true"></span>
+    <span>LOADING ARCHIVE // 正在载入存档网页</span>
+  </div>
   <script src="resources/scripts/sfx.js"></script>
+  <script src="resources/scripts/pixel-spinner.js?v=1"></script>
   <script src="resources/scripts/viewer.js"></script>
 </body>
 </html>
